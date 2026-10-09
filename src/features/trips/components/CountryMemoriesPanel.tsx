@@ -1,5 +1,6 @@
 
 import type { Trip } from '../types';
+import PhotoGallery from './PhotoGallery';
 
 interface CountryMemoriesPanelProps {
   countryName: string;
@@ -42,14 +43,26 @@ export default function CountryMemoriesPanel({
           <p>There are no travel stories for this country yet.</p>
         ) : (
           trips.map((trip) => (
+
             <article className="trip-card" key={trip.id}>
-              <span className="trip-card__city">{trip.city}</span>
-              <h3>{trip.title}</h3>
-              <time dateTime={trip.startDate}>
-                {trip.startDate}
-              </time>
-              <p>{trip.description}</p>
+                <span className="trip-card__city">
+                    {trip.city}
+                </span>
+
+                <h3>{trip.title}</h3>
+
+                <time dateTime={trip.startDate}>
+                    {trip.startDate}
+                </time>
+
+                <p>{trip.description}</p>
+
+                <PhotoGallery
+                    photos={trip.photos}
+                    title={trip.title}
+                />
             </article>
+
           ))
         )}
       </div>
