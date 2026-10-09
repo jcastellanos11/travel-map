@@ -182,3 +182,173 @@
     border-right-color: var(--border);
   }
 }
+
+
+
+/* Map legend */
+
+.map-legend {
+  position: absolute;
+  bottom: 28px;
+  left: 28px;
+  z-index: 900;
+
+  width: 230px;
+  padding: 20px;
+
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(35, 64, 55, 0.08);
+
+  pointer-events: none;
+}
+
+.map-legend__heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #253a32;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.map-legend__icon {
+  color: #6f9f80;
+  font-size: 19px;
+}
+
+.map-legend__stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.map-legend__stats > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.map-legend__stats strong {
+  font-size: 27px;
+  color: #253a32;
+}
+
+.map-legend__stats span {
+  font-size: 11px;
+  color: #7d8e83;
+}
+
+.map-legend__items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid #edf1ed;
+}
+
+.map-legend__items > div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 11px;
+  color: #6b8273;
+}
+
+.map-legend__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.map-legend__dot--visited {
+  background: #a5c8ae;
+}
+
+.map-legend__dot--empty {
+  background: #d8e5da;
+  border: 1px solid #bfcfc4;
+}
+
+/* Country tooltip */
+
+.country-tooltip {
+  padding: 7px 12px;
+  border: none;
+  border-radius: 9px;
+  background: #253a32;
+  color: white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.country-tooltip::before {
+  display: none;
+}
+
+/* Subtle interactions */
+
+.trip-card {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.trip-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(35, 64, 55, 0.07);
+}
+
+.memories-panel__close:hover {
+  background: #dfe9e1;
+}
+
+/* Mobile adjustments */
+
+@media (max-width: 767px) {
+  .map-legend {
+    left: 12px;
+    bottom: 16px;
+    width: auto;
+    min-width: 170px;
+    padding: 12px 14px;
+    border-radius: 14px;
+  }
+
+  .map-legend__heading {
+    font-size: 11px;
+  }
+
+  .map-legend__stats {
+    gap: 8px;
+    margin: 8px 0;
+  }
+
+  .map-legend__stats strong {
+    font-size: 19px;
+  }
+
+  .map-legend__items {
+    display: none;
+  }
+
+  /* The bottom sheet takes priority when opened */
+  .map-page:has(.memories-panel) .map-legend {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trip-card {
+    transition: none;
+  }
+
+  .trip-card:hover {
+    transform: none;
+  }
+}

@@ -10,6 +10,8 @@ import CountryMemoriesPanel from '../../trips/components/CountryMemoriesPanel';
 import CityMarkers from './CityMarkers';
 import type { Trip } from '../../trips/types';
 
+import MapLegend from './MapLegend';
+
 const MAP_COLORS = {
   ocean: '#EAF2F4',
   land: '#D8E5DA',
@@ -170,6 +172,12 @@ export default function WorldMap() {
                 feature.properties?.ADMIN ?? 'Unknown'
               );
 
+              layer.bindTooltip(countryName, {
+                sticky: true,
+                direction: 'top',
+                className: 'country-tooltip',
+              });
+
               if (!(layer instanceof L.Path)) return;
 
               layer.on('mouseover', () => {
@@ -218,7 +226,10 @@ export default function WorldMap() {
         )}
       </MapContainer>
 
-      
+      <MapLegend
+        countryCount={visitedCountries.size}
+        tripCount={trips.length}
+      />
       {selectedCountry && (
         <CountryMemoriesPanel
           key={`${selectedCountry.code}-${selectedTrip?.id ?? 'all'}`}
