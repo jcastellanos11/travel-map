@@ -337,6 +337,10 @@
     display: none;
   }
 
+  .memories-panel {
+    max-height: 65dvh;
+  }
+
   /* The bottom sheet takes priority when opened */
   .map-page:has(.memories-panel) .map-legend {
     display: none;
