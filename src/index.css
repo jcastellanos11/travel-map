@@ -1,4 +1,11 @@
+
 @import 'leaflet/dist/leaflet.css';
+
+:root {
+  font-family: Inter, system-ui, sans-serif;
+  color: #253A32;
+  background: #EAF2F4;
+}
 
 * {
   box-sizing: border-box;
@@ -7,11 +14,230 @@
 html,
 body,
 #root {
-  margin: 0;
   width: 100%;
   height: 100%;
+  margin: 0;
 }
 
-body {
+.map-page {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
   overflow: hidden;
+}
+
+.world-map {
+  width: 100%;
+  height: 100%;
+  background: #EAF2F4;
+}
+
+.map-header {
+  position: absolute;
+  top: 32px;
+  left: 40px;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.map-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.map-header p {
+  margin-top: 6px;
+  color: #6C8077;
+  font-size: 14px;
+}
+
+.country-info {
+  position: absolute;
+  bottom: 32px;
+  left: 40px;
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  min-width: 220px;
+  padding: 24px;
+
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(35, 64, 55, 0.08);
+}
+
+.country-info span {
+  font-size: 12px;
+  color: #799085;
+}
+
+.country-info strong {
+  font-size: 22px;
+}
+
+.country-info button {
+  align-self: flex-start;
+  padding: 9px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #E4EEE7;
+  color: #365A44;
+  cursor: pointer;
+}
+
+.country-info button:hover {
+  background: #D2E4D7;
+}
+
+.leaflet-container {
+  cursor: grab;
+}
+
+.leaflet-interactive {
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .map-header {
+    top: 24px;
+    left: 20px;
+  }
+
+  .country-info {
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+  }
+}
+
+
+
+/* Travel memories panel */
+
+.memories-panel {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+
+  width: min(380px, calc(100% - 48px));
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 20px;
+  box-shadow: 0 16px 50px rgba(35, 64, 55, 0.12);
+}
+
+.memories-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 28px;
+  border-bottom: 1px solid #EDF1ED;
+}
+
+.memories-panel__eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6F9F80;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.memories-panel__header h2 {
+  margin: 8px 0;
+  font-size: 28px;
+  letter-spacing: -1px;
+}
+
+.memories-panel__header p {
+  margin: 0;
+  font-size: 14px;
+  color: #7D8E83;
+}
+
+.memories-panel__close {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: #F0F4F0;
+  color: #43594A;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.memories-panel__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.trip-card {
+  padding: 20px;
+  margin-bottom: 16px;
+  background: #F6F9F6;
+  border: 1px solid #E8EEE8;
+  border-radius: 14px;
+}
+
+.trip-card__city {
+  color: #669378;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.trip-card h3 {
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+.trip-card time {
+  font-size: 12px;
+  color: #829387;
+}
+
+.trip-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #5E7064;
+}
+
+@media (max-width: 600px) {
+  .memories-panel {
+    top: auto;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    width: auto;
+    max-height: 55dvh;
+    border-radius: 20px;
+  }
+
+  .memories-panel__header {
+    padding: 18px;
+  }
+
+  .memories-panel__header h2 {
+    font-size: 22px;
+  }
+
+  .memories-panel__content {
+    padding: 16px;
+  }
 }
