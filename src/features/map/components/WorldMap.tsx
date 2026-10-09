@@ -7,6 +7,8 @@ import type { PathOptions } from 'leaflet';
 
 import { trips } from '../../trips/data/trips';
 import CountryMemoriesPanel from '../../trips/components/CountryMemoriesPanel';
+import CityMarkers from './CityMarkers';
+import type { Trip } from '../../trips/types';
 
 const MAP_COLORS = {
   ocean: '#EAF2F4',
@@ -35,6 +37,9 @@ export default function WorldMap() {
     code: string;
     name: string;
   } | null>(null);
+
+  const [selectedTrip, setSelectedTrip] =
+  useState<Trip | null>(null);
 
   const mapRef = useRef<L.Map | null>(null);
 
@@ -66,14 +71,29 @@ export default function WorldMap() {
     return () => controller.abort();
   }, []);
 
-  const selectedTrips = selectedCountry
-    ? trips.filter(
-        (trip) => trip.countryCode === selectedCountry.code
+  const countryTrips = selectedCountry
+  ? trips.filter(
+      (trip) => trip.countryCode === selectedCountry.code
       )
-    : [];
+  : [];
+
+  const displayedTrips = selectedTrip
+  ? countryTrips.filter(
+      (trip) => trip.id === selectedTrip.id
+      )
+  : countryTrips;
+
+  function handleSelectTrip(trip: Trip) {
+      setSelectedTrip(trip);
+
+      mapRef.current?.flyTo(trip.coordinates, 8, {
+          duration: 1.2,
+      });
+  }
 
   function handleClose() {
     setSelectedCountry(null);
+    setSelectedTrip(null);
 
     mapRef.current?.flyTo([20, 0], 2, {
       duration: 1.2,
@@ -95,6 +115,21 @@ export default function WorldMap() {
       ...defaultStyle,
       fillColor,
     };
+  }
+
+  function handleBackToCountry() {
+    setSelectedTrip(null);
+
+    if (countryTrips.length > 0) {
+      const bounds = L.latLngBounds(
+        countryTrips.map((trip) => trip.coordinates)
+      );
+
+      mapRef.current?.flyToBounds(bounds.pad(0.6), {
+        maxZoom: 6,
+        duration: 1.2,
+      });
+    }
   }
 
   return (
@@ -152,6 +187,8 @@ export default function WorldMap() {
               });
 
               layer.on('click', () => {
+                
+                setSelectedTrip(null);
                 setSelectedCountry({
                   code: countryCode,
                   name: countryName,
@@ -171,12 +208,22 @@ export default function WorldMap() {
             }}
           />
         )}
+
+        {selectedCountry && countryTrips.length > 0 && (
+          <CityMarkers
+            trips={countryTrips}
+            selectedTripId={selectedTrip?.id ?? null}
+            onSelectTrip={handleSelectTrip}
+          />
+        )}
       </MapContainer>
 
       {selectedCountry && (
         <CountryMemoriesPanel
           countryName={selectedCountry.name}
-          trips={selectedTrips}
+          trips={displayedTrips}
+          selectedTripId={selectedTrip?.id ?? null}
+          onBackToCountry={handleBackToCountry}
           onClose={handleClose}
         />
       )}

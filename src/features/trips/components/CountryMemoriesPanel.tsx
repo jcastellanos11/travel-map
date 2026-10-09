@@ -5,6 +5,8 @@ import PhotoGallery from './PhotoGallery';
 interface CountryMemoriesPanelProps {
   countryName: string;
   trips: Trip[];
+  selectedTripId?: string | null;
+  onBackToCountry?: () => void;
   onClose: () => void;
 }
 
@@ -12,6 +14,8 @@ export default function CountryMemoriesPanel({
   countryName,
   trips,
   onClose,
+  selectedTripId,
+  onBackToCountry,
 }: CountryMemoriesPanelProps) {
   return (
     <aside className="memories-panel">
@@ -20,6 +24,15 @@ export default function CountryMemoriesPanel({
           <span className="memories-panel__eyebrow">
             Travel memories
           </span>
+          {selectedTripId && (
+            <button
+                type="button"
+                className="back-to-country"
+                onClick={onBackToCountry}
+            >
+                ← All memories
+            </button>
+          )}
           <h2>{countryName}</h2>
           <p>
             {trips.length === 0
