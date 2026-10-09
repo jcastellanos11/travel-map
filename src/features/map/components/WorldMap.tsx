@@ -218,8 +218,10 @@ export default function WorldMap() {
         )}
       </MapContainer>
 
+      
       {selectedCountry && (
         <CountryMemoriesPanel
+          key={`${selectedCountry.code}-${selectedTrip?.id ?? 'all'}`}
           countryName={selectedCountry.name}
           trips={displayedTrips}
           selectedTripId={selectedTrip?.id ?? null}
@@ -227,6 +229,7 @@ export default function WorldMap() {
           onClose={handleClose}
         />
       )}
+
     </div>
   );
 }

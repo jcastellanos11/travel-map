@@ -362,3 +362,213 @@ body,
     padding: 12px;
   }
 }
+
+
+.back-to-country {
+  display: block;
+  padding: 0;
+  margin: 8px 0;
+  border: none;
+  background: transparent;
+  color: #6f9f80;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.back-to-country:hover {
+  text-decoration: underline;
+}
+
+
+
+
+/* Memories panel — Desktop */
+
+.memories-panel {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+  width: min(400px, calc(100% - 48px));
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 22px;
+  box-shadow: 0 16px 50px rgba(35, 64, 55, 0.12);
+}
+
+.memories-panel__handle-area {
+  display: none;
+}
+
+.memories-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 28px;
+  border-bottom: 1px solid #edf1ed;
+}
+
+.memories-panel__heading {
+  min-width: 0;
+}
+
+.memories-panel__eyebrow {
+  color: #6f9f80;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.memories-panel__header h2 {
+  margin: 8px 0;
+  font-size: 28px;
+  letter-spacing: -1px;
+}
+
+.memories-panel__header p {
+  margin: 0;
+  color: #7d8e83;
+  font-size: 14px;
+}
+
+.memories-panel__close {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: #f0f4f0;
+  color: #43594a;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.memories-panel__content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 24px;
+  overscroll-behavior: contain;
+}
+
+.memories-panel__content[hidden] {
+  display: none;
+}
+
+.back-to-country {
+  align-self: flex-start;
+  margin: 12px 24px 0;
+  padding: 6px 0;
+  border: none;
+  background: transparent;
+  color: #6f9f80;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Mobile bottom sheet */
+
+@media (max-width: 767px) {
+  .map-header {
+    top: max(16px, env(safe-area-inset-top));
+    left: 16px;
+  }
+
+  .map-header h1 {
+    font-size: 22px;
+  }
+
+  .map-header p {
+    font-size: 12px;
+  }
+
+  .memories-panel {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    width: 100%;
+    height: auto;
+    max-height: 75dvh;
+    padding-bottom: env(safe-area-inset-bottom);
+
+    border-radius: 24px 24px 0 0;
+    border-bottom: none;
+
+    box-shadow: 0 -12px 40px rgba(35, 64, 55, 0.12);
+    transition: max-height 0.25s ease;
+  }
+
+  .memories-panel__handle-area {
+    display: flex;
+    justify-content: center;
+    padding-top: 8px;
+  }
+
+  .memories-panel__handle-button {
+    display: grid;
+    place-items: center;
+    width: 80px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .memories-panel__handle {
+    display: block;
+    width: 38px;
+    height: 5px;
+    border-radius: 999px;
+    background: #cad8ce;
+  }
+
+  .memories-panel__header {
+    padding: 10px 20px 18px;
+  }
+
+  .memories-panel__header h2 {
+    font-size: 23px;
+    margin: 6px 0;
+  }
+
+  .memories-panel__content {
+    padding: 12px 20px 24px;
+  }
+
+  .memories-panel--collapsed {
+    max-height: 160px;
+  }
+
+  .memories-panel--collapsed .memories-panel__header {
+    border-bottom: none;
+  }
+
+  .trip-card {
+    padding: 16px;
+  }
+
+  .back-to-country {
+    margin: 6px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .memories-panel {
+    transition: none;
+  }
+}
