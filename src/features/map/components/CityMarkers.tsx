@@ -36,12 +36,15 @@ export default function CityMarkers({
             }}
           >
             <Tooltip
+              permanent
               direction="top"
               offset={[0, -12]}
+              opacity={1}
+              className="city-label"
             >
               <strong>{trip.city}</strong>
-              <div>{trip.title}</div>
             </Tooltip>
+
           </CircleMarker>
         );
       })}
