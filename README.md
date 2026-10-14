@@ -16,8 +16,6 @@
 
 ## ✨ See it in action
 
-<h3>🌍 Explore the world</h3>
-
 <p align="center">
   <img
     src="docs/screenshots/v0.1.0/world-desktop.webp"
