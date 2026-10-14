@@ -16,9 +16,6 @@
 
 ## ✨ See it in action
 
-
-<h2>✨ See it in action</h2>
-
 <h3>🌍 Explore the world</h3>
 
 <p align="center">
