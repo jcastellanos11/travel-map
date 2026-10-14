@@ -16,9 +16,31 @@
 
 ## ✨ See it in action
 
-<!-- Add actual screenshots before publishing these image links. -->
-![Travel Map desktop world view](docs/screenshots/v0.1.0/world-desktop.webp)
-![Travel Map mobile memories sheet](docs/screenshots/v0.1.0/memories-mobile.webp)
+
+<h2>✨ See it in action</h2>
+
+<h3>🌍 Explore the world</h3>
+
+<p align="center">
+  <img
+    src="docs/screenshots/v0.1.0/world-desktop.webp"
+    alt="Interactive world map"
+    width="100%"
+  />
+</p>
+
+<details>
+  <summary>📸 Explore more screenshots</summary>
+  <br>
+  <p align="center">
+    <img
+      src="docs/screenshots/v0.1.0/memories-mobile.webp"
+      alt="Mobile travel memories"
+      width="320"
+    />
+  </p>
+</details>
+
 
 **[Explore the live application →](https://travel-map.jhonjaner11.workers.dev)**
 
