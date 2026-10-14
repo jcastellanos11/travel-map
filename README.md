@@ -17,8 +17,8 @@
 ## ✨ See it in action
 
 <!-- Add actual screenshots before publishing these image links. -->
-<!-- ![Travel Map desktop world view](docs/screenshots/v0.1.0/world-desktop.webp) -->
-<!-- ![Travel Map mobile memories sheet](docs/screenshots/v0.1.0/memories-mobile.webp) -->
+![Travel Map desktop world view](docs/screenshots/v0.1.0/world-desktop.webp)
+![Travel Map mobile memories sheet](docs/screenshots/v0.1.0/memories-mobile.webp)
 
 **[Explore the live application →](https://travel-map.jhonjaner11.workers.dev)**
 
