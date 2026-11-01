@@ -1,0 +1,32 @@
+{
+  "name": "@travel-map/backend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0 <25",
+    "npm": ">=11 <12"
+  },
+  "scripts": {
+    "dev": "wrangler dev --local --env dev --ip 127.0.0.1 --port 8789",
+    "types": "wrangler types --env dev",
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.tools.json",
+    "lint": "eslint . --max-warnings 0",
+    "build": "wrangler deploy --dry-run --env test --outdir dist",
+    "test": "npm run build && node --test tests/http.test.ts tests/runtime.test.ts tests/migration-safety.test.ts tests/artifacts.test.ts",
+    "test:db": "node --env-file-if-exists=.env --test tests/database.test.ts",
+    "db:migrate": "node --env-file-if-exists=.env scripts/migrate.ts",
+    "db:local:test": "node scripts/local-postgres.ts",
+    "check": "npm run lint && npm run typecheck && npm test"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "24.19.1",
+    "@types/pg": "8.15.5",
+    "eslint": "10.12.0",
+    "pg": "8.16.3",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.1",
+    "wrangler": "4.156.0"
+  }
+}

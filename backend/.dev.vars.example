@@ -1,0 +1,2 @@
+# E0 needs no secrets or cloud bindings. Do not put database/admin credentials here.
+# Future secrets belong in ignored .dev.vars.dev, never wrangler vars or React.
