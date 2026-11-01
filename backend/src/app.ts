@@ -1,31 +1,72 @@
-import { assertEnvironment } from './env.ts';
+import { assertEnvironment, identityConfig } from './env.ts';
 import type { AppEnv } from './env.ts';
-import { denyUnconfiguredSession } from './modules/identity/boundary.ts';
+import { PostgresRepository } from './infrastructure/postgres.ts';
+import type { IdentityRepository } from './infrastructure/postgres.ts';
+import { SupabaseIdentityProvider } from './modules/identity/provider.ts';
+import type { IdentityProvider } from './modules/identity/provider.ts';
+import { finishLogin, startLogin } from './modules/identity/routes.ts';
+import { checkOrigin, cookie, csrf, digest, equal, OAUTH_COOKIE, SESSION_COOKIE, setCookie, tokenPattern } from './modules/identity/security.ts';
+import { projectInput, projectPage, projectQuery, uuid } from './modules/projects/validation.ts';
 import { health } from './modules/system/health.ts';
 import { errorResponse, HttpError, secureResponse } from './shared/http.ts';
 
-export function handleRequest(request: Request, env: AppEnv): Response {
-  // Ignore caller-supplied correlation IDs: do not reflect arbitrary input.
-  const requestId = crypto.randomUUID();
+// Ports support isolated tests; the production entry always uses real adapters.
+export interface Dependencies { repository: IdentityRepository; provider: IdentityProvider }
+export async function handleRequest(request: Request, env: AppEnv, dependencies?: Dependencies): Promise<Response> {
+  const requestId=crypto.randomUUID();
+  const url=new URL(request.url); const path=url.pathname;
   let response: Response;
   try {
     assertEnvironment(env);
-    const path = new URL(request.url).pathname;
-    if (path === '/health') {
-      if (request.method !== 'GET') {
-        throw new HttpError(405, 'METHOD_NOT_ALLOWED', 'Method not allowed');
+    if (path==='/health') {
+      if (request.method!=='GET') throw new HttpError(405,'METHOD_NOT_ALLOWED','Method not allowed');
+      response=health();
+    } else if (path==='/api/v1' || path.startsWith('/api/v1/')) {
+      const login=path==='/api/v1/auth/google/start'; const callback=path==='/api/v1/auth/callback';
+      const raw=cookie(request,SESSION_COOKIE);
+      if (!login && !callback && (!raw || !tokenPattern.test(raw))) {
+        throw new HttpError(401,'SESSION_REQUIRED','Authentication required');
       }
-      response = health();
-    } else if (path === '/api/v1' || path.startsWith('/api/v1/')) {
-      denyUnconfiguredSession();
-    } else {
-      throw new HttpError(404, 'RESOURCE_NOT_FOUND', 'Resource not available');
-    }
+      let config;
+      try { config=identityConfig(env); } catch { throw new HttpError(503,'DEPENDENCY_UNAVAILABLE','Service not configured'); }
+      if (url.origin!==config.origin) throw new HttpError(403,'ACTION_FORBIDDEN','Request origin not allowed');
+      const repo=dependencies?.repository??new PostgresRepository(config.databaseUrl);
+      const provider=dependencies?.provider??new SupabaseIdentityProvider(config);
+      if (login || callback) {
+        if (request.method!=='GET') throw new HttpError(405,'METHOD_NOT_ALLOWED','Method not allowed');
+        response=login?await startLogin(request,config,repo,provider):await finishLogin(request,config,repo,provider);
+      } else {
+        const token=raw!; const hash=await digest(token);
+        if (!['GET','HEAD','OPTIONS'].includes(request.method)) {
+          checkOrigin(request,config.origin);
+          if (!equal(request.headers.get('X-CSRF-Token')??'',await csrf(token))) {
+            throw new HttpError(403,'ACTION_FORBIDDEN','Request verification failed');
+          }
+        }
+        if (path==='/api/v1/me' && request.method==='GET') {
+          response=Response.json({...await repo.call(hash,'me'),csrfToken:await csrf(token)});
+        } else if (path==='/api/v1/auth/logout' && request.method==='POST') {
+          await repo.call(hash,'logout');
+          response=new Response(null,{status:204,headers:{'Set-Cookie':setCookie(SESSION_COOKIE,'',0)}});
+        } else if (path==='/api/v1/projects' && request.method==='POST') {
+          response=Response.json(await repo.call(hash,'projects.create',await projectInput(request)),{status:201});
+        } else if (path==='/api/v1/projects' && request.method==='GET') {
+          const {data,limit}=projectQuery(url);
+          response=Response.json(projectPage(await repo.call(hash,'projects.list',data),limit));
+        } else if (/^\/api\/v1\/projects\/[^/]+$/.test(path) && request.method==='GET') {
+          const id=path.split('/').at(-1)??'';
+          if (!uuid.test(id)) throw new HttpError(404,'RESOURCE_NOT_FOUND','Resource not available');
+          response=Response.json(await repo.call(hash,'projects.get',{id}));
+        } else {
+          await repo.call(hash,'me');
+          throw new HttpError(404,'RESOURCE_NOT_FOUND','Resource not available');
+        }
+      }
+    } else throw new HttpError(404,'RESOURCE_NOT_FOUND','Resource not available');
   } catch (error) {
-    response = errorResponse(error, requestId);
-    if (error instanceof HttpError && error.status === 405) {
-      response.headers.set('Allow', 'GET');
-    }
+    response=errorResponse(error,requestId);
+    if (error instanceof HttpError && error.status===405 && path==='/health') response.headers.set('Allow','GET');
+    if (path==='/api/v1/auth/callback') response.headers.append('Set-Cookie',setCookie(OAUTH_COOKIE,'',0));
   }
-  return secureResponse(response, requestId);
+  return secureResponse(response,requestId);
 }

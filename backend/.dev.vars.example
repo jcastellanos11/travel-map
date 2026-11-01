@@ -1,2 +1,9 @@
-# E0 needs no secrets or cloud bindings. Do not put database/admin credentials here.
-# Future secrets belong in ignored .dev.vars.dev, never wrangler vars or React.
+# Copy to ignored .dev.vars.dev; local HTTPS is mandatory for Secure cookies.
+APP_ORIGIN=https://127.0.0.1:8789
+SUPABASE_URL=http://127.0.0.1:57421
+# A PUBLIC/publishable or legacy anon key, never SECRET_KEY or SERVICE_ROLE_KEY.
+SUPABASE_PUBLISHABLE_KEY=REPLACE_WITH_LOCAL_PUBLIC_KEY
+# Dedicated restricted login, granted only the four E1 RPC functions.
+DATABASE_URL=postgresql://travel_map_api:REPLACE_LOCALLY@127.0.0.1:57422/travel_map_dev
+# Replace with 32 random bytes encoded as 64 lowercase hex characters.
+OAUTH_COOKIE_KEY=REPLACE_WITH_64_HEX_CHARACTERS

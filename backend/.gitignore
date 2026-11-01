@@ -8,3 +8,9 @@ coverage/
 .env*
 !.env.example
 *.log
+
+# Supabase local runtime state/locks may contain generated credentials.
+supabase/.temp/
+supabase/.branches/
+supabase/.supabase/
+supabase/.supabase.lock.lease

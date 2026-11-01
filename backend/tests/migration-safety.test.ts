@@ -14,7 +14,7 @@ test('migration tooling accepts only explicitly acknowledged disposable loopback
 
 test('migration pairs and checksums are reproducible', async () => {
   const first = await loadMigrations();
-  assert.equal(first.length, 1);
+  assert.equal(first.length, 2);
   assert.equal(first[0]?.version, '0001_foundation');
   assert.deepEqual(first, await loadMigrations());
   assert.match(first[0]?.checksum ?? '', /^[a-f0-9]{64}$/);

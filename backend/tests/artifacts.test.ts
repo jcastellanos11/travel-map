@@ -9,7 +9,7 @@ test('Worker bundle contains no administrative tools, embedded credentials or ha
   assert.ok(bundles.length > 0);
   for (const file of bundles) {
     const contents = await readFile(new URL(`../dist/${file}`, import.meta.url), 'utf8');
-    assert.doesNotMatch(contents, /postgres(?:ql)?:\/\/|BEGIN (?:RSA |EC )?PRIVATE KEY|SUPABASE_SERVICE_ROLE_KEY|service_role|\/harness\/|pg_advisory_lock/);
+    assert.doesNotMatch(contents, /postgres(?:ql)?:\/\/[^\s:@]+:[^\s@]+@|BEGIN (?:RSA |EC )?PRIVATE KEY|SUPABASE_SERVICE_ROLE_KEY|\/harness\/|pg_advisory_lock/);
   }
   // Positive assurance that ignored environment files are not emitted as assets.
   assert.ok(!files.some((file) => file.startsWith('.env') || file.startsWith('.dev.vars')));

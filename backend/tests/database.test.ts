@@ -2,7 +2,11 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { test } from 'node:test';
 import pg from 'pg';
-import { loadMigrations, localDatabaseUrl, migrate } from '../scripts/migrations.ts';
+import { loadMigrations as loadAllMigrations, localDatabaseUrl, migrate as migrateAll } from '../scripts/migrations.ts';
+
+// Preserve the committed E0 regression independently of E1 migrations.
+const loadMigrations = async () => (await loadAllMigrations()).slice(0,1);
+const migrate = async (client: pg.Client, direction: 'up'|'down'|'status', migrations = [] as Awaited<ReturnType<typeof loadMigrations>>) => migrateAll(client,direction,migrations.length ? migrations : await loadMigrations());
 
 const supplied = process.env.DATABASE_URL;
 

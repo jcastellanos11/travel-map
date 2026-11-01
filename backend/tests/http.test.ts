@@ -5,7 +5,7 @@ import { errorResponse } from '../src/shared/http.ts';
 import type { AppEnv } from '../src/env.ts';
 
 test('health is liveness only and discloses no infrastructure', async () => {
-  const response = handleRequest(new Request('https://api.example.invalid/health'), { APP_ENV: 'test' });
+  const response = await handleRequest(new Request('https://api.example.invalid/health'), { APP_ENV: 'test' });
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), { status: 'ok' });
   assert.equal(response.headers.get('Cache-Control'), 'private, no-store');
@@ -14,7 +14,7 @@ test('health is liveness only and discloses no infrastructure', async () => {
 
 test('all private API paths fail closed, including forged credentials', async () => {
   for (const path of ['/api/v1', '/api/v1/me', '/api/v1/projects', '/api/v1/photos/other/original']) {
-    const response = handleRequest(new Request(`https://api.example.invalid${path}`, {
+    const response = await handleRequest(new Request(`https://api.example.invalid${path}`, {
       headers: { Cookie: '__Host-travel-map-session=forged', Authorization: 'Bearer invented',
         'X-Mock-User': 'owner', 'X-Request-Id': 'caller-controlled' },
     }), { APP_ENV: 'test' });
@@ -27,15 +27,15 @@ test('all private API paths fail closed, including forged credentials', async ()
 });
 
 test('no PoC harness, debug or login implementation is exposed', async () => {
-  for (const path of ['/harness/reset', '/debug', '/api/v1/auth/google/start']) {
-    const response = handleRequest(new Request(`https://api.example.invalid${path}`), { APP_ENV: 'test' });
+  for (const path of ['/harness/reset', '/debug', '/not-implemented']) {
+    const response = await handleRequest(new Request(`https://api.example.invalid${path}`), { APP_ENV: 'test' });
     assert.equal(response.status, path.startsWith('/api/v1') ? 401 : 404);
     assert.equal(response.headers.get('X-Content-Type-Options'), 'nosniff');
   }
 });
 
 test('unsupported health methods return normalized 405 with Allow', async () => {
-  const response = handleRequest(new Request('https://api.example.invalid/health', { method: 'POST' }), { APP_ENV: 'test' });
+  const response = await handleRequest(new Request('https://api.example.invalid/health', { method: 'POST' }), { APP_ENV: 'test' });
   assert.equal(response.status, 405);
   assert.equal(response.headers.get('Allow'), 'GET');
   assert.equal((await response.json() as { error: { code: string } }).error.code, 'METHOD_NOT_ALLOWED');
@@ -45,7 +45,7 @@ test('unexpected errors and invalid configuration never disclose internal values
   const response = errorResponse(new Error('postgresql://secret-value@example.invalid/private'), 'req_test');
   assert.equal(response.status, 500);
   assert.deepEqual(await response.json(), { error: { code: 'INTERNAL_ERROR', message: 'Unexpected server error', requestId: 'req_test' } });
-  const invalid = handleRequest(new Request('https://api.example.invalid/health'), { APP_ENV: 'invalid' } as unknown as AppEnv);
+  const invalid = await handleRequest(new Request('https://api.example.invalid/health'), { APP_ENV: 'invalid' } as unknown as AppEnv);
   assert.equal(invalid.status, 500);
   assert.ok(!(await invalid.text()).includes('Invalid application environment'));
 });

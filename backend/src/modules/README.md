@@ -1,28 +1,24 @@
-# Module boundaries
+# Modular monolith boundaries
 
-One Worker composes modules through `src/app.ts`. Business modules must not
-import HTTP handlers from other modules or read their tables ad hoc. Introduce
-explicit services/ports as functionality is implemented; no distributed services.
+One Worker composes modules through `src/app.ts`; there are no microservices.
 
-| Module | Ownership | Stage |
+| Module | Ownership | Current scope |
 |---|---|---|
-| `system/` | Liveness; later operational readiness | E0 |
-| `identity/` | Stable provider mapping, account state, opaque application sessions | E0 types/deny boundary; actual login/session service E1 |
-| `projects/` | Projects, single owner, project memberships | E0 types/schema; service/authorization E1 |
-| trips | Project-scoped trips and trip-only memberships | E2 |
-| visits/places | Repeated visits, date-only ranges, shared geographic identity | E2 |
-| photos/uploads | Private original/derivative lifecycle, operation idempotency | E4 |
-| quota | Atomic reservation/accounting, separate author/responsible user | E4 |
-| invitations | Hashed one-use grants and redemption | E5 |
-| retention | Trash, assisted deletion/transfer, safe purge | E4/E5 |
-| observability | Redacted security/operational events | Incremental; no sensitive logging in E0 |
+| `system/` | Public liveness | E0 implemented |
+| `identity/` | Verified provider identity, OAuth transaction, opaque session, CSRF | E1 local implementation; real Google acceptance pending |
+| `projects/` | Project model, input/pagination validation | E1 services enforced through scoped SQL RPC |
+| `infrastructure/postgres.ts` | Parameterized, bounded server-only SQL transport | E1 restricted database role; never a browser connection |
+| trips, visits/places | Project/trip scopes, repeated visits, geographic identity | E2, not started |
+| photos/uploads, quota | Private media lifecycle and atomic accounting | E4, not started |
+| invitations, retention | Collaboration and assisted lifecycle procedures | E5/later approved scope, not started |
 
-Only the three E0 modules have code today. Later modules are not empty service
-stubs or implemented endpoints. `shared/` contains HTTP mechanics, not business
-authorization. Node-only migration tools live in `scripts/`, outside the Worker
-import graph. No application dependency on `spikes/` is permitted.
+SQL functions form the central authorization boundary for E1: validate current
+session/account, resolve current owner/membership and filter before projecting or
+counting. Only the trusted server role can invoke bootstrap functions; browser
+roles have no schema/table/function privileges. E1's schema migration owner is the
+SECURITY DEFINER authority and must never be a runtime/browser credential.
 
-E1 must replace the deny boundary with real, authoritative application-session
-validation and a central domain authorization service. Valid provider JWTs alone,
-caller roles, ownership history and UI capabilities never authorize a request.
-RLS is defense in depth; database invariants do not implement actor authorization.
+No imports from `spikes/`, test provider fixtures or test identity seeds are allowed
+in the production entry graph. Test injection ports are ordinary in-process
+interfaces, not HTTP backdoors or deployable mock authentication modes. Node-only
+migration/admin tools remain in `scripts/`, outside the Worker bundle.
