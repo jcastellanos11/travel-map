@@ -1,0 +1,9 @@
+{
+  "phase": "live-check",
+  "beforeStatus": 200,
+  "logoutStatus": 204,
+  "afterStatus": 404,
+  "expectedAfterStatus": 404,
+  "pass": true,
+  "interpretation": "Local live Auth check denies logged-out session; extra service round trip, not production strategy selected"
+}

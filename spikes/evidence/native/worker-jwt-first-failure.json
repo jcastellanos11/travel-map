@@ -1,0 +1,22 @@
+{
+  "scope": "Actual Worker B verifies LOCAL Supabase JWT and maps to fixture identity; NOT Google/cloud",
+  "cases": [
+    {
+      "actor": "guest",
+      "status": 404,
+      "pass": false
+    },
+    {
+      "actor": "member",
+      "status": 404,
+      "pass": false
+    },
+    {
+      "actor": "tampered JWT with forged mock fallback",
+      "status": 404,
+      "pass": true
+    }
+  ],
+  "passed": 1,
+  "failed": 2
+}

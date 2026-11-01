@@ -1,9 +1,9 @@
 {
   "candidate": "cloudflare-supabase",
-  "nativeLocalExecution": "BLOCKED",
-  "runtime": "Wrangler/workerd unavailable",
-  "database": "PostgreSQL server/client and Supabase CLI unavailable",
-  "identity": "Supabase Auth intentionally mocked",
-  "referenceSimulation": "shared Node policy + SQLite only; not candidate validation",
+  "nativeLocalExecution": "VERIFIED: 22/22 Worker/PostgreSQL integration tests; Docker packaging still blocked by host administrator permission",
+  "runtime": "Wrangler 4.156.0 / workerd 1.20261023.1; native Supabase CLI 2.122.0",
+  "database": "Actual PostgreSQL 17.11 ARM64 process; independent connections; local Supabase native stack",
+  "identity": "Domain parity suite uses mock sessions; separate LOCAL Supabase Auth/JWKS/RLS and Worker JWT integration verified, no Google/cloud",
+  "referenceSimulation": "Historical reference tests retained separately; current results in evidence/native/postgres-results.json and supabase-results.json",
   "remoteExecution": "NOT AUTHORIZED; no cloud resources created"
 }

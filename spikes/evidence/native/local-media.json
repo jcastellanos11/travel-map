@@ -1,0 +1,49 @@
+{
+  "scope": "LOCAL MACOS CODECS ONLY; NOT CLOUDFLARE IMAGES",
+  "sharp": "0.35.5",
+  "vips": "8.18.7",
+  "tests": [
+    {
+      "id": "TIFF_GPS_TO_WEBP",
+      "status": "PASS",
+      "outputBytes": 56,
+      "chunks": [
+        "VP8 "
+      ],
+      "elapsedMs": 2.3499160000000074,
+      "sha256": "258327d0fbc4fa870e19590e3c9d50e05c16e6addf7e8aee57018e3dcf195f30"
+    },
+    {
+      "id": "HEIC_TO_WEBP_SHARP",
+      "status": "FAIL",
+      "error": "/Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.heic: bad seek to 1024\n/Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.heic: bad seek to 768\n/Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.heic: bad seek to 736\n/Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.heic: bad seek to 728\n/Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.heic: bad seek to 724\n/Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.heic: bad seek to 755\n/Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.heic: bad seek to 739\n/Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.heic: bad seek to 731\n/Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.heic: bad seek to 727\n/Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.heic: bad seek to 725\n/Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.heic: bad seek to 724\nheif: Error while loading plugin: Support for this compression format has not been built in: HEVC (a suitable decoder plugin is libde265) (11.6003)"
+    },
+    {
+      "id": "LOCAL_JPEG_DECODE",
+      "status": "PASS",
+      "bytes": 269
+    },
+    {
+      "id": "LOCAL_PNG_DECODE",
+      "status": "PASS",
+      "bytes": 95
+    },
+    {
+      "id": "LOCAL_WEBP_DECODE",
+      "status": "PASS",
+      "bytes": 56
+    },
+    {
+      "id": "DISGUISED_IMAGE",
+      "status": "PASS"
+    }
+  ],
+  "sourceGPS": {
+    "latitude": 0,
+    "longitude": 0
+  },
+  "limitTests": {
+    "scope": "declared byte policy only; cloud format/20MB boundary still requires native Images",
+    "maxBytes": 20000000
+  }
+}

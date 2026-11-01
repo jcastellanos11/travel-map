@@ -1,0 +1,130 @@
+{
+  "candidate": "d1",
+  "scope": "NATIVE LOCAL ONLY; mock identity; no cloud resources",
+  "run": "1793530056877",
+  "base": "http://127.0.0.1:8787",
+  "passed": 0,
+  "failed": 20,
+  "tests": [
+    {
+      "id": "RUNTIME actual Worker and database version",
+      "status": "FAIL",
+      "elapsedMs": 9.727,
+      "error": "fetch failed"
+    },
+    {
+      "id": "AUTH-01 missing, forged and inactive sessions deny",
+      "status": "FAIL",
+      "elapsedMs": 0.529,
+      "error": "fetch failed"
+    },
+    {
+      "id": "AUTH-02 direct-ID and aggregate isolation",
+      "status": "FAIL",
+      "elapsedMs": 0.365,
+      "error": "fetch failed"
+    },
+    {
+      "id": "AUTH-03 project inheritance, overlapping grants and Place identity",
+      "status": "FAIL",
+      "elapsedMs": 0.369,
+      "error": "fetch failed"
+    },
+    {
+      "id": "AUTH-04 owner-only management",
+      "status": "FAIL",
+      "elapsedMs": 0.322,
+      "error": "fetch failed"
+    },
+    {
+      "id": "AUTH-05 creator and original-download rights",
+      "status": "FAIL",
+      "elapsedMs": 0.25,
+      "error": "fetch failed"
+    },
+    {
+      "id": "AUTH-06 caller user/role spoofing and injection do not grant access",
+      "status": "FAIL",
+      "elapsedMs": 0.223,
+      "error": "fetch failed"
+    },
+    {
+      "id": "AUTH-07 ancestor states suppress private reads",
+      "status": "FAIL",
+      "elapsedMs": 0.245,
+      "error": "fetch failed"
+    },
+    {
+      "id": "QUOTA-01 hundred native concurrent reservation races",
+      "status": "FAIL",
+      "elapsedMs": 0.293,
+      "error": "fetch failed"
+    },
+    {
+      "id": "QUOTA-02 fail/cancel releases once and charges actual variants",
+      "status": "FAIL",
+      "elapsedMs": 0.659,
+      "error": "fetch failed"
+    },
+    {
+      "id": "QUOTA-03 actual overflow rolls back then compensates",
+      "status": "FAIL",
+      "elapsedMs": 0.239,
+      "error": "fetch failed"
+    },
+    {
+      "id": "TRANSACTION native batch/transaction rollback injection",
+      "status": "FAIL",
+      "elapsedMs": 0.257,
+      "error": "fetch failed"
+    },
+    {
+      "id": "RECOVERY committed abandoned reservation expires once",
+      "status": "FAIL",
+      "elapsedMs": 0.235,
+      "error": "fetch failed"
+    },
+    {
+      "id": "UPLOAD-01 partial 7/3 and retry only failures",
+      "status": "FAIL",
+      "elapsedMs": 0.213,
+      "error": "fetch failed"
+    },
+    {
+      "id": "UPLOAD-02 eight process duplicate reserve/completion",
+      "status": "FAIL",
+      "elapsedMs": 0.147,
+      "error": "fetch failed"
+    },
+    {
+      "id": "UPLOAD-03 intentional repeat and conflicting key reuse",
+      "status": "FAIL",
+      "elapsedMs": 0.135,
+      "error": "fetch failed"
+    },
+    {
+      "id": "UPLOAD-04 denied scope and forged actor cannot reserve",
+      "status": "FAIL",
+      "elapsedMs": 0.128,
+      "error": "fetch failed"
+    },
+    {
+      "id": "RETENTION trash retains bytes; restore within 30 days only",
+      "status": "FAIL",
+      "elapsedMs": 0.123,
+      "error": "fetch failed"
+    },
+    {
+      "id": "INVITATION hashed token single-use race; expiry and revocation",
+      "status": "FAIL",
+      "elapsedMs": 0.267,
+      "error": "fetch failed"
+    },
+    {
+      "id": "MEDIA actual local R2 bytes, original permissions and next-GET revocation",
+      "status": "FAIL",
+      "elapsedMs": 0.542,
+      "error": "fetch failed"
+    }
+  ]
+}

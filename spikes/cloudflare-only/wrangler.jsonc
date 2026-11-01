@@ -1,0 +1,10 @@
+{
+  "name": "travel-map-local-d1-poc",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-30",
+  "workers_dev": false,
+  "images": { "binding": "IMAGES", "remote": false },
+  "dev": { "ip": "127.0.0.1", "port": 8787, "inspector_port": 9237 },
+  "d1_databases": [{ "binding": "DB", "database_name": "poc-db", "database_id": "00000000-0000-0000-0000-000000000001", "remote": false }],
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "poc-private-media-a", "remote": false }]
+}

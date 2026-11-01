@@ -1,0 +1,10 @@
+{
+  "scope": "Actual PostgreSQL native ARM64 process managed by experimental local Supabase; NOT Docker or managed cloud",
+  "version": "PostgreSQL 17.11 on aarch64-apple-darwin25.3.0, compiled by clang version 21.1.7, 64-bit",
+  "database": "poc_candidate_b",
+  "architecture": "darwin-arm64 (locked native archive)",
+  "applicationRole": "poc_app NOSUPERUSER NOBYPASSRLS",
+  "listenAddress": "127.0.0.1",
+  "port": 26958,
+  "credentials": "REDACTED; ignored files only"
+}

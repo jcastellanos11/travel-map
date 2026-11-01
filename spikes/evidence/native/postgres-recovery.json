@@ -1,0 +1,12 @@
+{
+  "scope": "Actual local PostgreSQL pg_dump/pg_restore into separate disposable database; NOT managed Supabase backup validation",
+  "database": "poc_candidate_b_restore",
+  "account": {
+    "used": "11000000",
+    "reserved": "0"
+  },
+  "uploads": 10,
+  "assets": 20,
+  "backupBytes": 31458,
+  "passed": true
+}

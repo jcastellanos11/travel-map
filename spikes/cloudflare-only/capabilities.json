@@ -1,9 +1,9 @@
 {
   "candidate": "cloudflare-only",
-  "nativeLocalExecution": "BLOCKED",
-  "runtime": "Wrangler/workerd unavailable",
-  "database": "D1 binding unavailable",
+  "nativeLocalExecution": "VERIFIED: 22/22 local integration tests passed",
+  "runtime": "Wrangler 4.156.0 / workerd 1.20261023.1; compatibility date 2026-10-30",
+  "database": "Actual local D1 binding, SQL triggers and native batch rollback",
   "identity": "Google OIDC intentionally mocked",
-  "referenceSimulation": "shared Node policy + SQLite only; not candidate validation",
+  "referenceSimulation": "Historical reference tests retained separately; current results in evidence/native/d1-results.json",
   "remoteExecution": "NOT AUTHORIZED; no cloud resources created"
 }

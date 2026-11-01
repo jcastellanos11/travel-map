@@ -1,5 +1,28 @@
 # Candidate B — Workers + Supabase PostgreSQL/Auth
 
+**Current status (2026-11-01): 22/22 actual Worker/PostgreSQL local integration
+tests passed.** PostgreSQL 17.11 runs as an ARM64 process in Supabase CLI's
+experimental native stack. Supabase Auth/JWKS/PostgREST/RLS passed 11 additional
+tests; bearer JWT integration, expiry and session revocation were checked
+separately. `pg_dump/pg_restore` and native-stack restart were exercised.
+
+Docker installation was attempted twice and rolled back at sudo prompts. The
+container-specific run is **still blocked**, not claimed verified by native mode.
+See `../evidence/native/postgres-results.json`, `supabase-results.json` and the
+current authoritative `../../docs/POC_RESULTS.md`.
+
+Current commands use isolated `../tools/node_modules/.bin/wrangler` and
+`supabase`; all `.dev.vars`, raw logs, credentials and dumps stay ignored.
+`tools/postgres-native-setup.mjs` initializes a distinct disposable DB, never a
+production connection. The ordinary `tools/postgres-setup.mjs` container setup
+is prepared but was not executed successfully without Docker.
+
+Use `/harness/*` only on localhost. Synthetic password grants are local Auth test
+transport, not a change to the production Google-only requirement. The optional
+live-session check is an experiment, not a selected production session design.
+
+## Historical prerequisite note (resolved through native mode except Docker)
+
 Native local execution: **BLOCKED**. Wrangler/workerd, PostgreSQL server/client,
 Docker and Supabase CLI are unavailable on PATH. No existing service or cloud
 credentials were accessed. No tools or dependencies were installed.

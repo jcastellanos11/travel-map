@@ -1,3 +1,11 @@
 # Generated local experiment stores. Never place credentials in this spike.
 **/runs/
 **/__pycache__/
+**/.state/
+**/.wrangler/
+**/.dev.vars
+**/.env
+**/.env.*
+**/private/
+**/.temp/
+**/.branches/

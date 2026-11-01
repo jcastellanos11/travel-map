@@ -1,5 +1,24 @@
 # Candidate A — Workers + D1
 
+**Current status (2026-11-01): 22/22 actual local Worker/D1 integration tests
+passed.** Local R2/Images, D1 export/import and quiesced R2 state restore were also
+exercised. Images' HEIC simulator failed; cloud behavior remains unverified.
+See `../evidence/native/d1-results.json` and `../../docs/POC_RESULTS.md`.
+
+Current commands from this folder, after isolated tools and fixture generation:
+
+```sh
+WRANGLER_SEND_METRICS=false WRANGLER_LOG_PATH=../runs/wrangler-a.log ../tools/node_modules/.bin/wrangler d1 execute poc-db --local --config wrangler.jsonc --persist-to .state --file fixture.sql
+WRANGLER_SEND_METRICS=false WRANGLER_LOG_PATH=../runs/wrangler-a.log ../tools/node_modules/.bin/wrangler dev --local --config wrangler.jsonc --ip 127.0.0.1 --port 8787 --persist-to .state
+```
+
+In another terminal from repository root: `node spikes/shared/native-tests.mjs d1`.
+Use only the loopback interface. `/harness/*` is deliberately privileged and
+unauthenticated for local setup; this must never be deployed. The local ledger
+schema uses triggers, not the reference harness's interactive `BEGIN IMMEDIATE`.
+
+## Historical prerequisite note (resolved for local D1)
+
 Native local execution: **BLOCKED**. Wrangler/workerd are unavailable on PATH
 and no local frontend Wrangler/workerd executable is present. No dependency was
 installed and no Cloudflare account, binding or resource was inspected/created.

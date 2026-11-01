@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "724929efbe258848b7fce591bc69dd9cee7f7a5f",
+  "node": "v24.21.0",
+  "versions": {
+    "wrangler": "4.156.0",
+    "miniflare": "5.20261023.3-beta",
+    "pg": "8.16.3",
+    "supabase": "2.122.0",
+    "jose": "6.2.14",
+    "sharp": "0.35.5",
+    "exifr": "7.1.3",
+    "@cloudflare/workerd-darwin-arm64": "1.20261023.1"
+  },
+  "protectedPathsUnchanged": true,
+  "approvedInputDocumentHashes": {
+    "docs/PRD.md": "d1648113663bee9555b87bfec4ef340f09b6a430a05e62a748fe93b80a6e8262",
+    "docs/DATA_MODEL.md": "8413918450d156e49a4bc1762e1b6cef642b530ad285202d1273a41f063d333e",
+    "docs/AUTHORIZATION_MATRIX.md": "e217cf3c207c03bf48beda70f43b8b775d69c0d0025e67734daaeec856affc2b",
+    "docs/ARCHITECTURE.md": "242dccde69adcde8f4c6f74a85c434f177b3e9f7d8bd280c12174658cb691e09",
+    "docs/POC_PLAN.md": "39b5eece6e343cf838a344c1dc2ebb1a28ac6e89c613d562a795f69178b2f998"
+  },
+  "nonIgnoredCredentialMatches": [],
+  "filesChecked": 78,
+  "changedPaths": [
+    "M docs/POC_RESULTS.md",
+    " M spikes/.gitignore",
+    " M spikes/README.md",
+    " M spikes/cloudflare-only/README.md",
+    " M spikes/cloudflare-only/capabilities.json",
+    " M spikes/cloudflare-supabase/README.md",
+    " M spikes/cloudflare-supabase/capabilities.json",
+    " M spikes/shared/probe.mjs",
+    "?? spikes/cloudflare-only/fixture.sql",
+    "?? spikes/cloudflare-only/worker.mjs",
+    "?? spikes/cloudflare-only/wrangler.jsonc",
+    "?? spikes/cloudflare-supabase/fixture.sql",
+    "?? spikes/cloudflare-supabase/local-supabase/",
+    "?? spikes/cloudflare-supabase/native-supabase/",
+    "?? spikes/cloudflare-supabase/worker.mjs",
+    "?? spikes/cloudflare-supabase/wrangler.jsonc",
+    "?? spikes/evidence/native/",
+    "?? spikes/fixtures/synthetic-derived.webp",
+    "?? spikes/shared/generate-native.mjs",
+    "?? spikes/shared/native-handler.mjs",
+    "?? spikes/shared/native-request-child.mjs",
+    "?? spikes/shared/native-schema.mjs",
+    "?? spikes/shared/native-tests.mjs",
+    "?? spikes/tools/"
+  ],
+  "scope": "Local synthetic PoC only; installed-runtime caches outside repo require OS permission; no cloud resources"
+}

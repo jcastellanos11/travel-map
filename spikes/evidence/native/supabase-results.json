@@ -1,0 +1,100 @@
+{
+  "scope": "Actual LOCAL Supabase native Auth + PostgREST + RLS; no real Google or managed cloud",
+  "api": "http://127.0.0.1:27954",
+  "tests": [
+    {
+      "id": "AUTH local service health and synthetic account creation",
+      "status": "PASS",
+      "evidence": {
+        "syntheticAccounts": 5,
+        "identityMethod": "LOCAL password grant as test transport only; NOT production Google verification"
+      }
+    },
+    {
+      "id": "AUTH valid token accepted; missing and tampered tokens rejected",
+      "status": "PASS",
+      "evidence": {
+        "valid": 200,
+        "invalidCasesDenied": 3
+      }
+    },
+    {
+      "id": "AUTH independent JWKS signature, issuer and audience validation",
+      "status": "PASS",
+      "evidence": {
+        "alg": "ES256",
+        "validSignature": true,
+        "wrongIssuerDenied": true,
+        "wrongAudienceDenied": true
+      }
+    },
+    {
+      "id": "RLS install isolated domain and deny-default policies",
+      "status": "PASS",
+      "evidence": {
+        "version": "PostgreSQL 17.11 on aarch64-apple-darwin25.3.0, compiled by clang version 21.1.7, 64-bit",
+        "rlsTables": 15,
+        "functions": "SECURITY DEFINER with empty search_path; explicit EXECUTE grants",
+        "scope": "Disposable RLS experiment, not approved production policies"
+      }
+    },
+    {
+      "id": "RLS anonymous and outsider cannot read main-project photos",
+      "status": "PASS",
+      "evidence": {
+        "anonymousRows": 0,
+        "outsiderRomeRows": 0
+      }
+    },
+    {
+      "id": "RLS Italy guest scopes rows, counts, direct IDs and projects",
+      "status": "PASS",
+      "evidence": {
+        "guestRows": 2,
+        "deniedCount": "*/0",
+        "projectRows": 0
+      }
+    },
+    {
+      "id": "RLS inherited membership sees five photos; originals remain author/admin only",
+      "status": "PASS"
+    },
+    {
+      "id": "RLS blocks client writes, spoofed roles and protected membership enumeration",
+      "status": "PASS",
+      "evidence": {
+        "membershipWrite": 403,
+        "membershipRead": 403,
+        "foreignPhotoMutation": 403
+      }
+    },
+    {
+      "id": "RLS membership revocation affects the next request with still-valid JWT",
+      "status": "PASS",
+      "evidence": {
+        "jwtNotChanged": true,
+        "newVisibleRows": 0
+      }
+    },
+    {
+      "id": "RLS service-role bypass observed and explicitly separated",
+      "status": "PASS",
+      "evidence": {
+        "serviceRoleRows": 6,
+        "securityConsequence": "Privileged Worker must still enforce domain authorization; never expose this credential"
+      }
+    },
+    {
+      "id": "AUTH logout invalidates refresh; access-token behavior measured",
+      "status": "PASS",
+      "evidence": {
+        "logoutStatus": 204,
+        "refreshDeniedStatus": 400,
+        "previousAccessTokenUserStatus": 403,
+        "note": "Do not infer immediate JWT invalidation; membership policies remain necessary"
+      }
+    }
+  ],
+  "passed": 11,
+  "failed": 0
+}

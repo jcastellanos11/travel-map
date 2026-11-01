@@ -1,0 +1,168 @@
+{
+  "candidate": "postgres",
+  "scope": "LOCAL Images simulator only; NOT cloud processing, billing or 20MB guarantees",
+  "tests": [
+    {
+      "name": "synthetic-heic",
+      "inputBytes": 723,
+      "status": 422,
+      "elapsedMs": 42.66995800000001,
+      "error": "{\"error\":\"local_images_failure\",\"detail\":\"Unexpected error response 500: Error: source: bad seek to 1024\\nsource: bad seek to 768\\nsource: bad seek to 736\\nsource: bad seek to 728\\nsource: bad seek to 724\\nsource: bad seek to 755\\nsource: bad seek to 739\\nsource: bad seek to 731\\nsource: bad seek to 727\\nsource: bad seek to 725\\nsource: bad seek to 724\\nheif: Error while loading plugin: Support for this compression format has not been built in: HEVC (a suitable decoder plugin is libde265) (11.6003)\\n    at Sharp.toBuffer (file:///Users/luffy/Documents/travel-map/spikes/tools/node_modules/sharp/dist/output.mjs:159:17)\\n    at runTransform (/Users/luffy/Documents/travel-map/spikes/tools/node_modules/miniflare/dist/src/index.js:135694:37)\\n    at imagesLocalFetcher (/Users/luffy/Documents/travel-map/spikes/tools/node_modules/miniflare/dist/src/index.js:135583:14)\\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\\n    at async #handleLoopbackCustomFetchService (/Users/luffy/Documents/travel-map/spikes/tools/node_modules/miniflare/dist/src/index.js:138097:22)\\n    at async #handleLoopback (/Users/luffy/Documents/travel-map/spikes/tools/node_modules/miniflare/dist/src/index.js:138390:20)\"}"
+    },
+    {
+      "name": "synthetic-tiff-gps",
+      "inputBytes": 458,
+      "status": 200,
+      "elapsedMs": 6.094832999999994,
+      "output": {
+        "bytes": 56,
+        "format": "webp",
+        "chunks": [
+          "VP8 "
+        ],
+        "sensitiveMetadataChunks": []
+      }
+    },
+    {
+      "name": "jpeg",
+      "inputBytes": 269,
+      "status": 200,
+      "elapsedMs": 5.320665999999989,
+      "output": {
+        "bytes": 58,
+        "format": "webp",
+        "chunks": [
+          "VP8 "
+        ],
+        "sensitiveMetadataChunks": []
+      }
+    },
+    {
+      "name": "png",
+      "inputBytes": 95,
+      "status": 200,
+      "elapsedMs": 5.831125,
+      "output": {
+        "bytes": 56,
+        "format": "webp",
+        "chunks": [
+          "VP8 "
+        ],
+        "sensitiveMetadataChunks": []
+      }
+    },
+    {
+      "name": "webp",
+      "inputBytes": 56,
+      "status": 200,
+      "elapsedMs": 5.607791999999989,
+      "output": {
+        "bytes": 56,
+        "format": "webp",
+        "chunks": [
+          "VP8 "
+        ],
+        "sensitiveMetadataChunks": []
+      }
+    },
+    {
+      "name": "disguised-png",
+      "inputBytes": 12,
+      "status": 422,
+      "elapsedMs": 5.651541999999978,
+      "error": "{\"error\":\"local_images_failure\",\"detail\":\"Unexpected error response 500: Error: Input buffer contains unsupported image format\\n    at Sharp.toBuffer (file:///Users/luffy/Documents/travel-map/spikes/tools/node_modules/sharp/dist/output.mjs:159:17)\\n    at runTransform (/Users/luffy/Documents/travel-map/spikes/tools/node_modules/miniflare/dist/src/index.js:135694:37)\\n    at imagesLocalFetcher (/Users/luffy/Documents/travel-map/spikes/tools/node_modules/miniflare/dist/src/index.js:135583:14)\\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\\n    at async #handleLoopbackCustomFetchService (/Users/luffy/Documents/travel-map/spikes/tools/node_modules/miniflare/dist/src/index.js:138097:22)\\n    at async #handleLoopback (/Users/luffy/Documents/travel-map/spikes/tools/node_modules/miniflare/dist/src/index.js:138390:20)\"}"
+    },
+    {
+      "name": "png-19900000",
+      "inputBytes": 19900000,
+      "status": 200,
+      "elapsedMs": 68.06579199999999,
+      "output": {
+        "bytes": 56,
+        "format": "webp",
+        "chunks": [
+          "VP8 "
+        ],
+        "sensitiveMetadataChunks": []
+      }
+    },
+    {
+      "name": "png-20000000",
+      "inputBytes": 20000000,
+      "status": 200,
+      "elapsedMs": 86.29291699999999,
+      "output": {
+        "bytes": 56,
+        "format": "webp",
+        "chunks": [
+          "VP8 "
+        ],
+        "sensitiveMetadataChunks": []
+      }
+    },
+    {
+      "name": "png-20000001",
+      "inputBytes": 20000001,
+      "status": 200,
+      "elapsedMs": 70.53308400000003,
+      "output": {
+        "bytes": 56,
+        "format": "webp",
+        "chunks": [
+          "VP8 "
+        ],
+        "sensitiveMetadataChunks": []
+      }
+    },
+    {
+      "name": "private-local-R2-to-Images",
+      "status": 200,
+      "outputBytes": 56
+    }
+  ],
+  "batch10": {
+    "elapsedMs": 19.13695800000005,
+    "results": [
+      {
+        "status": 200,
+        "bytes": 56
+      },
+      {
+        "status": 200,
+        "bytes": 56
+      },
+      {
+        "status": 200,
+        "bytes": 56
+      },
+      {
+        "status": 200,
+        "bytes": 56
+      },
+      {
+        "status": 200,
+        "bytes": 56
+      },
+      {
+        "status": 200,
+        "bytes": 56
+      },
+      {
+        "status": 200,
+        "bytes": 56
+      },
+      {
+        "status": 200,
+        "bytes": 56
+      },
+      {
+        "status": 200,
+        "bytes": 56
+      },
+      {
+        "status": 200,
+        "bytes": 56
+      }
+    ]
+  }
+}

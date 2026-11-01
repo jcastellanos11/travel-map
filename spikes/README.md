@@ -1,4 +1,49 @@
-# Isolated architecture PoC: phases 0 and 1
+# Isolated architecture PoC: reference and native local experiments
+
+## Current native local run (2026-11-01)
+
+The historical reference harness below is retained. Actual local Workers/D1 and
+Workers/PostgreSQL adapters now live in the candidate directories; neither is a
+production backend. See `docs/POC_RESULTS.md` for the current authoritative result.
+
+- `tools/package.json` and `package-lock.json` pin isolated tooling; reproduce with
+  `npm ci --prefix spikes/tools` from the repository root.
+- `shared/generate-native.mjs` generates disposable D1/PostgreSQL schemas from the
+  same fixture. SQL triggers implement atomic quota/operation/asset transitions.
+- `shared/native-handler.mjs` is a **loopback-only experimental HTTP interface**,
+  including deliberately privileged `/harness/*` setup controls. Never deploy it.
+- `shared/native-tests.mjs d1|postgres`: 22 parity integration tests per candidate.
+  These use actual local bindings/connections, not the reference SQLite adapter.
+- `tools/supabase-tests.mjs`: actual LOCAL Auth/JWKS/PostgREST/RLS tests. Synthetic
+  password grants are only a test transport, not the production Google flow.
+- `tools/worker-jwt-test.mjs`, `session-revocation-test.mjs`, `expiry-check.mjs`:
+  signature/session lifecycle integration and negative controls.
+- `tools/images-binding-test.mjs d1|postgres`: local Images/R2 probes including
+  actual 19.9/20/20+ MB PNG bytes. The emulator rejects HEIC but accepts 20+ MB;
+  neither outcome proves Cloudflare's deployed service behavior.
+- `tools/d1-recovery.mjs`, `postgres-recovery.mjs`, `supabase-restart-check.mjs`:
+  local export/import, object-state copy, pg_dump/restore and restart checks.
+- Native Supabase's service versions/checksums are pinned in
+  `cloudflare-supabase/native-supabase/supabase/supabase.lock`. Its experimental
+  native runtime uses actual ARM64 PostgreSQL/Auth processes. **Docker installation
+  remains blocked by host sudo interaction; no container test was substituted.**
+- Credentials, raw runtime logs, databases, dumps and stack status live only in
+  ignored `.dev.vars`, `.state`, `.wrangler`, or `runs/` paths. Never copy them into
+  reports or Git. Supabase's host cache/preferences also contain local runtime state.
+
+Native test time/expiry values are injected logical clocks. Scenario `namespace`
+values create independent disposable ledgers; they are not production per-user
+quota semantics. Mock sessions remain available for parity tests. The B bearer
+path separately verifies local Supabase JWTs and maps subjects to fixture actors.
+Its optional live session check demonstrates logout revocation at additional cost;
+no production session strategy is selected.
+
+The scripts expect services already initialized/running. Recovery uses independent
+restore state/databases, and the PostgreSQL restore script uses a fixed disposable
+restore DB name: do not rerun it over an already populated restore DB without an
+explicit scoped reset. Do not run destructive commands against unrelated state.
+
+## Historical reference-only harness
 
 This is disposable experiment code. It is not a backend, HTTP API, migration,
 authentication library, D1 adapter, or PostgreSQL emulator. It must never be

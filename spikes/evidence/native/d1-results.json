@@ -1,0 +1,2144 @@
+{
+  "candidate": "d1",
+  "scope": "NATIVE LOCAL ONLY; mock identity; no cloud resources",
+  "run": "1793532842188",
+  "base": "http://127.0.0.1:8787",
+  "passed": 22,
+  "failed": 0,
+  "tests": [
+    {
+      "id": "RUNTIME actual Worker and database version",
+      "status": "PASS",
+      "elapsedMs": 24.789,
+      "evidence": {
+        "engine": "D1",
+        "sessionCheck": false,
+        "version": [
+          {
+            "version": "local-D1-binding",
+            "binding_ready": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "AUTH-01 missing, forged and inactive sessions deny",
+      "status": "PASS",
+      "elapsedMs": 8.106,
+      "evidence": {
+        "denials": 3
+      }
+    },
+    {
+      "id": "AUTH-02 direct-ID and aggregate isolation",
+      "status": "PASS",
+      "elapsedMs": 15.099,
+      "evidence": {
+        "photos": [],
+        "count": 0
+      }
+    },
+    {
+      "id": "AUTH-03 project inheritance, overlapping grants and Place identity",
+      "status": "PASS",
+      "elapsedMs": 8.181,
+      "evidence": {
+        "photos": [
+          "photo-bogota-1",
+          "photo-bogota-2",
+          "photo-bogota-3"
+        ],
+        "count": 3
+      }
+    },
+    {
+      "id": "AUTH-04 owner-only management",
+      "status": "PASS",
+      "elapsedMs": 13.54
+    },
+    {
+      "id": "AUTH-05 creator and original-download rights",
+      "status": "PASS",
+      "elapsedMs": 7.874
+    },
+    {
+      "id": "AUTH-06 caller user/role spoofing and injection do not grant access",
+      "status": "PASS",
+      "elapsedMs": 5.535
+    },
+    {
+      "id": "AUTH-07 ancestor states suppress private reads",
+      "status": "PASS",
+      "elapsedMs": 20.773
+    },
+    {
+      "id": "QUOTA-01 hundred native concurrent reservation races",
+      "status": "PASS",
+      "elapsedMs": 795.415,
+      "evidence": {
+        "rounds": [
+          {
+            "round": 0,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [
+              15527,
+              15528
+            ],
+            "elapsedMs": 49.457
+          },
+          {
+            "round": 1,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 7.88
+          },
+          {
+            "round": 2,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 7.628
+          },
+          {
+            "round": 3,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.789
+          },
+          {
+            "round": 4,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 7.446
+          },
+          {
+            "round": 5,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 7.242
+          },
+          {
+            "round": 6,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.506
+          },
+          {
+            "round": 7,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.893
+          },
+          {
+            "round": 8,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 13.792
+          },
+          {
+            "round": 9,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.82
+          },
+          {
+            "round": 10,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.366
+          },
+          {
+            "round": 11,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.578
+          },
+          {
+            "round": 12,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.803
+          },
+          {
+            "round": 13,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.867
+          },
+          {
+            "round": 14,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.452
+          },
+          {
+            "round": 15,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.614
+          },
+          {
+            "round": 16,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.112
+          },
+          {
+            "round": 17,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.038
+          },
+          {
+            "round": 18,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.429
+          },
+          {
+            "round": 19,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.121
+          },
+          {
+            "round": 20,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.405
+          },
+          {
+            "round": 21,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.845
+          },
+          {
+            "round": 22,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.216
+          },
+          {
+            "round": 23,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.228
+          },
+          {
+            "round": 24,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.336
+          },
+          {
+            "round": 25,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.138
+          },
+          {
+            "round": 26,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.471
+          },
+          {
+            "round": 27,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.889
+          },
+          {
+            "round": 28,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.738
+          },
+          {
+            "round": 29,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.226
+          },
+          {
+            "round": 30,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.757
+          },
+          {
+            "round": 31,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 8.973
+          },
+          {
+            "round": 32,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.057
+          },
+          {
+            "round": 33,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.595
+          },
+          {
+            "round": 34,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.551
+          },
+          {
+            "round": 35,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.295
+          },
+          {
+            "round": 36,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.61
+          },
+          {
+            "round": 37,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.719
+          },
+          {
+            "round": 38,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.496
+          },
+          {
+            "round": 39,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.429
+          },
+          {
+            "round": 40,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.34
+          },
+          {
+            "round": 41,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.907
+          },
+          {
+            "round": 42,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.873
+          },
+          {
+            "round": 43,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.243
+          },
+          {
+            "round": 44,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 4.98
+          },
+          {
+            "round": 45,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.072
+          },
+          {
+            "round": 46,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.767
+          },
+          {
+            "round": 47,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.28
+          },
+          {
+            "round": 48,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.248
+          },
+          {
+            "round": 49,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.566
+          },
+          {
+            "round": 50,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.542
+          },
+          {
+            "round": 51,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.436
+          },
+          {
+            "round": 52,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.133
+          },
+          {
+            "round": 53,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.031
+          },
+          {
+            "round": 54,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 8.665
+          },
+          {
+            "round": 55,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.481
+          },
+          {
+            "round": 56,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.688
+          },
+          {
+            "round": 57,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.054
+          },
+          {
+            "round": 58,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 4.899
+          },
+          {
+            "round": 59,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.196
+          },
+          {
+            "round": 60,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 4.991
+          },
+          {
+            "round": 61,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.064
+          },
+          {
+            "round": 62,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.11
+          },
+          {
+            "round": 63,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.095
+          },
+          {
+            "round": 64,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.107
+          },
+          {
+            "round": 65,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.346
+          },
+          {
+            "round": 66,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.63
+          },
+          {
+            "round": 67,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.382
+          },
+          {
+            "round": 68,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.715
+          },
+          {
+            "round": 69,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.063
+          },
+          {
+            "round": 70,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 4.805
+          },
+          {
+            "round": 71,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 4.707
+          },
+          {
+            "round": 72,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.375
+          },
+          {
+            "round": 73,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.552
+          },
+          {
+            "round": 74,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 4.672
+          },
+          {
+            "round": 75,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.174
+          },
+          {
+            "round": 76,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.048
+          },
+          {
+            "round": 77,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.375
+          },
+          {
+            "round": 78,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 4.992
+          },
+          {
+            "round": 79,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.366
+          },
+          {
+            "round": 80,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.467
+          },
+          {
+            "round": 81,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 4.861
+          },
+          {
+            "round": 82,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.664
+          },
+          {
+            "round": 83,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.087
+          },
+          {
+            "round": 84,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 6.445
+          },
+          {
+            "round": 85,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.431
+          },
+          {
+            "round": 86,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 4.977
+          },
+          {
+            "round": 87,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 4.977
+          },
+          {
+            "round": 88,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 4.869
+          },
+          {
+            "round": 89,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.859
+          },
+          {
+            "round": 90,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 4.933
+          },
+          {
+            "round": 91,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.509
+          },
+          {
+            "round": 92,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.065
+          },
+          {
+            "round": 93,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.13
+          },
+          {
+            "round": 94,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.187
+          },
+          {
+            "round": 95,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.384
+          },
+          {
+            "round": 96,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 5.043
+          },
+          {
+            "round": 97,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 4.829
+          },
+          {
+            "round": 98,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [],
+            "elapsedMs": 4.928
+          },
+          {
+            "round": 99,
+            "total": 497000000,
+            "statuses": [
+              200,
+              409
+            ],
+            "pids": [
+              15529,
+              15530
+            ],
+            "elapsedMs": 43.692
+          }
+        ]
+      }
+    },
+    {
+      "id": "QUOTA-02 fail/cancel releases once and charges actual variants",
+      "status": "PASS",
+      "elapsedMs": 22.45,
+      "evidence": {
+        "account": [
+          {
+            "user_id": "member:1793532842188-release",
+            "used": 496000000,
+            "reserved": 0,
+            "quota": 500000000
+          }
+        ],
+        "uploads": [
+          {
+            "user_id": "member:1793532842188-release",
+            "op": "op",
+            "file": "f1",
+            "visit_id": "visit-bogota-1",
+            "fingerprint": "synthetic-digest",
+            "estimate": 17000000,
+            "actual": 16000000,
+            "original_bytes": 15000000,
+            "display_bytes": 1000000,
+            "state": "ready",
+            "attempts": 2,
+            "expires": 1000,
+            "deleted_at": null
+          }
+        ],
+        "assets": [
+          {
+            "user_id": "member:1793532842188-release",
+            "op": "op",
+            "file": "f1",
+            "kind": "display",
+            "bytes": 1000000
+          },
+          {
+            "user_id": "member:1793532842188-release",
+            "op": "op",
+            "file": "f1",
+            "kind": "original",
+            "bytes": 15000000
+          }
+        ]
+      }
+    },
+    {
+      "id": "QUOTA-03 actual overflow rolls back then compensates",
+      "status": "PASS",
+      "elapsedMs": 11.508,
+      "evidence": {
+        "account": [
+          {
+            "user_id": "member:1793532842188-overflow",
+            "used": 480000000,
+            "reserved": 17000000,
+            "quota": 500000000
+          }
+        ],
+        "uploads": [
+          {
+            "user_id": "member:1793532842188-overflow",
+            "op": "op",
+            "file": "f1",
+            "visit_id": "visit-bogota-1",
+            "fingerprint": "synthetic-digest",
+            "estimate": 17000000,
+            "actual": 0,
+            "original_bytes": 0,
+            "display_bytes": 0,
+            "state": "reserved",
+            "attempts": 1,
+            "expires": 1000,
+            "deleted_at": null
+          }
+        ],
+        "assets": []
+      }
+    },
+    {
+      "id": "TRANSACTION native batch/transaction rollback injection",
+      "status": "PASS",
+      "elapsedMs": 1.832,
+      "evidence": {
+        "rolledBack": true
+      }
+    },
+    {
+      "id": "RECOVERY committed abandoned reservation expires once",
+      "status": "PASS",
+      "elapsedMs": 8.679,
+      "evidence": {
+        "account": [
+          {
+            "user_id": "member:1793532842188-abandoned",
+            "used": 0,
+            "reserved": 0,
+            "quota": 500000000
+          }
+        ],
+        "uploads": [
+          {
+            "user_id": "member:1793532842188-abandoned",
+            "op": "op",
+            "file": "f1",
+            "visit_id": "visit-bogota-1",
+            "fingerprint": "synthetic-digest",
+            "estimate": 1200000,
+            "actual": 0,
+            "original_bytes": 0,
+            "display_bytes": 0,
+            "state": "failed",
+            "attempts": 1,
+            "expires": 100,
+            "deleted_at": null
+          }
+        ],
+        "assets": []
+      }
+    },
+    {
+      "id": "UPLOAD-01 partial 7/3 and retry only failures",
+      "status": "PASS",
+      "elapsedMs": 72.624,
+      "evidence": {
+        "before": {
+          "account": [
+            {
+              "user_id": "member:1793532842188-partial",
+              "used": 7700000,
+              "reserved": 0,
+              "quota": 500000000
+            }
+          ],
+          "uploads": [
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-0",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-1",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-2",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-3",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-4",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-5",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-6",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-7",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 0,
+              "original_bytes": 0,
+              "display_bytes": 0,
+              "state": "failed",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-8",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 0,
+              "original_bytes": 0,
+              "display_bytes": 0,
+              "state": "failed",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-9",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 0,
+              "original_bytes": 0,
+              "display_bytes": 0,
+              "state": "failed",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            }
+          ],
+          "assets": [
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-0",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-0",
+              "kind": "original",
+              "bytes": 1000000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-1",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-1",
+              "kind": "original",
+              "bytes": 1000000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-2",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-2",
+              "kind": "original",
+              "bytes": 1000000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-3",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-3",
+              "kind": "original",
+              "bytes": 1000000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-4",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-4",
+              "kind": "original",
+              "bytes": 1000000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-5",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-5",
+              "kind": "original",
+              "bytes": 1000000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-6",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-6",
+              "kind": "original",
+              "bytes": 1000000
+            }
+          ]
+        },
+        "after": {
+          "account": [
+            {
+              "user_id": "member:1793532842188-partial",
+              "used": 11000000,
+              "reserved": 0,
+              "quota": 500000000
+            }
+          ],
+          "uploads": [
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-0",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-1",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-2",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-3",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-4",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-5",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-6",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-7",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 2,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-8",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 2,
+              "expires": 1000,
+              "deleted_at": null
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-9",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 2,
+              "expires": 1000,
+              "deleted_at": null
+            }
+          ],
+          "assets": [
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-0",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-0",
+              "kind": "original",
+              "bytes": 1000000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-1",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-1",
+              "kind": "original",
+              "bytes": 1000000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-2",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-2",
+              "kind": "original",
+              "bytes": 1000000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-3",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-3",
+              "kind": "original",
+              "bytes": 1000000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-4",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-4",
+              "kind": "original",
+              "bytes": 1000000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-5",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-5",
+              "kind": "original",
+              "bytes": 1000000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-6",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-6",
+              "kind": "original",
+              "bytes": 1000000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-7",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-7",
+              "kind": "original",
+              "bytes": 1000000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-8",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-8",
+              "kind": "original",
+              "bytes": 1000000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-9",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-partial",
+              "op": "op",
+              "file": "file-9",
+              "kind": "original",
+              "bytes": 1000000
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "UPLOAD-02 eight process duplicate reserve/completion",
+      "status": "PASS",
+      "elapsedMs": 138.724,
+      "evidence": {
+        "reservations": [
+          {
+            "phase": "result",
+            "pid": 15532,
+            "status": 200,
+            "body": {
+              "outcome": "replay"
+            }
+          },
+          {
+            "phase": "result",
+            "pid": 15533,
+            "status": 200,
+            "body": {
+              "outcome": "replay"
+            }
+          },
+          {
+            "phase": "result",
+            "pid": 15534,
+            "status": 200,
+            "body": {
+              "outcome": "replay"
+            }
+          },
+          {
+            "phase": "result",
+            "pid": 15535,
+            "status": 200,
+            "body": {
+              "outcome": "replay"
+            }
+          },
+          {
+            "phase": "result",
+            "pid": 15536,
+            "status": 200,
+            "body": {
+              "outcome": "replay"
+            }
+          },
+          {
+            "phase": "result",
+            "pid": 15537,
+            "status": 200,
+            "body": {
+              "outcome": "replay"
+            }
+          },
+          {
+            "phase": "result",
+            "pid": 15538,
+            "status": 200,
+            "body": {
+              "outcome": "reserved"
+            }
+          },
+          {
+            "phase": "result",
+            "pid": 15539,
+            "status": 200,
+            "body": {
+              "outcome": "replay"
+            }
+          }
+        ],
+        "completions": [
+          {
+            "phase": "result",
+            "pid": 15540,
+            "status": 200,
+            "body": {
+              "outcome": "replay"
+            }
+          },
+          {
+            "phase": "result",
+            "pid": 15541,
+            "status": 200,
+            "body": {
+              "outcome": "replay"
+            }
+          },
+          {
+            "phase": "result",
+            "pid": 15542,
+            "status": 200,
+            "body": {
+              "outcome": "replay"
+            }
+          },
+          {
+            "phase": "result",
+            "pid": 15543,
+            "status": 200,
+            "body": {
+              "outcome": "replay"
+            }
+          },
+          {
+            "phase": "result",
+            "pid": 15544,
+            "status": 200,
+            "body": {
+              "outcome": "replay"
+            }
+          },
+          {
+            "phase": "result",
+            "pid": 15545,
+            "status": 200,
+            "body": {
+              "outcome": "ready"
+            }
+          },
+          {
+            "phase": "result",
+            "pid": 15546,
+            "status": 200,
+            "body": {
+              "outcome": "replay"
+            }
+          },
+          {
+            "phase": "result",
+            "pid": 15547,
+            "status": 200,
+            "body": {
+              "outcome": "replay"
+            }
+          }
+        ],
+        "state": {
+          "account": [
+            {
+              "user_id": "member:1793532842188-duplicate",
+              "used": 1100000,
+              "reserved": 0,
+              "quota": 500000000
+            }
+          ],
+          "uploads": [
+            {
+              "user_id": "member:1793532842188-duplicate",
+              "op": "op",
+              "file": "f1",
+              "visit_id": "visit-bogota-1",
+              "fingerprint": "synthetic-digest",
+              "estimate": 1200000,
+              "actual": 1100000,
+              "original_bytes": 1000000,
+              "display_bytes": 100000,
+              "state": "ready",
+              "attempts": 1,
+              "expires": 1000,
+              "deleted_at": null
+            }
+          ],
+          "assets": [
+            {
+              "user_id": "member:1793532842188-duplicate",
+              "op": "op",
+              "file": "f1",
+              "kind": "display",
+              "bytes": 100000
+            },
+            {
+              "user_id": "member:1793532842188-duplicate",
+              "op": "op",
+              "file": "f1",
+              "kind": "original",
+              "bytes": 1000000
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "UPLOAD-03 intentional repeat and conflicting key reuse",
+      "status": "PASS",
+      "elapsedMs": 15.394,
+      "evidence": {
+        "account": [
+          {
+            "user_id": "member:1793532842188-intent",
+            "used": 2200000,
+            "reserved": 0,
+            "quota": 500000000
+          }
+        ],
+        "uploads": [
+          {
+            "user_id": "member:1793532842188-intent",
+            "op": "new-1",
+            "file": "f1",
+            "visit_id": "visit-bogota-1",
+            "fingerprint": "synthetic-digest",
+            "estimate": 1200000,
+            "actual": 1100000,
+            "original_bytes": 1000000,
+            "display_bytes": 100000,
+            "state": "ready",
+            "attempts": 1,
+            "expires": 1000,
+            "deleted_at": null
+          },
+          {
+            "user_id": "member:1793532842188-intent",
+            "op": "new-2",
+            "file": "f1",
+            "visit_id": "visit-bogota-1",
+            "fingerprint": "synthetic-digest",
+            "estimate": 1200000,
+            "actual": 1100000,
+            "original_bytes": 1000000,
+            "display_bytes": 100000,
+            "state": "ready",
+            "attempts": 1,
+            "expires": 1000,
+            "deleted_at": null
+          }
+        ],
+        "assets": [
+          {
+            "user_id": "member:1793532842188-intent",
+            "op": "new-1",
+            "file": "f1",
+            "kind": "display",
+            "bytes": 100000
+          },
+          {
+            "user_id": "member:1793532842188-intent",
+            "op": "new-1",
+            "file": "f1",
+            "kind": "original",
+            "bytes": 1000000
+          },
+          {
+            "user_id": "member:1793532842188-intent",
+            "op": "new-2",
+            "file": "f1",
+            "kind": "display",
+            "bytes": 100000
+          },
+          {
+            "user_id": "member:1793532842188-intent",
+            "op": "new-2",
+            "file": "f1",
+            "kind": "original",
+            "bytes": 1000000
+          }
+        ]
+      }
+    },
+    {
+      "id": "UPLOAD-04 denied scope and forged actor cannot reserve",
+      "status": "PASS",
+      "elapsedMs": 4.318
+    },
+    {
+      "id": "UPLOAD-05 actual R2 object existence and measured-byte finalization",
+      "status": "PASS",
+      "elapsedMs": 27.508,
+      "evidence": {
+        "account": [
+          {
+            "user_id": "member:1793532842188-real-objects",
+            "used": 779,
+            "reserved": 0,
+            "quota": 500000000
+          }
+        ],
+        "uploads": [
+          {
+            "user_id": "member:1793532842188-real-objects",
+            "op": "op",
+            "file": "f1",
+            "visit_id": "visit-bogota-1",
+            "fingerprint": "synthetic-digest",
+            "estimate": 1200000,
+            "actual": 779,
+            "original_bytes": 723,
+            "display_bytes": 56,
+            "state": "ready",
+            "attempts": 1,
+            "expires": 1000,
+            "deleted_at": null
+          }
+        ],
+        "assets": [
+          {
+            "user_id": "member:1793532842188-real-objects",
+            "op": "op",
+            "file": "f1",
+            "kind": "display",
+            "bytes": 56
+          },
+          {
+            "user_id": "member:1793532842188-real-objects",
+            "op": "op",
+            "file": "f1",
+            "kind": "original",
+            "bytes": 723
+          }
+        ]
+      }
+    },
+    {
+      "id": "RETENTION trash retains bytes; restore within 30 days only",
+      "status": "PASS",
+      "elapsedMs": 14.722
+    },
+    {
+      "id": "INVITATION hashed token single-use race; expiry and revocation",
+      "status": "PASS",
+      "elapsedMs": 96.03,
+      "evidence": {
+        "activeRace": [
+          {
+            "pid": 15550,
+            "status": 200
+          },
+          {
+            "pid": 15551,
+            "status": 404
+          }
+        ],
+        "invalidStatesDenied": 2
+      }
+    },
+    {
+      "id": "MEDIA actual local R2 bytes, original permissions and next-GET revocation",
+      "status": "PASS",
+      "elapsedMs": 15.635,
+      "evidence": {
+        "bytes": 723,
+        "sha256": "ea6b660ac1761b1afde7a368fc756075f84b6fc74c98d0a193cf69f3c1824d89",
+        "displayBytes": 56,
+        "derivativeProcessing": "Local TIFF-to-WebP only; NOT HEIC/Cloudflare Images"
+      }
+    },
+    {
+      "id": "PERFORMANCE authorized query for 100 synthetic visits",
+      "status": "PASS",
+      "elapsedMs": 38.815,
+      "evidence": {
+        "visits": 100,
+        "requests": 20,
+        "p50Ms": 1.6078749999999218,
+        "p95Ms": 2.359207999999853,
+        "jsonBytes": 2514,
+        "scope": "Local API only, NOT mobile map first-useful-view"
+      }
+    }
+  ]
+}

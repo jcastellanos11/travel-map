@@ -1,0 +1,66 @@
+{
+  "platform": "darwin",
+  "arch": "arm64",
+  "totalRAMBytes": 17179869184,
+  "databaseSizes": [
+    {
+      "datname": "poc_candidate_b",
+      "bytes": "8779443"
+    },
+    {
+      "datname": "poc_candidate_b_restore",
+      "bytes": "8730291"
+    }
+  ],
+  "nodeDependenciesKiB": 367332,
+  "nativeServiceCacheKiB": 1931596,
+  "d1StateKiB": 15288,
+  "processSnapshot": [
+    {
+      "pid": 13947,
+      "rssKiB": 153440,
+      "executable": "supabase"
+    },
+    {
+      "pid": 15093,
+      "rssKiB": 73424,
+      "executable": "workerd"
+    },
+    {
+      "pid": 15132,
+      "rssKiB": 120848,
+      "executable": "workerd"
+    },
+    {
+      "pid": 15250,
+      "rssKiB": 50944,
+      "executable": "supabase"
+    },
+    {
+      "pid": 15252,
+      "rssKiB": 27184,
+      "executable": "mailpit"
+    },
+    {
+      "pid": 15259,
+      "rssKiB": 51312,
+      "executable": "supabase"
+    },
+    {
+      "pid": 15289,
+      "rssKiB": 50496,
+      "executable": "supabase"
+    },
+    {
+      "pid": 15299,
+      "rssKiB": 50640,
+      "executable": "supabase"
+    },
+    {
+      "pid": 15300,
+      "rssKiB": 33904,
+      "executable": ".auth-wrapped"
+    }
+  ],
+  "note": "RSS is a point-in-time per-process estimate and double-counts shared mappings; not peak or unique RAM. No cloud CPU/cost measurement."
+}

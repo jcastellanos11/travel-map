@@ -1,0 +1,9 @@
+{
+  "phase": "jwt-only",
+  "beforeStatus": 200,
+  "logoutStatus": 204,
+  "afterStatus": 200,
+  "expectedAfterStatus": 200,
+  "pass": true,
+  "interpretation": "NEGATIVE CONTROL: valid signed JWT alone still grants private reads after logout. Signature validation is not session revocation."
+}

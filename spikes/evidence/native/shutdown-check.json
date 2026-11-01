@@ -1,0 +1,7 @@
+{
+  "workersStopped": true,
+  "namedSupabaseStopExit": 0,
+  "inspectionExit": 0,
+  "remainingExperimentPortListeners": [],
+  "note": "Only the named PoC stack and its Workers were stopped. Data and downloaded tools retained; management daemon may remain on its own loopback control port."
+}

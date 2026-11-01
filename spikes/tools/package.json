@@ -1,0 +1,14 @@
+{
+  "name": "travel-map-isolated-poc-tools",
+  "private": true,
+  "type": "module",
+  "version": "0.0.0",
+  "devDependencies": {
+    "exifr": "7.1.3",
+    "jose": "6.2.14",
+    "pg": "8.16.3",
+    "sharp": "0.35.5",
+    "supabase": "2.122.0",
+    "wrangler": "4.156.0"
+  }
+}

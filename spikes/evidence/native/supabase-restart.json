@@ -1,0 +1,11 @@
+{
+  "scope": "Restart of named LOCAL native Supabase stack, preserving state",
+  "authStatus": 200,
+  "rlsStatus": 200,
+  "guestPhotoCount": 2,
+  "account": {
+    "used": "11000000",
+    "reserved": "0"
+  },
+  "passed": true
+}

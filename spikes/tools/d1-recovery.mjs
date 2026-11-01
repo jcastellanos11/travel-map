@@ -1,0 +1,31 @@
+import {Miniflare,convertV4MiniflareOptions} from 'miniflare';
+import {readFileSync,writeFileSync,mkdirSync,cpSync,existsSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
+const root=fileURLToPath(new URL('../',import.meta.url));
+process.chdir(root); // Keep Miniflare's auxiliary cache inside the spike too.
+const sourcePath=root+'cloudflare-only/.state/v3';
+const restorePath=root+`runs/d1-restored-${Date.now()}/v3`;
+mkdirSync(restorePath,{recursive:true});
+const options=(path)=>convertV4MiniflareOptions({modules:true,script:'export default {}',host:'127.0.0.1',cf:false,resourcePersistencePath:path,d1Databases:{DB:'00000000-0000-0000-0000-000000000001'},r2Buckets:{MEDIA:'poc-private-media-a'},compatibilityDate:'2026-10-30'});
+const source=new Miniflare(options(sourcePath));
+const db=await source.getD1Database('DB');
+const dump=await db.prepare('PRAGMA miniflare_d1_export(?,?,?);').bind(false,false).raw();
+const sql=dump[0].join('\n');writeFileSync(root+'runs/d1-backup.sql',sql,{mode:0o600});
+await source.dispose();
+if(existsSync(sourcePath+'/r2'))cpSync(sourcePath+'/r2',restorePath+'/r2',{recursive:true});
+const command=['../tools/node_modules/wrangler/bin/wrangler.js','d1','execute','poc-db','--local','--config','wrangler.jsonc','--persist-to',restorePath.slice(0,-3),'--file','../runs/d1-backup.sql'];
+const imported=spawnSync(process.execPath,command,{cwd:root+'cloudflare-only',encoding:'utf8',env:{...process.env,WRANGLER_SEND_METRICS:'false',WRANGLER_LOG_PATH:root+'runs/d1-restore-debug.log'}});
+if(imported.status!==0){writeFileSync(root+'runs/d1-restore-failure.log',imported.stdout+imported.stderr);throw new Error('D1 restore failed; details in ignored log');}
+const restored=new Miniflare(options(restorePath));const restoredDB=await restored.getD1Database('DB');
+const results=JSON.parse(readFileSync(root+'evidence/native/d1-results.json','utf8'));
+const user=`member:${results.run}-partial`;
+const account=await restoredDB.prepare('SELECT used,reserved FROM account WHERE user_id=?').bind(user).first();
+const upload=await restoredDB.prepare('SELECT count(*) n FROM upload WHERE user_id=?').bind(user).first();
+const assets=await restoredDB.prepare('SELECT count(*) n FROM asset WHERE user_id=?').bind(user).first();
+const bucket=await restored.getR2Bucket('MEDIA');const object=await bucket.get('photo-rome-guest/original');
+const bytes=object?Buffer.from(await object.arrayBuffer()):Buffer.alloc(0);
+const expected=readFileSync(root+'fixtures/synthetic-gps.heic');
+const report={scope:'Local D1 export/import into independent state and quiesced local R2 state copy; NOT cloud backup guarantee',account,uploads:upload.n,assets:assets.n,privateObjectBytes:bytes.length,objectHash:createHash('sha256').update(bytes).digest('hex'),sourceAndRestoreDifferentPaths:true,passed:Number(account.used)===11_000_000&&Number(account.reserved)===0&&upload.n===10&&assets.n===20&&bytes.equals(expected),backupSQLBytes:Buffer.byteLength(sql),restoredPath:restorePath};
+await restored.dispose();writeFileSync(root+'evidence/native/d1-recovery.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));if(!report.passed)process.exitCode=1;

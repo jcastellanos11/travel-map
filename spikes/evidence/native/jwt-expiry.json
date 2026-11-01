@@ -1,0 +1,6 @@
+{
+  "scope": "LOCAL JWT signature verified, then expiry enforced with injected verifier clock; no real waiting or cloud",
+  "validNow": true,
+  "expiredRejected": true,
+  "errorCode": "ERR_JWT_EXPIRED"
+}

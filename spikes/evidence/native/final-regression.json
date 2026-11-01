@@ -1,0 +1,18 @@
+[
+  {
+    "command": "node spikes/shared/native-tests.mjs d1",
+    "exit": 0
+  },
+  {
+    "command": "node spikes/shared/native-tests.mjs postgres",
+    "exit": 0
+  },
+  {
+    "command": "node spikes/tools/worker-jwt-test.mjs",
+    "exit": 0
+  },
+  {
+    "command": "node spikes/tools/expiry-check.mjs",
+    "exit": 0
+  }
+]

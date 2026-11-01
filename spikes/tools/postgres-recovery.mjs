@@ -1,0 +1,28 @@
+import {Client} from 'pg';
+import {readFileSync,writeFileSync,readdirSync,existsSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+const root=new URL('../',import.meta.url);
+let stack;for(const line of readFileSync(new URL('runs/supabase-native-start.log',root),'utf8').split('\n')){try{const x=JSON.parse(line);if(x.env)stack=x;}catch{}}
+const base=process.env.HOME+'/.supabase/cache/stack/slim-services/postgres/17.11.0.006-r0/darwin-arm64/';
+const versionDir=readdirSync(base).map((s)=>base+s).find((s)=>existsSync(s+'/bin/pg_dump'));
+if(!versionDir)throw new Error('matching_pg_dump_not_found');
+const connection=new URL(stack.env.DB_URL);const restore='poc_candidate_b_restore';
+const backup=new URL('runs/candidate-b.dump',root).pathname;
+const env={...process.env,PGPASSWORD:decodeURIComponent(connection.password)};
+const args=['-h',connection.hostname,'-p',connection.port,'-U',decodeURIComponent(connection.username)];
+const dump=spawnSync(versionDir+'/bin/pg_dump',[...args,'-d','poc_candidate_b','-Fc','-f',backup],{env,encoding:'utf8'});
+if(dump.status!==0)throw new Error(`pg_dump_failed_${dump.status}: ${dump.stderr}`);
+const db=new Client({connectionString:stack.env.DB_URL});await db.connect();
+if(!(await db.query('SELECT 1 FROM pg_database WHERE datname=$1',[restore])).rows.length)await db.query(`CREATE DATABASE ${restore}`);
+await db.end();
+const restored=spawnSync(versionDir+'/bin/pg_restore',[...args,'--no-owner','--exit-on-error','-d',restore,backup],{env,encoding:'utf8'});
+if(restored.status!==0)throw new Error(`pg_restore_failed_${restored.status}: ${restored.stderr}`);
+connection.pathname='/'+restore;const verify=new Client({connectionString:connection.toString()});await verify.connect();
+const latest=JSON.parse(readFileSync(new URL('evidence/native/postgres-results.json',root),'utf8'));
+const id=`member:${latest.run}-partial`;
+const account=(await verify.query('SELECT used,reserved FROM account WHERE user_id=$1',[id])).rows[0];
+const upload=+(await verify.query('SELECT count(*) n FROM upload WHERE user_id=$1',[id])).rows[0].n;
+const assets=+(await verify.query('SELECT count(*) n FROM asset WHERE user_id=$1',[id])).rows[0].n;
+await verify.end();
+const report={scope:'Actual local PostgreSQL pg_dump/pg_restore into separate disposable database; NOT managed Supabase backup validation',database:restore,account,uploads:upload,assets,backupBytes:readFileSync(backup).length,passed:+account.used===11_000_000&&+account.reserved===0&&upload===10&&assets===20};
+writeFileSync(new URL('evidence/native/postgres-recovery.json',root),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));if(!report.passed)process.exitCode=1;

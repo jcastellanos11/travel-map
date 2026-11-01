@@ -1,0 +1,15 @@
+{
+  "scope": "Local D1 export/import into independent state and quiesced local R2 state copy; NOT cloud backup guarantee",
+  "account": {
+    "used": 11000000,
+    "reserved": 0
+  },
+  "uploads": 10,
+  "assets": 20,
+  "privateObjectBytes": 723,
+  "objectHash": "ea6b660ac1761b1afde7a368fc756075f84b6fc74c98d0a193cf69f3c1824d89",
+  "sourceAndRestoreDifferentPaths": true,
+  "passed": true,
+  "backupSQLBytes": 249273,
+  "restoredPath": "/Users/luffy/Documents/travel-map/spikes/runs/d1-restored-1793531751099/v3"
+}
