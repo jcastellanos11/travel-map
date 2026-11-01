@@ -1,0 +1,23 @@
+{
+  "inputDocumentHashesUnchanged": {
+    "docs/PRD.md": true,
+    "docs/DATA_MODEL.md": true,
+    "docs/AUTHORIZATION_MATRIX.md": true,
+    "docs/ARCHITECTURE.md": true,
+    "docs/POC_PLAN.md": true,
+    "docs/FRONTEND_AUDIT.md": true
+  },
+  "frontendBackendTrackedDiffExit": 0,
+  "localReportLinksResolved": true,
+  "gitStatus": [
+    "?? docs/ARCHITECTURE.md",
+    "?? docs/AUTHORIZATION_MATRIX.md",
+    "?? docs/DATA_MODEL.md",
+    "?? docs/FRONTEND_AUDIT.md",
+    "?? docs/POC_PLAN.md",
+    "?? docs/POC_RESULTS.md",
+    "?? spikes/"
+  ],
+  "cloudResourcesCreated": 0,
+  "projectDependenciesChanged": false
+}

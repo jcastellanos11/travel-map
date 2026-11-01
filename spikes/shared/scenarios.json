@@ -1,0 +1,19 @@
+{
+  "scope": "Reference assertions, not production API or persistence design",
+  "authentication": "Explicit mock session lookup only; no real Google or Supabase identity verification",
+  "units": "Decimal MB: 1000000 bytes; exploratory assumption, not PRD amendment",
+  "expected": {
+    "italyGuest": {"italyPhotoCount": 2, "colombiaPhotoCount": 0, "projectOverview": "deny", "colombiaDirectMedia": "deny"},
+    "fullProjectMember": {"photoCount": 5, "otherProjectAccess": "deny"},
+    "samePlace": {"authorizedBogotaVisits": 3, "trips": 2, "authorizedBogotaPhotoCount": 3},
+    "nearQuotaRace": {"workers": 2, "rounds": 10, "successfulReservationsPerRound": 1, "usedPlusReservedBytes": 497000000},
+    "unsafeNegativeControl": {"expectedOversubscribedBytes": 514000000},
+    "partialUpload": {"initialReady": 7, "initialFailed": 3, "finalReady": 10, "totalFileAttempts": 13, "finalUsedBytes": 11000000},
+    "duplicateConcurrentUpload": {"processes": 8, "uniquePhotos": 1, "assetRows": 2, "usedBytes": 1100000},
+    "intentionalDuplicate": {"uniquePhotos": 2, "usedBytes": 2200000},
+    "mediaFixture": {"width": 8, "height": 8, "fictionalGPS": [0, 0], "codec": "HEIC", "providerProcessing": "blocked"}
+  },
+  "deferredProductDecisions": ["P-01b", "P-02b", "P-03", "P-04", "P-05", "P-06 workflow", "P-08", "P-09", "P-10"],
+  "unimplementedActions": "Fail closed in reference code; do not treat as approved product policy",
+  "photoMove": "Unimplemented, outside MVP pending product decision"
+}

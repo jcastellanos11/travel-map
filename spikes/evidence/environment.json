@@ -1,0 +1,35 @@
+{
+  "node": "v24.21.0",
+  "sqlite": "3.53.4",
+  "platform": "darwin",
+  "arch": "arm64",
+  "tools": {
+    "wrangler": null,
+    "workerd": null,
+    "docker": null,
+    "psql": null,
+    "postgres": null,
+    "initdb": null,
+    "supabase": null,
+    "heif-enc": null,
+    "exiftool": null,
+    "magick": null,
+    "sips": "/usr/bin/sips",
+    "sqlite3": "/usr/bin/sqlite3"
+  },
+  "localFrontendBins": {
+    "wrangler": false,
+    "workerd": false,
+    "supabase": false
+  },
+  "documentHashes": {
+    "docs/PRD.md": "d1648113663bee9555b87bfec4ef340f09b6a430a05e62a748fe93b80a6e8262",
+    "docs/DATA_MODEL.md": "8413918450d156e49a4bc1762e1b6cef642b530ad285202d1273a41f063d333e",
+    "docs/AUTHORIZATION_MATRIX.md": "e217cf3c207c03bf48beda70f43b8b775d69c0d0025e67734daaeec856affc2b",
+    "docs/ARCHITECTURE.md": "242dccde69adcde8f4c6f74a85c434f177b3e9f7d8bd280c12174658cb691e09",
+    "docs/POC_PLAN.md": "39b5eece6e343cf838a344c1dc2ebb1a28ac6e89c613d562a795f69178b2f998",
+    "docs/FRONTEND_AUDIT.md": "382b060838e5ff7bcb80a2a1303e29338f748cd570a1c8710aae679fd5c8067f"
+  },
+  "credentialsRead": false,
+  "experimentNetworkRequests": 0
+}

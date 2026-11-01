@@ -1,0 +1,29 @@
+{
+  "syntheticDataOnly": true,
+  "failures": [
+    {
+      "command": "node --test --test-reporter=tap spikes/shared/experiments.test.ts > spikes/evidence/tests.tap",
+      "exit": 1,
+      "stage": "shell redirection before tests started",
+      "message": "zsh:1: no such file or directory: spikes/evidence/tests.tap",
+      "cause": "Initial probe directory creation and test redirection were mistakenly launched concurrently.",
+      "resolution": "Probe completed, then tests were run sequentially; exit 0, 20/20 assertions passed. No candidate test failed."
+    },
+    {
+      "command": "python3 spikes/shared/media_fixture.py",
+      "stage": "sandboxed macOS sips HEIC encoding",
+      "encoderExit": 13,
+      "scriptExit": 0,
+      "message": "sysctlbyname for kern.hv_vmm_present failed with status -1; kIOSurfaceMethodSetCoreVideoBridgedKeys failed: 10000003; Error: Unable to write image to file; Error 13: an unknown error occurred",
+      "resolution": "User-approved execution outside sandbox succeeded using the same installed sips encoder. See media-fixture.json. The script records blocked codec outcomes instead of treating exit 0 as a media pass."
+    },
+    {
+      "command": "node spikes/shared/probe.mjs",
+      "exit": 1,
+      "stage": "document hash inventory enhancement",
+      "message": "ENOENT opening /Users/luffy/Documents/docs/PRD.md",
+      "cause": "Wrong relative base in the new read-only document hash code.",
+      "resolution": "Corrected the path from spikes/ to ../docs/ and reran the probe. No file outside the spike was written."
+    }
+  ]
+}

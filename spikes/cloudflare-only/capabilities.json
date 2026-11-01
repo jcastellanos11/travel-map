@@ -1,0 +1,9 @@
+{
+  "candidate": "cloudflare-only",
+  "nativeLocalExecution": "BLOCKED",
+  "runtime": "Wrangler/workerd unavailable",
+  "database": "D1 binding unavailable",
+  "identity": "Google OIDC intentionally mocked",
+  "referenceSimulation": "shared Node policy + SQLite only; not candidate validation",
+  "remoteExecution": "NOT AUTHORIZED; no cloud resources created"
+}

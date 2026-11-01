@@ -1,0 +1,130 @@
+TAP version 13
+# Subtest: AUTH-01 mock sessions: absent, invented, inactive and revoked identities deny
+ok 1 - AUTH-01 mock sessions: absent, invented, inactive and revoked identities deny
+  ---
+  duration_ms: 1.087792
+  type: 'test'
+  ...
+# Subtest: AUTH-02 Italy-only guest denies Colombia IDs, media, metadata, map and counts
+ok 2 - AUTH-02 Italy-only guest denies Colombia IDs, media, metadata, map and counts
+  ---
+  duration_ms: 0.203959
+  type: 'test'
+  ...
+# Subtest: AUTH-03 full-project membership inherits all trips; outsider is excluded
+ok 3 - AUTH-03 full-project membership inherits all trips; outsider is excluded
+  ---
+  duration_ms: 0.118208
+  type: 'test'
+  ...
+# Subtest: AUTH-04 owner-only management cannot be acquired by project admin
+ok 4 - AUTH-04 owner-only management cannot be acquired by project admin
+  ---
+  duration_ms: 0.073084
+  type: 'test'
+  ...
+# Subtest: AUTH-05 configurable trip creation excludes trip-only guest
+ok 5 - AUTH-05 configurable trip creation excludes trip-only guest
+  ---
+  duration_ms: 0.064125
+  type: 'test'
+  ...
+# Subtest: AUTH-06 visit creator, photo author and admin rights are separate
+ok 6 - AUTH-06 visit creator, photo author and admin rights are separate
+  ---
+  duration_ms: 0.078042
+  type: 'test'
+  ...
+# Subtest: AUTH-07 revocation denies new reads despite authorship or quota responsibility
+ok 7 - AUTH-07 revocation denies new reads despite authorship or quota responsibility
+  ---
+  duration_ms: 0.068958
+  type: 'test'
+  ...
+# Subtest: AUTH-08 shared Place preserves repeated visits and deduplicates authorization paths
+ok 8 - AUTH-08 shared Place preserves repeated visits and deduplicates authorization paths
+  ---
+  duration_ms: 0.075167
+  type: 'test'
+  ...
+# Subtest: AUTH-09 every inactive ancestor and non-ready photo suppresses normal reads
+ok 9 - AUTH-09 every inactive ancestor and non-ready photo suppresses normal reads
+  ---
+  duration_ms: 0.124084
+  type: 'test'
+  ...
+# Subtest: QUOTA-01 negative control reproduces unsafe check-then-write oversubscription across processes
+ok 10 - QUOTA-01 negative control reproduces unsafe check-then-write oversubscription across processes
+  ---
+  duration_ms: 45.708917
+  type: 'test'
+  ...
+# Subtest: QUOTA-02 ten process races each accept exactly one 17MB reservation at 480/500MB
+ok 11 - QUOTA-02 ten process races each accept exactly one 17MB reservation at 480/500MB
+  ---
+  duration_ms: 440.522625
+  type: 'test'
+  ...
+# Subtest: QUOTA-03 cancellation/failure releases once and actual original+derivative bytes count once
+ok 12 - QUOTA-03 cancellation/failure releases once and actual original+derivative bytes count once
+  ---
+  duration_ms: 2.422667
+  type: 'test'
+  ...
+# Subtest: QUOTA-04 actual-byte overflow rolls back; failed reservation can be explicitly released
+ok 13 - QUOTA-04 actual-byte overflow rolls back; failed reservation can be explicitly released
+  ---
+  duration_ms: 1.789334
+  type: 'test'
+  ...
+# Subtest: QUOTA-05 killed transaction leaves no orphan reservation or upload row
+ok 14 - QUOTA-05 killed transaction leaves no orphan reservation or upload row
+  ---
+  duration_ms: 41.551916
+  type: 'test'
+  ...
+# Subtest: UPLOAD-01 batch 7 successes/3 failures retries only failures, preserving IDs and charge
+ok 15 - UPLOAD-01 batch 7 successes/3 failures retries only failures, preserving IDs and charge
+  ---
+  duration_ms: 5.189125
+  type: 'test'
+  ...
+# Subtest: UPLOAD-02 eight concurrent duplicate requests reserve and complete only once
+ok 16 - UPLOAD-02 eight concurrent duplicate requests reserve and complete only once
+  ---
+  duration_ms: 202.357792
+  type: 'test'
+  ...
+# Subtest: UPLOAD-03 intentional duplicate content with new operation creates another photo
+ok 17 - UPLOAD-03 intentional duplicate content with new operation creates another photo
+  ---
+  duration_ms: 1.923583
+  type: 'test'
+  ...
+# Subtest: UPLOAD-04 key reuse with changed content, target or estimate is rejected without charge
+ok 18 - UPLOAD-04 key reuse with changed content, target or estimate is rejected without charge
+  ---
+  duration_ms: 2.024792
+  type: 'test'
+  ...
+# Subtest: UPLOAD-05 idempotency keys are user scoped
+ok 19 - UPLOAD-05 idempotency keys are user scoped
+  ---
+  duration_ms: 1.876084
+  type: 'test'
+  ...
+# Subtest: VALIDATION-01 synthetic metadata size hypotheses accept boundary values and reject oversized batches
+ok 20 - VALIDATION-01 synthetic metadata size hypotheses accept boundary values and reject oversized batches
+  ---
+  duration_ms: 0.128833
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 802.88775

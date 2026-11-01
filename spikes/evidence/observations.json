@@ -1,0 +1,593 @@
+{
+  "scope": "SHARED_REFERENCE_ONLY_NOT_D1_OR_POSTGRESQL",
+  "node": "v24.21.0",
+  "sqlite": "node:sqlite",
+  "runDirectory": "/Users/luffy/Documents/travel-map/spikes/runs/run-AxFJfF",
+  "observations": [
+    {
+      "id": "AUTH-02",
+      "guestVisiblePhotos": 2,
+      "guestColombiaCount": 0,
+      "projectOverview": "denied"
+    },
+    {
+      "id": "AUTH-08",
+      "samePlaceDistinctVisits": 3,
+      "tripCount": 2,
+      "authorizedColombiaPhotos": 3
+    },
+    {
+      "id": "QUOTA-01",
+      "expectedUnsafeCounterexample": true,
+      "totalBytes": 514000000,
+      "result": [
+        {
+          "pid": 12084,
+          "phase": "result",
+          "result": "reserved"
+        },
+        {
+          "pid": 12085,
+          "phase": "result",
+          "result": "reserved"
+        }
+      ]
+    },
+    {
+      "id": "QUOTA-02",
+      "rounds": [
+        {
+          "results": [
+            {
+              "pid": 12086,
+              "phase": "result",
+              "result": "quota_denied"
+            },
+            {
+              "pid": 12087,
+              "phase": "result",
+              "result": "reserved"
+            }
+          ],
+          "state": {
+            "account": {
+              "user": "member",
+              "used": 480000000,
+              "reserved": 17000000,
+              "quota": 500000000
+            },
+            "uploads": [
+              {
+                "state": "reserved",
+                "n": 1,
+                "attempts": 1
+              }
+            ],
+            "assets": {
+              "n": 0,
+              "bytes": 0
+            }
+          },
+          "elapsedMs": 44.54
+        },
+        {
+          "results": [
+            {
+              "pid": 12088,
+              "phase": "result",
+              "result": "reserved"
+            },
+            {
+              "pid": 12089,
+              "phase": "result",
+              "result": "quota_denied"
+            }
+          ],
+          "state": {
+            "account": {
+              "user": "member",
+              "used": 480000000,
+              "reserved": 17000000,
+              "quota": 500000000
+            },
+            "uploads": [
+              {
+                "state": "reserved",
+                "n": 1,
+                "attempts": 1
+              }
+            ],
+            "assets": {
+              "n": 0,
+              "bytes": 0
+            }
+          },
+          "elapsedMs": 42.747
+        },
+        {
+          "results": [
+            {
+              "pid": 12090,
+              "phase": "result",
+              "result": "quota_denied"
+            },
+            {
+              "pid": 12091,
+              "phase": "result",
+              "result": "reserved"
+            }
+          ],
+          "state": {
+            "account": {
+              "user": "member",
+              "used": 480000000,
+              "reserved": 17000000,
+              "quota": 500000000
+            },
+            "uploads": [
+              {
+                "state": "reserved",
+                "n": 1,
+                "attempts": 1
+              }
+            ],
+            "assets": {
+              "n": 0,
+              "bytes": 0
+            }
+          },
+          "elapsedMs": 43.008
+        },
+        {
+          "results": [
+            {
+              "pid": 12092,
+              "phase": "result",
+              "result": "quota_denied"
+            },
+            {
+              "pid": 12093,
+              "phase": "result",
+              "result": "reserved"
+            }
+          ],
+          "state": {
+            "account": {
+              "user": "member",
+              "used": 480000000,
+              "reserved": 17000000,
+              "quota": 500000000
+            },
+            "uploads": [
+              {
+                "state": "reserved",
+                "n": 1,
+                "attempts": 1
+              }
+            ],
+            "assets": {
+              "n": 0,
+              "bytes": 0
+            }
+          },
+          "elapsedMs": 42.238
+        },
+        {
+          "results": [
+            {
+              "pid": 12094,
+              "phase": "result",
+              "result": "reserved"
+            },
+            {
+              "pid": 12095,
+              "phase": "result",
+              "result": "quota_denied"
+            }
+          ],
+          "state": {
+            "account": {
+              "user": "member",
+              "used": 480000000,
+              "reserved": 17000000,
+              "quota": 500000000
+            },
+            "uploads": [
+              {
+                "state": "reserved",
+                "n": 1,
+                "attempts": 1
+              }
+            ],
+            "assets": {
+              "n": 0,
+              "bytes": 0
+            }
+          },
+          "elapsedMs": 43.336
+        },
+        {
+          "results": [
+            {
+              "pid": 12096,
+              "phase": "result",
+              "result": "quota_denied"
+            },
+            {
+              "pid": 12097,
+              "phase": "result",
+              "result": "reserved"
+            }
+          ],
+          "state": {
+            "account": {
+              "user": "member",
+              "used": 480000000,
+              "reserved": 17000000,
+              "quota": 500000000
+            },
+            "uploads": [
+              {
+                "state": "reserved",
+                "n": 1,
+                "attempts": 1
+              }
+            ],
+            "assets": {
+              "n": 0,
+              "bytes": 0
+            }
+          },
+          "elapsedMs": 42.506
+        },
+        {
+          "results": [
+            {
+              "pid": 12098,
+              "phase": "result",
+              "result": "reserved"
+            },
+            {
+              "pid": 12099,
+              "phase": "result",
+              "result": "quota_denied"
+            }
+          ],
+          "state": {
+            "account": {
+              "user": "member",
+              "used": 480000000,
+              "reserved": 17000000,
+              "quota": 500000000
+            },
+            "uploads": [
+              {
+                "state": "reserved",
+                "n": 1,
+                "attempts": 1
+              }
+            ],
+            "assets": {
+              "n": 0,
+              "bytes": 0
+            }
+          },
+          "elapsedMs": 42.318
+        },
+        {
+          "results": [
+            {
+              "pid": 12100,
+              "phase": "result",
+              "result": "quota_denied"
+            },
+            {
+              "pid": 12101,
+              "phase": "result",
+              "result": "reserved"
+            }
+          ],
+          "state": {
+            "account": {
+              "user": "member",
+              "used": 480000000,
+              "reserved": 17000000,
+              "quota": 500000000
+            },
+            "uploads": [
+              {
+                "state": "reserved",
+                "n": 1,
+                "attempts": 1
+              }
+            ],
+            "assets": {
+              "n": 0,
+              "bytes": 0
+            }
+          },
+          "elapsedMs": 42.316
+        },
+        {
+          "results": [
+            {
+              "pid": 12102,
+              "phase": "result",
+              "result": "reserved"
+            },
+            {
+              "pid": 12103,
+              "phase": "result",
+              "result": "quota_denied"
+            }
+          ],
+          "state": {
+            "account": {
+              "user": "member",
+              "used": 480000000,
+              "reserved": 17000000,
+              "quota": 500000000
+            },
+            "uploads": [
+              {
+                "state": "reserved",
+                "n": 1,
+                "attempts": 1
+              }
+            ],
+            "assets": {
+              "n": 0,
+              "bytes": 0
+            }
+          },
+          "elapsedMs": 42.522
+        },
+        {
+          "results": [
+            {
+              "pid": 12104,
+              "phase": "result",
+              "result": "reserved"
+            },
+            {
+              "pid": 12105,
+              "phase": "result",
+              "result": "quota_denied"
+            }
+          ],
+          "state": {
+            "account": {
+              "user": "member",
+              "used": 480000000,
+              "reserved": 17000000,
+              "quota": 500000000
+            },
+            "uploads": [
+              {
+                "state": "reserved",
+                "n": 1,
+                "attempts": 1
+              }
+            ],
+            "assets": {
+              "n": 0,
+              "bytes": 0
+            }
+          },
+          "elapsedMs": 42.492
+        }
+      ]
+    },
+    {
+      "id": "QUOTA-03",
+      "state": {
+        "account": {
+          "user": "member",
+          "used": 496000000,
+          "reserved": 0,
+          "quota": 500000000
+        },
+        "uploads": [
+          {
+            "state": "ready",
+            "n": 1,
+            "attempts": 2
+          }
+        ],
+        "assets": {
+          "n": 2,
+          "bytes": 16000000
+        }
+      }
+    },
+    {
+      "id": "QUOTA-05",
+      "results": [
+        {
+          "pid": 12106,
+          "crashed": true,
+          "code": 17
+        }
+      ],
+      "state": {
+        "account": {
+          "user": "member",
+          "used": 480000000,
+          "reserved": 0,
+          "quota": 500000000
+        },
+        "uploads": [],
+        "assets": {
+          "n": 0,
+          "bytes": 0
+        }
+      }
+    },
+    {
+      "id": "UPLOAD-01",
+      "initial": {
+        "account": {
+          "user": "member",
+          "used": 7700000,
+          "reserved": 0,
+          "quota": 500000000
+        },
+        "uploads": [
+          {
+            "state": "failed",
+            "n": 3,
+            "attempts": 3
+          },
+          {
+            "state": "ready",
+            "n": 7,
+            "attempts": 7
+          }
+        ],
+        "assets": {
+          "n": 14,
+          "bytes": 7700000
+        }
+      },
+      "final": {
+        "account": {
+          "user": "member",
+          "used": 11000000,
+          "reserved": 0,
+          "quota": 500000000
+        },
+        "uploads": [
+          {
+            "state": "ready",
+            "n": 10,
+            "attempts": 13
+          }
+        ],
+        "assets": {
+          "n": 20,
+          "bytes": 11000000
+        }
+      }
+    },
+    {
+      "id": "UPLOAD-02",
+      "reservations": [
+        {
+          "pid": 12107,
+          "phase": "result",
+          "result": "reserved"
+        },
+        {
+          "pid": 12108,
+          "phase": "result",
+          "result": "replay",
+          "photo": "[\"member\",\"op1\",\"f1\"]"
+        },
+        {
+          "pid": 12109,
+          "phase": "result",
+          "result": "replay",
+          "photo": "[\"member\",\"op1\",\"f1\"]"
+        },
+        {
+          "pid": 12110,
+          "phase": "result",
+          "result": "replay",
+          "photo": "[\"member\",\"op1\",\"f1\"]"
+        },
+        {
+          "pid": 12111,
+          "phase": "result",
+          "result": "replay",
+          "photo": "[\"member\",\"op1\",\"f1\"]"
+        },
+        {
+          "pid": 12112,
+          "phase": "result",
+          "result": "replay",
+          "photo": "[\"member\",\"op1\",\"f1\"]"
+        },
+        {
+          "pid": 12113,
+          "phase": "result",
+          "result": "replay",
+          "photo": "[\"member\",\"op1\",\"f1\"]"
+        },
+        {
+          "pid": 12114,
+          "phase": "result",
+          "result": "replay",
+          "photo": "[\"member\",\"op1\",\"f1\"]"
+        }
+      ],
+      "completions": [
+        {
+          "pid": 12115,
+          "phase": "result",
+          "result": "replay"
+        },
+        {
+          "pid": 12116,
+          "phase": "result",
+          "result": "replay"
+        },
+        {
+          "pid": 12117,
+          "phase": "result",
+          "result": "replay"
+        },
+        {
+          "pid": 12118,
+          "phase": "result",
+          "result": "replay"
+        },
+        {
+          "pid": 12119,
+          "phase": "result",
+          "result": "replay"
+        },
+        {
+          "pid": 12120,
+          "phase": "result",
+          "result": "replay"
+        },
+        {
+          "pid": 12121,
+          "phase": "result",
+          "result": "ready"
+        },
+        {
+          "pid": 12122,
+          "phase": "result",
+          "result": "replay"
+        }
+      ],
+      "state": {
+        "account": {
+          "user": "member",
+          "used": 1100000,
+          "reserved": 0,
+          "quota": 500000000
+        },
+        "uploads": [
+          {
+            "state": "ready",
+            "n": 1,
+            "attempts": 1
+          }
+        ],
+        "assets": {
+          "n": 2,
+          "bytes": 1100000
+        }
+      }
+    },
+    {
+      "id": "VALIDATION-01",
+      "MB": 1000000,
+      "maxFile": 20000000,
+      "maxBatch": 10,
+      "binaryValidation": "NOT TESTED"
+    }
+  ]
+}

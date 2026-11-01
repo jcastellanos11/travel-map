@@ -1,0 +1,52 @@
+{
+  "synthetic": true,
+  "sourceGPS": {
+    "latitude": 0.0,
+    "longitude": 0.0
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/sips",
+        "-s",
+        "format",
+        "heic",
+        "/Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.tiff",
+        "--out",
+        "/Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.heic"
+      ],
+      "exit": 0,
+      "stdout": "/Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.tiff\n  /Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.heic\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/usr/bin/sips",
+        "-s",
+        "format",
+        "tiff",
+        "/Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.heic",
+        "--out",
+        "/Users/luffy/Documents/travel-map/spikes/fixtures/roundtrip-gps.tiff"
+      ],
+      "exit": 0,
+      "stdout": "/Users/luffy/Documents/travel-map/spikes/fixtures/synthetic-gps.heic\n  /Users/luffy/Documents/travel-map/spikes/fixtures/roundtrip-gps.tiff\n",
+      "stderr": ""
+    }
+  ],
+  "cloudImages": "NOT EXECUTED",
+  "heicGPSPayloads": [
+    {
+      "latitude": 0.0,
+      "longitude": 0.0
+    }
+  ],
+  "heicHeaderHex": "000000246674797068656963000000006d6966314d6950726d6961664d694842",
+  "heicBytes": 723,
+  "heicSHA256": "ea6b660ac1761b1afde7a368fc756075f84b6fc74c98d0a193cf69f3c1824d89",
+  "roundtripGPS": {
+    "latitude": 0.0,
+    "longitude": 0.0
+  },
+  "heicGPSFixture": "LOCAL PASS: encoder/decoder roundtrip and TIFF GPS payload verified"
+}

@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "synthetic": true,
+  "clock": "2026-11-01T00:00:00Z",
+  "byteHypothesis": {"MB": 1000000, "quota": 500000000, "used": 480000000, "reservation": 17000000, "maxFile": 20000000, "maxBatch": 10},
+  "users": ["owner", "admin", "member", "guest", "outsider", "overlap", "inactive"],
+  "projects": [
+    {"id": "project-main", "owner": "owner", "state": "active", "membersCanCreateTrips": false},
+    {"id": "project-other", "owner": "outsider", "state": "active", "membersCanCreateTrips": false}
+  ],
+  "projectMemberships": [
+    {"project": "project-main", "user": "admin", "role": "admin", "active": true},
+    {"project": "project-main", "user": "member", "role": "member", "active": true},
+    {"project": "project-main", "user": "overlap", "role": "member", "active": true}
+  ],
+  "tripMemberships": [
+    {"trip": "trip-italy", "user": "guest", "active": true},
+    {"trip": "trip-colombia", "user": "overlap", "active": true}
+  ],
+  "trips": [
+    {"id": "trip-italy", "project": "project-main", "state": "active"},
+    {"id": "trip-colombia", "project": "project-main", "state": "active"},
+    {"id": "trip-colombia-repeat", "project": "project-main", "state": "active"},
+    {"id": "trip-other", "project": "project-other", "state": "active"}
+  ],
+  "places": [
+    {"id": "place-rome", "country": "ITA", "label": "Synthetic Rome"},
+    {"id": "place-bogota", "country": "COL", "label": "Synthetic Bogota"}
+  ],
+  "visits": [
+    {"id": "visit-rome", "trip": "trip-italy", "place": "place-rome", "creator": "guest", "state": "active"},
+    {"id": "visit-bogota-1", "trip": "trip-colombia", "place": "place-bogota", "creator": "member", "state": "active"},
+    {"id": "visit-bogota-2", "trip": "trip-colombia", "place": "place-bogota", "creator": "admin", "state": "active"},
+    {"id": "visit-bogota-3", "trip": "trip-colombia-repeat", "place": "place-bogota", "creator": "member", "state": "active"},
+    {"id": "visit-other", "trip": "trip-other", "place": "place-bogota", "creator": "outsider", "state": "active"}
+  ],
+  "photos": [
+    {"id": "photo-rome-guest", "visit": "visit-rome", "author": "guest", "quotaOwner": "guest", "state": "ready"},
+    {"id": "photo-rome-member", "visit": "visit-rome", "author": "member", "quotaOwner": "member", "state": "ready"},
+    {"id": "photo-bogota-1", "visit": "visit-bogota-1", "author": "member", "quotaOwner": "member", "state": "ready"},
+    {"id": "photo-bogota-2", "visit": "visit-bogota-2", "author": "admin", "quotaOwner": "admin", "state": "ready"},
+    {"id": "photo-bogota-3", "visit": "visit-bogota-3", "author": "member", "quotaOwner": "member", "state": "ready"},
+    {"id": "photo-other", "visit": "visit-other", "author": "outsider", "quotaOwner": "outsider", "state": "ready"}
+  ],
+  "uploadCases": {"batch": "batch-partial", "files": 10, "initialSuccesses": 7, "initialFailures": 3, "originalBytes": 1000000, "displayBytes": 100000, "fingerprint": "synthetic-content-digest-not-a-real-file-hash"}
+}

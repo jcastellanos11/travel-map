@@ -1,0 +1,9 @@
+{
+  "candidate": "cloudflare-supabase",
+  "nativeLocalExecution": "BLOCKED",
+  "runtime": "Wrangler/workerd unavailable",
+  "database": "PostgreSQL server/client and Supabase CLI unavailable",
+  "identity": "Supabase Auth intentionally mocked",
+  "referenceSimulation": "shared Node policy + SQLite only; not candidate validation",
+  "remoteExecution": "NOT AUTHORIZED; no cloud resources created"
+}
