@@ -1,6 +1,44 @@
 
 @import 'leaflet/dist/leaflet.css';
 
+.local-boundaries-status {
+  position: absolute;
+  top: 110px;
+  left: 16px;
+  z-index: 1000;
+  width: min(280px, calc(100% - 32px));
+  max-height: 24dvh;
+  overflow-y: auto;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.85);
+  color: #43594a;
+  font: 11px/1.5 system-ui, sans-serif;
+}
+
+.local-boundaries-status strong,
+.local-boundaries-status span,
+.local-boundaries-status small {
+  display: block;
+}
+
+.local-boundaries-status small { margin-top: 6px; }
+.local-boundaries-status a { color: #365f47; }
+.local-boundaries-status button { margin-top: 8px; cursor: pointer; }
+.local-boundaries-status summary { cursor: pointer; }
+
+.local-boundary-tooltip {
+  padding: 5px 9px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.96);
+  color: #365f47;
+  font: 12px/1.4 system-ui, sans-serif;
+  box-shadow: 0 2px 8px rgba(35, 64, 55, 0.08);
+}
+
+.local-boundary-tooltip::before { display: none; }
+
 :root {
   font-family: Inter, system-ui, sans-serif;
   color: #253A32;

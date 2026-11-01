@@ -1,7 +1,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
-import { GeoJSON, MapContainer } from 'react-leaflet';
+import { GeoJSON, MapContainer, Pane } from 'react-leaflet';
 import type { FeatureCollection } from 'geojson';
 import type { PathOptions } from 'leaflet';
 
@@ -11,6 +11,7 @@ import CityMarkers from './CityMarkers';
 import type { Trip } from '../../trips/types';
 
 import MapLegend from './MapLegend';
+import LocalBoundaries from './LocalBoundaries';
 
 const MAP_COLORS = {
   ocean: '#EAF2F4',
@@ -146,7 +147,7 @@ export default function WorldMap() {
         center={[20, 0]}
         zoom={2}
         minZoom={2}
-        maxZoom={8}
+        maxZoom={12}
         zoomControl={false}
         worldCopyJump
         className="world-map"
@@ -217,12 +218,20 @@ export default function WorldMap() {
           />
         )}
 
+        {selectedCountry && (
+          <Pane name="local-boundaries" style={{ zIndex: 410 }}>
+            <LocalBoundaries key={selectedCountry.code} countryCode={selectedCountry.code} />
+          </Pane>
+        )}
+
         {selectedCountry && countryTrips.length > 0 && (
-          <CityMarkers
-            trips={countryTrips}
-            selectedTripId={selectedTrip?.id ?? null}
-            onSelectTrip={handleSelectTrip}
-          />
+          <Pane name="trip-markers" style={{ zIndex: 420 }}>
+            <CityMarkers
+              trips={countryTrips}
+              selectedTripId={selectedTrip?.id ?? null}
+              onSelectTrip={handleSelectTrip}
+            />
+          </Pane>
         )}
       </MapContainer>
 
