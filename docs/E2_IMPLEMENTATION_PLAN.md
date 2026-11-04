@@ -1,8 +1,10 @@
 # Travel Map — Proposed E2 Implementation Plan
 
-Date: 2026-11-03. **DRAFT FOR REVIEW — no E2 implementation is authorized by this document.**
+Date: 2026-11-03. Updated: 2026-11-04. **E2.1 ONLY approved for implementation by the user. E2.2–E2.4 remain proposals, not implemented.**
 
-Baseline commit: `b25701c223c8528d4bf3e655118961e0467e4232` (`feat(auth): implement Google OAuth and secure sessions`). Initial tracked worktree change: `backend/supabase/config.toml`; preserve it. This planning task creates only this document.
+Implementation evidence and exact results: [E2_1_VALIDATION](../backend/E2_1_VALIDATION.md). Historical E1 audit below describes the pre-E2.1 baseline.
+
+Baseline commit: `b25701c223c8528d4bf3e655118961e0467e4232` (`feat(auth): implement Google OAuth and secure sessions`). Initial tracked worktree change: `backend/supabase/config.toml`; preserve it. This records the original planning baseline; subsequent E2.1 implementation is tracked separately.
 
 ## 1. Authority, scope and evidence
 
@@ -84,13 +86,13 @@ These are proposed domain extensions to the existing boundary, not a redesign of
 | `GET /api/v1/projects/{projectId}/trips` | O/A/M only; G cannot enumerate the project. |
 | `POST /api/v1/projects/{projectId}/trips` | O/A; M only with all_project_members; G never. |
 | `GET /api/v1/trips/{tripId}` | O/A/M inherited from the active parent or G of exactly that trip. |
-| `PATCH /api/v1/trips/{tripId}` | O/A for title/description; creator-member editing remains gated by P-03. No project/status/creator reassignment. |
+| `PATCH /api/v1/trips/{tripId}` | O/A for title/description; P-03 Option A approved: members cannot edit, including creators. No project/status/creator reassignment. |
 
 O = owner, A = project admin, M = project member, G = trip-only guest. Unknown/foreign ancestors never produce broader context. Initial responses to G omit project roster, other trips and aggregates; additional project context is gated by P-09.
 
 **Acceptance/tests:** create two trips and retrieve distinct IDs/content; M inherits both without duplicated trip memberships; creation policy allowed/denied cases; G can read only its trip and cannot create/list another; country/location similarity grants nothing; inactive parent/member/session denied; crafted project/creator/role fields rejected; project membership precedence over G tested; no PUBLIC/direct SQL reads; new RPC actions deny cross-project calls even when invoked directly with the runtime SQL role. Run the unchanged E1 regression suite.
 
-**Dependencies/gates:** E1 accepted; P-03 decision for member-created-trip editing. Until that decision, member PATCH stays denied; it must not silently become creator privilege.
+**Dependencies/gates:** E1 accepted. P-03 Option A approved by user on 2026-11-04: only O/A edit Trips, including member-created Trips. Visit creator/Admin rules remain reserved for E2.2.
 
 **Rollback:** restore the preceding dispatcher definition, then remove E2.1 helpers/policies and new tables only after later dependent migrations are reversed. Never roll back 0001/0002. Destructive table rollback is permitted only in an explicitly disposable test database; populated development data requires preservation/forward repair.
 
@@ -188,7 +190,7 @@ These are proposals/gates, not silently adopted product rules. An unresolved sub
 
 | Question | Source / proposed treatment | Gate |
 |---|---|---|
-| Can a member who created a trip edit it? | P-03; propose O/A-only editing, no permanent creator privilege. Latest creator/Admin rule explicitly covers Visits. | Before that PATCH permission ships. |
+| Can a member who created a trip edit it? | P-03 Option A approved 2026-11-04: O/A-only editing, no permanent creator privilege. Visit rules are unchanged. | Resolved for E2.1. |
 | Who changes ordinary project settings? | P-02b; propose owner-only initially; broader admin power needs approval. | E2.3 settings route. |
 | Restore project / recover deleted Visit? | P-01b/P-04; restoration rights and Visit period are not decided. | Keep restore/delete/purge outside E2. |
 | Already-member redemption and retry? | P-08; propose consume once without changing existing rights; same redeemer retry can acknowledge existing access only while it remains valid, never reinstate a revoked grant. | E2.4 transaction/results contract. |

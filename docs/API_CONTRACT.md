@@ -97,7 +97,7 @@ Un token de invitación no concede acceso hasta que una cuenta autenticada lo ca
 | `GET` | `/api/v1/projects/{projectId}/trips` | O/A/M; listas y conteos autorizados. G no accede a la lista general del proyecto. |
 | `POST` | `/api/v1/projects/{projectId}/trips` | O/A o M si política permite; G nunca. |
 | `GET` | `/api/v1/trips/{tripId}` | O/A/M del proyecto o G de ese viaje; exponer mínimo contexto del proyecto al G. |
-| `PATCH` | `/api/v1/trips/{tripId}` | Por defecto O/A; decisión P-03 abierta, fail-closed. |
+| `PATCH` | `/api/v1/trips/{tripId}` | Solo O/A; P-03 opción A aprobada (2026-11-04). M creador tampoco edita. |
 | `POST` | `/api/v1/trips/{tripId}/archive` | Por defecto O/A, sujeto a matriz pendiente. |
 | `GET` | `/api/v1/projects/{projectId}/map` | Mapa general solo O/A/M; filtros autorizados. |
 | `GET` | `/api/v1/trips/{tripId}/map` | Mapa del viaje; incluye G del viaje autorizado. |
@@ -251,3 +251,24 @@ El backend deberá modelar `Place.countryCode`, `Place.id` y `Visit.placeId` de 
 - Fecha o alcance de despliegue cloud: requiere autorización posterior para crear servicios, R2 y secretos.
 
 **Siguiente artefacto:** `docs/IMPLEMENTATION_PLAN.md`.
+
+## E2.1 implemented Trip contract (2026-11-04)
+
+These four routes are implemented; other planned routes above remain future work.
+
+| Method and route | Effective authorization | Success |
+|---|---|---|
+| GET `/api/v1/projects/{projectId}/trips` | Active project Owner/Admin/Member; no trip-only Guest enumeration | 200 `{items,nextCursor}` |
+| POST `/api/v1/projects/{projectId}/trips` | Owner/Admin; Member only if `tripCreationPolicy=all_project_members` | 201 Trip |
+| GET `/api/v1/trips/{tripId}` | Inherited active project access or explicit active Guest for this Trip | 200 Trip |
+| PATCH `/api/v1/trips/{tripId}` | Owner/Admin only (P-03 Option A); Member authorship grants no edit permission | 200 Trip |
+
+Trip DTO: `{id,projectId,createdByUserId,name,description,status,createdAt,updatedAt}`. UUIDs are strings; timestamps are UTC ISO-8601. `description` is string or null. Guest receives this same minimal Trip projection, without project roster, names, emails, aggregates or other Trips. IDs are references, never access credentials.
+
+POST accepts only `{name,description?}`; PATCH accepts at least one of these fields. Name is trimmed, 1–200 Unicode code points without control characters. Description is optional, up to 2000 Unicode code points; null clears it, omission on PATCH preserves it. JSON body budget is 16,384 bytes. Invalid JSON, unknown fields, invalid Unicode, creator/project/role/status assignment and empty PATCH return 400. Path determines parent/Trip; session determines creator. No lifecycle/membership mutations are implemented.
+
+List accepts only `limit` (default 25, maximum 100) and opaque `cursor`, using the existing Project pagination format. Order is ascending `(createdAt,id)`, scoped to active Trips of the authorized active parent before pagination. No totals; authorization is re-evaluated on every page. A cursor is a pagination hint, not permission or a snapshot guarantee.
+
+All routes retain E1 opaque sessions. Mutations retain exact Origin and `X-CSRF-Token` verification. Missing/invalid/expired/revoked session: 401; forbidden action on visible resource: 403; hidden/foreign/unknown/inactive resource: 404; invalid input: 400; recognized operation conflict: 409; database unavailable: 503. No raw SQL detail is returned. Security checks can reject a malformed mutation before its resource lookup; no existence is disclosed.
+
+SQL entry remains `api_call`; new handlers are private. See [E2.1 validation](../backend/E2_1_VALIDATION.md) for migration and test evidence. Visits, invitations, member administration, archival, media and frontend integration are not implemented here.

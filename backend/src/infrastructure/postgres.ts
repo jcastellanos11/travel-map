@@ -34,6 +34,18 @@ export class PostgresRepository implements IdentityRepository {
   async call(token: string, action: string, data: JsonObject = {}): Promise<JsonObject> {
     const result = await this.query<JsonObject>('SELECT travel_map.api_call($1,$2,$3) AS result',[token,action,JSON.stringify(data)]);
     if (result.error === 'SESSION_REQUIRED') throw new HttpError(401,'SESSION_REQUIRED','Authentication required');
+    // E2.1 outcomes are whitelisted and scoped to trip actions. Existing E1
+    // error behavior remains unchanged; never reflect database-provided messages.
+    if (action.startsWith('trips.') && typeof result.error === 'string') {
+      const errors: Record<string, { status: number; message: string }> = {
+        ACTION_FORBIDDEN: { status: 403, message: 'Action not allowed' },
+        VALIDATION_ERROR: { status: 400, message: 'Invalid request' },
+        OPERATION_CONFLICT: { status: 409, message: 'Operation conflicts with current state' },
+        DEPENDENCY_UNAVAILABLE: { status: 503, message: 'Data service unavailable' },
+      };
+      const known = errors[result.error];
+      if (known) throw new HttpError(known.status, result.error, known.message);
+    }
     if (result.error) throw new HttpError(404,'RESOURCE_NOT_FOUND','Resource not available');
     return result;
   }

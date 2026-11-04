@@ -1,7 +1,7 @@
 # Travel Map — Matriz de autorización y permisos
 
-**Versión:** 0.2 — revisión de permisos de administración  
-**Fecha:** 2026-11-01  
+**Versión:** 0.3 — decisión P-03 y alcance E2.1
+**Fecha:** 2026-11-04
 **Estado:** Borrador de diseño. La decisión #38 confirma restricciones del propietario; los restantes puntos abiertos siguen marcados como propuestas y **no** sustituyen las decisiones aprobadas en el PRD.  
 **Fuentes:** `docs/PRD.md` v1.0 (FR-01, FR-02, FR-04 a FR-10; NFR-04 a NFR-06), `docs/DATA_MODEL.md` v0.1, auditoría de frontend de Codex y decisiones de colaboración #02, #03, #08, #15, #16, #26, #27, #35 y #36.  
 **Alcance:** autorización conceptual para la beta privada, sin fijar API, mecanismo de sesión, framework o esquema de base de datos.
@@ -60,7 +60,7 @@ Todas las celdas siguientes se refieren a **un `Trip` determinado**. Para G, ese
 |---|:---:|:---:|:---:|:---:|:---:|---|
 | Listar / abrir / consultar viaje | Sí | Sí | Sí | Sí | No | No devuelve otros viajes ni datos privados del proyecto a G. |
 | Crear viaje en proyecto | Sí | Sí | Cond. | No | No | M solo cuando `Project` permite crear viajes a todos los miembros. |
-| Editar título y descripción del viaje | Sí | Sí | No | No | No | **Propuesta**: el hecho de haber creado el viaje no otorga edición perpetua. |
+| Editar título y descripción del viaje | Sí | Sí | No | No | No | **P-03 aprobada, opción A (2026-11-04)**: solo O/A; la autoría de M no concede edición. |
 | Invitar colaboradores solo a este viaje | Sí | Sí | No | No | No | No permite usar la invitación para entrar al proyecto completo. |
 | Retirar invitado de este viaje | Sí | Sí | No | No | No | Invalida futuras lecturas privadas; preserva fotos y cuotas según política. |
 | Archivar / restaurar viaje | Sí | Sí | No | No | No | **Propuesta**, sujeto a reglas de estado del proyecto. |
@@ -188,7 +188,7 @@ No alterar silenciosamente el PRD para resolver las siguientes cuestiones:
 | **P-01b — Pendiente** | ¿Quién puede restaurar un proyecto archivado? | Solo O en MVP (propuesta por confirmar). |
 | **P-02a — Resuelta (#38)** | ¿Quién puede promover/revocar administradores? | Solo O. |
 | **P-02b — Pendiente** | ¿Quién puede editar configuraciones ordinarias del proyecto? | O y A, salvo ajustes sensibles (propuesta por confirmar). |
-| **P-03** | ¿Puede el creador de un `Trip` (M) editarlo si no es A? | No; solo O/A en MVP. |
+| **P-03 — APROBADA** | ¿Puede el creador de un `Trip` (M) editarlo si no es A? | Opción A, aprobada el 2026-11-04: no; solo O/A. Implementada en E2.1. No cambia las reglas de creador/Admin de Visit (E2.2). |
 | **P-04** | ¿Plazo de recuperación de `Visit`? | 30 días, consistente con otras entidades, pendiente de aprobación explícita. |
 | **P-05** | ¿Cómo gestionar EXIF del original descargado por administradores? | Avisar al autor y documentar que los originales pueden conservar EXIF; no mostrar GPS preciso en UI sin consentimiento. |
 | **P-06** | ¿Cómo se tramita la transferencia de propiedad? | Destinatario con cuenta válida, aceptación explícita, operación auditable. |
@@ -197,7 +197,7 @@ No alterar silenciosamente el PRD para resolver las siguientes cuestiones:
 | **P-09** | ¿Qué información mínima del proyecto puede ver G? | Título/contexto indispensable del viaje, sin listar otros viajes, miembros o estadísticas privadas. |
 | **P-10** | ¿Puede G consultar lista completa de participantes del viaje? | Solo nombres/autores necesarios para la colaboración; sin emails ni datos de proyectos ajenos. |
 
-**Punto de control antes de implementar:** confirmar los apartados pendientes (P-01b, P-02b y P-03 a P-10) o etiquetarlos formalmente como decisiones diferidas con un comportamiento por defecto aprobado. Después, derivar pruebas de autorización por recurso, por ruta de navegación y por acceso a medios. No seleccionar ni implementar un mecanismo de seguridad específico todavía.
+**Punto de control antes de implementar:** confirmar los apartados pendientes (P-01b, P-02b y P-04 a P-10) o etiquetarlos formalmente como decisiones diferidas con un comportamiento por defecto aprobado. Después, derivar pruebas de autorización por recurso, por ruta de navegación y por acceso a medios. No seleccionar ni implementar un mecanismo de seguridad específico todavía.
 
 ## 12. Relación con documentos siguientes
 
@@ -207,3 +207,7 @@ No alterar silenciosamente el PRD para resolver las siguientes cuestiones:
 - `docs/IMPLEMENTATION_PLAN.md`: tareas y pruebas de seguridad/aislamiento antes de la beta.
 
 **Advertencia de alcance:** la vista transversal de fotografías por país/ciudad se prepara conceptualmente, pero no es una interfaz ni un endpoint requerido para el MVP. No representa acceso público a recuerdos de otros usuarios.
+
+## Alcance implementado E2.1 (2026-11-04)
+
+Solo las cuatro rutas de viajes descritas en [API_CONTRACT](API_CONTRACT.md#e21-implemented-trip-contract-2026-11-04) están implementadas. O/A/M pueden listar los viajes de su proyecto; G solo puede abrir su viaje explícito, nunca enumerar el proyecto. O/A crean; M crea únicamente con `all_project_members`; solo O/A editan nombre/descripción. Se requiere cuenta, sesión, proyecto y relación efectivos activos. Una relación G revocada no niega acceso heredado activo. La creación/revocación de membresías e invitaciones sigue diferida. Evidencia: [E2.1](../backend/E2_1_VALIDATION.md).

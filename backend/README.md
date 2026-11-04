@@ -1,10 +1,11 @@
-# Travel Map backend — E1
+# Travel Map backend — E2.1
 
 Workers/TypeScript modular monolith under [decision #40](../docs/ADR-001-STACK.md).
 E0 is committed; E1 adds Supabase Google OAuth/PKCE integration, opaque revocable
-application sessions, identity synchronization and private projects. **Real Google
-OAuth/browser acceptance is still pending manual provider configuration.** No
-frontend integration, E2 entities, cloud resources or deployment is included.
+application sessions, identity synchronization and private projects. Real Google
+login/logout were subsequently confirmed by the user. E2.1 adds Trips and inherited
+authorization; E2.2–E2.4 remain unimplemented. No frontend integration, cloud
+resources or deployment is included.
 
 See [E1 validation and manual prerequisites](E1_VALIDATION.md). The
 [E0 record](E0_VALIDATION.md) is historical evidence; its HTTP-only development
@@ -21,7 +22,7 @@ npm run check
 ```
 
 `check` runs lint, strict Worker/tooling type checking, local dry-run build and
-16 tests. Regenerate with `npm run types` after changing compatibility settings.
+22 tests. Regenerate with `npm run types` after changing compatibility settings.
 `build` uses `wrangler deploy --dry-run --env test --outdir dist`: no deployment
 occurs and no Cloudflare login is required. All outputs/state/logs are ignored.
 Do not remove `--dry-run` or invoke a real deployment command.
@@ -151,10 +152,27 @@ Application cookies are HttpOnly/Secure/host-only/SameSite=Lax. Sessions have
 sliding idle expiry. Logout revokes durably before clearing the cookie. New login
 rotates/revokes the browser's old session. These are explicit initial technical
 defaults, not new product requirements. `/me` returns a session-bound CSRF token;
-POST requests require it in `X-CSRF-Token` plus exact `Origin`. No permissive CORS,
+Mutation requests (including POST and PATCH) require it in `X-CSRF-Token` plus exact `Origin`. No permissive CORS,
 provider-JWT bootstrap, fake credentials or `/harness/*` routes exist.
 
 See [module ownership](src/modules/README.md) and [E1 evidence/limits](E1_VALIDATION.md).
-R2/Images, travel/visit/photo entities, uploads, quota accounting, invitation and
-retention workflows remain in their approved later stages. **Do not start E2
-without the next instruction.**
+Trips and inherited authorization are implemented in E2.1; see below. Visits, media, uploads, quota, invitations and membership administration remain deferred. Do not begin E2.2 without separate authorization.
+
+## E2.1 — Trips and inherited authorization
+
+Implemented: `GET/POST /api/v1/projects/{projectId}/trips` and `GET/PATCH /api/v1/trips/{tripId}`. See [contract](../docs/API_CONTRACT.md#e21-implemented-trip-contract-2026-11-04) and [validation evidence](E2_1_VALIDATION.md). O/A edit; creator Members never acquire an editing grant. Guest access is explicitly scoped to one Trip; no public route yet grants memberships.
+
+`0003_trips_authorization.up.sql` adds `trips`/`trip_memberships`, FORCE RLS, private handlers and authenticated dispatcher actions. Apply through the existing migration runner **as the existing E1 migration/function owner**, not the application role. Preflight rejects different ownership, weakened RLS/table ACLs or unsafe RPC grantees; final checks reject unsafe default ACLs. Do not grant broader privileges to make migration pass. The application still receives only the existing four EXECUTE grants, no table or private-helper grants.
+
+No migration was applied to persistent `travel_map_dev` during the isolated E2.1 implementation phase. A subsequent explicitly authorized operation applied 0003 on 2026-11-04 after owner/history verification and a protected local backup; see [persistent migration evidence](E2_1_VALIDATION.md#authorized-application-to-persistent-local-development--2026-11-04). For any future application, review owner identity and backup policy. The CLI commands above use operator-only `DATABASE_URL` in ignored `.env`, never Worker credentials; `LOCAL_DATABASE_ONLY=1` and loopback restrictions still apply. Do not paste credentials into command history. A known privileged owner must use their existing authorized credentials (or authorized SET ROLE); if unavailable, stop.
+
+Migration `0003` down is destructive to Trip data and refuses database names other than `travel_map_test_<suffix>`. Do not run down against persistent development data; use backup/preservation and forward repair. It restores the exact E1 dispatcher and removes only E2.1 objects. Never reverse 0001/0002 to undo E2.1.
+
+Run isolated regressions from `backend/`:
+
+```sh
+WRANGLER_LOG_PATH=.local/e21-check.log WRANGLER_SEND_METRICS=false npm run check
+PG_BIN=/absolute/path/to/postgresql/bin WRANGLER_LOG_PATH=.local/e21-db-runtime.log WRANGLER_SEND_METRICS=false npm run db:local:test
+```
+
+The second command starts/stops its own disposable loopback cluster, seeds synthetic actors, tests forward/failed/down/reapply migrations and SQL/HTTP security; it never connects to `.env` or `travel_map_dev`. Requires existing PostgreSQL 17+ binaries and local process/network permissions. `npm run test:db` is intended only for an explicitly configured disposable administrative test target, not the application role or persistent data. E1 regression pins its original migration pair; E2.1 exercises the full chain. Local Supabase regression remains `npm run test:supabase` with an ignored, protected `SUPABASE_LOCAL_STATUS_FILE`; see E2.1 evidence for isolated-stack prerequisites.

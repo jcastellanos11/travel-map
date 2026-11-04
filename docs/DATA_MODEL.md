@@ -185,3 +185,7 @@ La eliminación de un recurso padre no debe destruir inmediatamente los archivos
 ## 13. Próximo entregable
 
 Tras aprobar este borrador: `docs/AUTHORIZATION_MATRIX.md` (roles por ámbito, acceso a fotos, recuperación, revocación y transferencia); después, comparación arquitectónica y contrato de API. Ninguna elección de stack está implícita aquí.
+
+## E2.1 implementation note — 2026-11-04
+
+Migration `0003_trips_authorization` implements `trips` and guest-only `trip_memberships`. Project/creator/guest-user references use RESTRICT; retained content is not cascade-deleted. Project membership inheritance is resolved at request time, not copied into Trip memberships. Trip creator is immutable API provenance, not an editing grant: approved P-03 Option A reserves name/description edits to Project Owner/Admin. Lifecycle storage exists, but lifecycle mutation and membership-administration APIs remain deferred. This decision does not change future Visit creator/Admin editing rules. Exact schema and evidence: [E2.1 validation](../backend/E2_1_VALIDATION.md).

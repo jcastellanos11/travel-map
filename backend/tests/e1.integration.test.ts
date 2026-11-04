@@ -7,8 +7,12 @@ import { handleRequest } from '../src/app.ts';
 import type { AppEnv } from '../src/env.ts';
 import { PostgresRepository } from '../src/infrastructure/postgres.ts';
 import { digest, SESSION_COOKIE, OAUTH_COOKIE, randomToken, openOAuth } from '../src/modules/identity/security.ts';
-import { loadMigrations, localDatabaseUrl, migrate } from '../scripts/migrations.ts';
+import { loadMigrations as loadAllMigrations, localDatabaseUrl, migrate as migrateAll } from '../scripts/migrations.ts';
 import { providerFixture, syntheticGoogleUser } from './helpers/provider-fixture.ts';
+
+// Exercise the original E1 schema independently of later migrations.
+const loadMigrations = async () => (await loadAllMigrations()).slice(0, 2);
+const migrate = async (client: pg.Client, direction: 'up'|'down'|'status') => migrateAll(client, direction, await loadMigrations());
 
 const configured=process.env.DATABASE_URL;
 test('E1 actual PostgreSQL + SDK + HTTP security; synthetic OAuth transport',{
