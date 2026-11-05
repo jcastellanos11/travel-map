@@ -4,6 +4,8 @@
 **Dependencias:** `docs/PRD.md`, `docs/DATA_MODEL.md`, `docs/AUTHORIZATION_MATRIX.md`, `docs/ADR-001-STACK.md`.  
 **Objetivo:** integrar React + Leaflet con una API REST protegida, sin mezclar datos de viajes, autenticación, archivos ni permisos. Los nombres y formatos aquí especificados son una **primera propuesta técnica**; cambios de forma son admisibles antes de consumirla desde frontend, conservando los requisitos de producto.
 
+**Actualización E2.3 (2026-11-05):** las secciones implementadas al final de este documento prevalecen sobre DTOs orientativos anteriores. Invitaciones, restauración y medios siguen sin implementar.
+
 ## 1. Convenciones transversales
 
 - Base: `/api/v1`; JSON UTF-8; fechas de visita son cadenas de calendario `YYYY-MM-DD` y **no timestamps UTC**. Tiempos operativos sí son ISO 8601 UTC.
@@ -58,7 +60,7 @@ No incluir rutas privadas, tokens, EXIF, emails ajenos ni detalles de existencia
 | `GET` | `/api/v1/projects` | Proyectos con acceso efectivo; lista paginada. |
 | `POST` | `/api/v1/projects` | Crear proyecto propio; política de creación de viajes por defecto explícita. |
 | `GET` | `/api/v1/projects/{projectId}` | O/A/M con acceso. G de viaje no adquiere acceso a la vista completa. |
-| `PATCH` | `/api/v1/projects/{projectId}` | Solo ajustes no sensibles con política aprobada; **default conservador O** mientras P-02b siga abierto. |
+| `PATCH` | `/api/v1/projects/{projectId}` | Solo ajustes no sensibles con política aprobada; **O/A** según P-02b Option A aprobada: nombre y política existente de creación de viajes. |
 | `GET` | `/api/v1/projects/{projectId}/members` | Administración de colaboración autorizada; proyección mínima de participantes. |
 | `POST` | `/api/v1/projects/{projectId}/invitations` | O/A; destino `project` o `trip`; token secreto devuelto solo al emisor. |
 | `GET` | `/api/v1/projects/{projectId}/invitations` | O/A; listar estados, nunca hashes ni tokens completos. |
@@ -310,3 +312,54 @@ Each list/map returns `{items,nextCursor}`. limit defaults 25, max 100; opaque c
 All routes retain E1 session validation, private/no-store/CSP headers and error normalization. POST/PATCH require exact Origin and session-bound X-CSRF-Token. 401 invalid/missing/revoked/expired auth; 403 forbidden modification of a visible Visit; 404 hidden/foreign/inactive resource; 400 validation; 409 recognized transaction conflicts; 503 dependency unavailable. Existing E1 rate limits/429 behavior remain unchanged. SQL authorization applies independently of HTTP validation through the same four-function runtime boundary. No GPS/request-body/audit logging is added.
 
 D1 exact-point policy is pending, not inferred: database fields are constrained null. Enablement requires an approved confirmation actor, visibility audience, edits/reconfirmation, consent withdrawal/revocation and projection contract, plus a later migration. Evidence: [E2_2_VALIDATION](../backend/E2_2_VALIDATION.md). Migration 0004 is not automatically applied to persistent travel_map_dev.
+
+## E2.3 implemented collaboration contract — 2026-11-05
+
+These nine routes require migration 0005 (currently validated only in disposable
+local databases). E1 authentication, secure cookies, exact Origin and X-CSRF-Token
+remain unchanged. All actors are resolved by SQL from the current opaque session.
+
+| Method/path under `/api/v1` | Authorization | Success |
+|---|---|---|
+| GET `projects/{projectId}/members` | Active Project Owner/Admin | 200 management roster page |
+| POST `projects/{projectId}/members/{userId}/promote-admin` | Owner; target active Member | 204 |
+| POST `projects/{projectId}/members/{userId}/remove-admin` | Owner; target active Admin | 204, becomes Member |
+| DELETE `projects/{projectId}/members/{userId}` | Owner for non-Owner; Admin for ordinary Member | 204 soft revocation |
+| POST `projects/{projectId}/leave` | Active Member/Admin, never Owner | 204 |
+| DELETE `trips/{tripId}/members/{userId}` | Active Project Owner/Admin | 204 explicit Guest grant revoked |
+| POST `trips/{tripId}/leave` | Active explicit Guest without inherited access | 204 |
+| PATCH `projects/{projectId}` | Owner/Admin | 200 existing Project DTO |
+| POST `projects/{projectId}/archive` | Owner | 204 |
+
+Roster: `{items:[{userId,displayName,role,createdAt}],nextCursor}`. Role is
+`owner|admin|member`; Owner is derived from Project, never a second membership.
+Only active accounts/memberships appear; no email, Guest roster, revoked identities
+or private account profile. Standard `limit` (default 25/max 100) and cursor convention
+applies, ordered by membership creation time then userId (Owner uses Project creation
+time). Cursor is a position, not authority; scope/role checks precede projection.
+
+PATCH accepts a nonempty JSON object containing only `name` and/or
+`tripCreationPolicy`. Name is trimmed, 1–200 Unicode scalar characters, no control
+characters; policy is `admins_only|all_project_members`. Omitted values remain
+unchanged. Body budget 4096 bytes. Dedicated POST/DELETE actions accept an empty body
+or `{}` only; reject role/actor/status payloads, any other fields and query parameters.
+No ownership assignment, privileged defaults, bulk grants or creation of memberships.
+
+Project removal/leave revokes every active explicit Trip grant under that Project
+(including inactive Trips) in the same transaction. Content/creator IDs are retained.
+Trip leave does not modify Project membership and is forbidden for inherited access.
+Revoking an explicit grant never suppresses independent active inheritance.
+
+403 means a forbidden action on a visible resource (e.g. Member managing roles or
+Owner attempting to leave). 404 conceals unknown/inaccessible/inactive parents or
+missing/revoked target grants. An authorized Owner repeating a promotion of an
+already-Admin or demotion of an ordinary Member gets 409. Repeated removal is 404.
+Malformed payloads are 400; missing/expired/revoked sessions 401; unexpected database
+failures 503 with static messages. Lock/serialization conflicts from domain operations
+return 409; dispatcher/transport failures retain the established 503 boundary.
+
+Archive hides Project/Trips/Visits/maps and blocks subsequent content/membership
+writes; rows, attribution and unrelated sessions remain. Repeated archive is 404.
+**There is no restore/list-archived API or shortcut.** P-01b approves Owner/Admin
+restoration rights only for a future workflow. E2.4 invitations, ownership transfer,
+Trip archival, Visit deletion and audit-reading endpoints are not implemented.

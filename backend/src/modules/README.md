@@ -10,10 +10,11 @@ One Worker composes modules through `src/app.ts`; there are no microservices.
 | `infrastructure/postgres.ts` | Parameterized, bounded server-only SQL transport | E1 restricted database role; never a browser connection |
 | `trips/` | Trip DTOs, request validation and routing | E2.1 implemented; inherited authorization enforced in SQL |
 | `geography/` | Controlled Places, Visit DTO/validation/routes, scoped map projections | E2.2 implemented; private SQL handlers; exact Visit points disabled |
+| `collaboration/` | Membership roster/actions, Project settings and archival | E2.3 implemented; exclusive Project locks and transactional audit in private SQL |
 | photos/uploads, quota | Private media lifecycle and atomic accounting | E4, not started |
-| invitations, retention | Collaboration and assisted lifecycle procedures | E5/later approved scope, not started |
+| invitations, retention | Collaboration and assisted lifecycle procedures | E2.4/later approved scope, not started |
 
-SQL functions form the central authorization boundary for E1/E2.1/E2.2: validate current
+SQL functions form the central authorization boundary for E1/E2.1/E2.2/E2.3: validate current
 session/account, resolve current owner/membership and filter before projecting or
 counting. Only the trusted server role can invoke bootstrap functions; browser
 roles have no schema/table/function privileges. E1's schema migration owner is the

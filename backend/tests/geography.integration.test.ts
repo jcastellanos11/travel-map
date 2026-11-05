@@ -27,7 +27,7 @@ test('E2.2 geography: populated E2.1 upgrade, native SQL/HTTP, privacy and migra
     await admin.query(`CREATE DATABASE ${database} OWNER ${ownerRole}`); created = true;
     const url = new URL(base); url.pathname = `/${database}`;
     db = new pg.Client({ connectionString: url.toString() }); await db.connect(); const sql = db;
-    const all = await loadMigrations(), previous = all.slice(0, 3), migration = all[3]; assert.ok(migration); assert.equal(all.length, 4);
+    const all = (await loadMigrations()).slice(0, 4), previous = all.slice(0, 3), migration = all[3]; assert.ok(migration); assert.equal(all.length, 4);
     const owned = async (direction: 'up' | 'down', set: Migration[] = all) => { await sql.query(`SET ROLE ${ownerRole}`); try { return await migrate(sql, direction, set); } finally { await sql.query('RESET ROLE'); } };
     await owned('up', previous);
     await admin.query(`CREATE ROLE ${apiRole} LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS NOINHERIT`); roles.push(apiRole);

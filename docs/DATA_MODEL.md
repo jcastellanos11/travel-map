@@ -2,7 +2,7 @@
 
 **Versión:** 0.1 (borrador para revisión)  
 **Fecha:** 2026-11-01  
-**Estado:** no aprobado todavía como especificación definitiva  
+**Estado:** modelo conceptual de origen; las secciones de implementación E2.1–E2.3 al final documentan decisiones aprobadas y esquema real. Funcionalidad futura sigue siendo propuesta.
 **Fuentes:** `docs/PRD.md` v1.0, auditoría de frontend de Codex (2026-11-01), decisiones de dominio #35 y #36 y modificación solicitada en la decisión #37.  
 **Alcance:** modelo conceptual independiente de lenguaje, base de datos, ORM, API y proveedor cloud.
 
@@ -199,3 +199,33 @@ Visit has immutable API trip/creator associations, mutable explicit placeId, opt
 D1/D2/D3 are approved. Exact-point columns exist only as a fail-closed future boundary: a database constraint requires coordinate/confirmation/visibility fields all null. API accepts confirmedCoordinates only as null and never returns a precise point. Enabling storage/sharing requires a separately approved confirmation, visibility/reconfirmation and revocation policy plus a later migration; authorship or a claimed client confirmation alone is insufficient. No EXIF is processed. Independent approximate Place points are never overwritten from Visits.
 
 Creator editing requires current Trip access; O/A may edit within their active Project. Other Members/Guests cannot edit another author’s Visit. This does not change P-03’s Owner/Admin-only Trip editing rule. Inactive ancestors/grants hide retained contributions. Map DTO is one marker per authorized Visit, not a merged city/travel record; photoCount=0 and previewPhotoId=null. Full implemented request/response shapes: [API contract](API_CONTRACT.md#e22-implemented-geography-contract-2026-11-04).
+
+## E2.3 approved decisions — 2026-11-05
+
+Recorded before E2.3 implementation from explicit user approval:
+
+- **P-02b Option A:** Owner and active Project Admin may edit only ordinary Project name and the existing admins_only/all_project_members Trip creation policy. Ownership, lifecycle and role assignment are excluded. Only Owner appoints/removes Admins and archives.
+- **Project departure Option A:** Project removal/self-departure atomically revokes the active Project membership and every active explicit descendant Trip grant, while preserving content, creator attribution and future storage responsibility. Owner cannot leave. Existing descendant grants cannot restore access; future new authorization is outside this increment.
+- **P-01b Option B:** Owner and Admin may restore archived Projects in a future approved workflow. **No restoration endpoint or shortcut is authorized in E2.3.** Owner-only archive currently has no implemented self-service restoration.
+
+E2.3 only is authorized; E2.4 invitations and ownership transfer remain out of scope.
+
+### E2.3 implemented schema and transitions
+
+Migration 0005 reuses Project/Trip memberships and Project lifecycle without changing
+0001–0004. Owner remains `projects.owner_user_id`. Dedicated operations change
+Member↔Admin or active→revoked; no membership issuance/reactivation API exists yet.
+Departure includes every explicit descendant grant, preserving authored Trips and
+Visits and their creator foreign keys. Project active→archived retains all children
+and grants. No reverse lifecycle API is implemented.
+
+`domain_audit_events`: UUID PK, actor FK to users (RESTRICT), resource UUID/type
+(project/trip), closed action enum, UTC occurred_at, server-built minimal JSON
+transition metadata. Resource identity is polymorphic; private handler supplies the
+verified locked Project/Trip ID (no client audit-writing interface). Actor/resource
+indexes support future operational lookup. Table has FORCE RLS/owner-only policy,
+no runtime table grants. UPDATE/DELETE/TRUNCATE triggers reject rewrites, including
+normal owner DML. This is not tamper-proof storage against a privileged owner able
+to change DDL. No audit reader endpoint; retention/export policy remains pending.
+No names, emails, raw bodies, credentials, session digests, GPS or invitation secrets
+are recorded. Audit and domain mutations commit/rollback together.

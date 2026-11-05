@@ -1,8 +1,8 @@
 # Travel Map — Proposed E2 Implementation Plan
 
-Date: 2026-11-03. Updated: 2026-11-04. **E2.1 and E2.2 approved and locally implemented. E2.3–E2.4 remain proposals, not implemented.**
+Date: 2026-11-03. Updated: 2026-11-05. **E2.1–E2.3 approved and locally implemented. E2.3 migration remains disposable-only; E2.4 remains a proposal, not implemented.**
 
-Implementation evidence and exact results: [E2_1_VALIDATION](../backend/E2_1_VALIDATION.md), [E2_2_VALIDATION](../backend/E2_2_VALIDATION.md). Historical E1 audit below describes the pre-E2.1 baseline.
+Implementation evidence and exact results: [E2_1_VALIDATION](../backend/E2_1_VALIDATION.md), [E2_2_VALIDATION](../backend/E2_2_VALIDATION.md), [E2_3_VALIDATION](../backend/E2_3_VALIDATION.md). Historical E1 audit below describes the pre-E2.1 baseline.
 
 Baseline commit: `b25701c223c8528d4bf3e655118961e0467e4232` (`feat(auth): implement Google OAuth and secure sessions`). Initial tracked worktree change: `backend/supabase/config.toml`; preserve it. This records the original planning baseline; subsequent E2.1 implementation is tracked separately.
 
@@ -153,7 +153,7 @@ Reuse project_memberships; add private mutation handlers and a minimal append-on
 | `DELETE /api/v1/trips/{id}/members/{userId}` | O/A revoke explicit guest grant; cannot suppress inherited project access. |
 | `POST /api/v1/trips/{id}/leave` | G revokes own explicit grant; M cannot opt out of inherited project access through this route. |
 | `POST /api/v1/projects/{id}/archive` | O only; changes lifecycle atomically, preserves all descendants and storage responsibility. |
-| `PATCH /api/v1/projects/{id}` | Name/creation policy only if P-02b is resolved or an explicit conservative owner-only policy is approved; no owner/status mass assignment. |
+| `PATCH /api/v1/projects/{id}` | P-02b Option A approved: O/A edit name/existing creation policy only; no owner/status mass assignment. |
 
 Business roles are data, **not PostgreSQL roles**. No database login is created per collaborator. Permission and target-role checks run after acquiring the project lock; concurrent promotion/removal cannot let A remove a newly promoted A. Voluntary A departure is distinct from appointing/demoting another administrator; clarify the self-departure edge at review if interpreting owner-only removal more broadly.
 
@@ -199,11 +199,11 @@ These are proposals/gates, not silently adopted product rules. An unresolved sub
 | Question | Source / proposed treatment | Gate |
 |---|---|---|
 | Can a member who created a trip edit it? | P-03 Option A approved 2026-11-04: O/A-only editing, no permanent creator privilege. Visit rules are unchanged. | Resolved for E2.1. |
-| Who changes ordinary project settings? | P-02b; propose owner-only initially; broader admin power needs approval. | E2.3 settings route. |
-| Restore project / recover deleted Visit? | P-01b/P-04; restoration rights and Visit period are not decided. | Keep restore/delete/purge outside E2. |
+| Who changes ordinary project settings? | P-02b Option A approved: O/A, name and existing Trip creation policy only. | Resolved for E2.3. |
+| Restore project / recover deleted Visit? | P-01b Option B approved: O/A may restore through a future workflow; P-04 remains pending. | No restoration/delete/purge API in E2.3. |
 | Already-member redemption and retry? | P-08; propose consume once without changing existing rights; same redeemer retry can acknowledge existing access only while it remains valid, never reinstate a revoked grant. | E2.4 transaction/results contract. |
 | What if invitation issuer loses admin/membership before redemption? | Not specified; propose revalidate issuer's current O/A authority. Alternative persistence policy needs explicit approval. | E2.4. |
-| Does project leave/removal also revoke explicit trip memberships? | Not specified. There are no deny overrides. Propose revoking all explicit descendant grants for a true project departure; otherwise document that independent guest access survives. Never promise total denial while preserving another active grant. | E2.3 departure/removal with overlapping grants; E2.4 retries. |
+| Does project leave/removal also revoke explicit trip memberships? | Option A approved: revoke ALL active descendant grants atomically with Project membership; retain contributions. | Resolved for E2.3; future acquisition of new authorization is E2.4/later. |
 | What project context / participant details can G see? | P-09/P-10; propose trip-only data and minimal creator display projection; no project roster/email/statistics. | Guest DTOs; broader views deferred. |
 | What is an authoritative Place identity/catalog? | DATA_MODEL §5; proposed controlled independent catalog, canonical country codes, stable UUIDs, source provenance, no name-only merging. D3 approved; source-identified limited GeoNames snapshot documented; inline-place resolver remains disabled. | Coverage expansion and cross-provider identity review remain future work. |
 | How is exact-location confirmation shared? | Precise consent/projection details remain undefined. Propose city-only default; share confirmed exact points only after explicit consent to current trip collaborators. No silent EXIF-derived sharing. | E2.2 precise-point write/read; null/omitted until approved. |
@@ -245,3 +245,36 @@ E2 acceptance requires all four agreed increments, documented outcomes for the g
 Executed only repository reads, git status/commit inspection and a read-only local catalog transaction selecting table/column/function/RLS/role metadata. Five tables and four executable RPCs matched the E1 foundation; direct runtime table access and elevated role flags were false. No account data or secrets were printed. No dependency installation, build, application test rerun, migration or service restart was performed. Document links/scope checks validate this artifact only.
 
 **Review requested:** confirm the E2.1–E2.4 sequence and collaboration resequencing; resolve or explicitly defer the gates in §9. Only after approval should implementation begin, starting with E2.1. Approval of this proposal is not authorization to change E1 authentication or deploy services.
+
+## E2.3 approved decisions — 2026-11-05
+
+Recorded before E2.3 implementation from explicit user approval:
+
+- **P-02b Option A:** Owner and active Project Admin may edit only ordinary Project name and the existing admins_only/all_project_members Trip creation policy. Ownership, lifecycle and role assignment are excluded. Only Owner appoints/removes Admins and archives.
+- **Project departure Option A:** Project removal/self-departure atomically revokes the active Project membership and every active explicit descendant Trip grant, while preserving content, creator attribution and future storage responsibility. Owner cannot leave. Existing descendant grants cannot restore access; future new authorization is outside this increment.
+- **P-01b Option B:** Owner and Admin may restore archived Projects in a future approved workflow. **No restoration endpoint or shortcut is authorized in E2.3.** Owner-only archive currently has no implemented self-service restoration.
+
+E2.3 only is authorized; E2.4 invitations and ownership transfer remain out of scope.
+
+### E2.3 implementation record
+
+The approved decisions above supersede the earlier proposals in §7/§9. Migration
+0005 implements private collaboration_action and append-only domain_audit_events;
+api_call retains its four-function runtime boundary. Nine HTTP routes implement
+roster, dedicated role changes, Project/Trip departure/revocation, ordinary settings
+and Owner-only archive. Invitations, restoration, transfers and media remain absent.
+
+Mutations lock session/account through the unchanged dispatcher, then Project FOR
+UPDATE, Trip rows in UUID order when necessary, then target membership/grants.
+Authority is resolved after the parent lock. Project removal includes grants under
+inactive Trips. Existing content handlers use compatible shared parent locks.
+Concurrency tests hold real RPC transactions while independent HTTP requests wait,
+then assert post-commit access/role checks, retained contributions and atomic audit.
+E1 Project list/get behavior is unchanged; these reads retain their original locks.
+
+Migration down is guarded to disposable travel_map_test_* databases, restores the
+exact E2.2 dispatcher and removes E2.3 helpers/audit table. It does not undo legitimate
+role/revocation/archive transitions. Persistent migration is separately authorized,
+requires preflight/backups and must preserve audit evidence. **0005 has not been
+applied to travel_map_dev by this implementation.** Results and outstanding local
+migration steps: [E2_3_VALIDATION](../backend/E2_3_VALIDATION.md). E2.4 is not started.

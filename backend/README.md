@@ -1,10 +1,10 @@
-# Travel Map backend — E2.2
+# Travel Map backend — E2.3
 
 Workers/TypeScript modular monolith under [decision #40](../docs/ADR-001-STACK.md).
 E0 is committed; E1 adds Supabase Google OAuth/PKCE integration, opaque revocable
 application sessions, identity synchronization and private projects. Real Google
 login/logout were subsequently confirmed by the user. E2.1 adds Trips and inherited
-authorization; E2.2 adds controlled Places, Visits and map projections. E2.3–E2.4 remain unimplemented. No frontend integration, cloud
+authorization; E2.2 adds controlled Places, Visits and map projections. E2.3 adds membership administration, departure, settings and Owner-only archive; E2.4 remains unimplemented. No frontend integration, cloud
 resources or deployment is included.
 
 See [E1 validation and manual prerequisites](E1_VALIDATION.md). The
@@ -22,7 +22,7 @@ npm run check
 ```
 
 `check` runs lint, strict Worker/tooling type checking, local dry-run build and
-27 tests. Regenerate with `npm run types` after changing compatibility settings.
+31 tests. Regenerate with `npm run types` after changing compatibility settings.
 `build` uses `wrangler deploy --dry-run --env test --outdir dist`: no deployment
 occurs and no Cloudflare login is required. All outputs/state/logs are ignored.
 Do not remove `--dry-run` or invoke a real deployment command.
@@ -36,7 +36,7 @@ npm run db:local:test
 
 Use PostgreSQL 17+ executables (`initdb`, `postgres`, `pg_ctl`). The command builds
 current Worker code, creates its own loopback-only cluster and random databases,
-runs E0/E1/E2.1/E2.2 SQL and workerd integration tests, and stops/removes only its generated
+runs E0/E1/E2.1/E2.2/E2.3 SQL and workerd integration tests, and stops/removes only its generated
 cluster. No Docker, existing database or `.env` is required. Temporary local trust
 authentication is for synthetic tests only. Let the command finish normally; if
 interrupted, inspect its own `.local/pg-e0-*` directory and stop that exact cluster
@@ -156,7 +156,7 @@ Mutation requests (including POST and PATCH) require it in `X-CSRF-Token` plus e
 provider-JWT bootstrap, fake credentials or `/harness/*` routes exist.
 
 See [module ownership](src/modules/README.md) and [E1 evidence/limits](E1_VALIDATION.md).
-Trips and inherited authorization are implemented in E2.1; see below. Visits and map projections are implemented in E2.2 (below); media, uploads, quota, invitations and membership administration remain deferred. Do not begin E2.3/E2.4 without separate authorization.
+Trips and inherited authorization are implemented in E2.1; see below. Visits and map projections are implemented in E2.2 (below); E2.3 membership administration/settings/archive are implemented below. Media, uploads, quota and invitations remain deferred. Do not begin E2.4 without separate authorization.
 
 ## E2.1 — Trips and inherited authorization
 
@@ -188,3 +188,25 @@ Exact Visit coordinates are disabled in both SQL and API pending consent/sharing
 Migration `0004_places_visits.up/down.sql` has been tested only in disposable local databases. **Do not run db:migrate up against travel_map_dev without separate approval**: the runner now sees 0004 as pending. Correct existing E1/E2.1 migration-owner context and preflight are required; no new runtime grants. Down restores the exact E2.1 dispatcher and is destructive to E2.2 data, allowed only for disposable travel_map_test_* databases. Keep persistent data and use forward repair, never automatic rollback.
 
 Existing `npm run check` and `PG_BIN=<existing PostgreSQL 17+ bin> npm run db:local:test` include E2.2. Tests use synthetic users/Visits, a non-superuser owner, full rollback/reapply checks and 110 generated Visits/query plans. Native Supabase regressions use only the separately configured disposable test stack, never the Google-enabled development stack. No persistent development database or Docker networking is changed by this implementation.
+
+## E2.3 membership administration and Project lifecycle
+
+[Endpoint contract](../docs/API_CONTRACT.md#e23-implemented-collaboration-contract--2026-11-05)
+and [validation record](E2_3_VALIDATION.md) describe the nine implemented routes.
+Owner/Admin manage ordinary settings; only Owner promotes/demotes Admins and
+archives. Project removal/departure atomically revokes all descendant explicit Trip
+grants, retaining contributed content. Guest departure affects only that explicit
+Trip grant. No restoration API exists; archival has no self-service undo.
+
+Migration 0005 is **not applied to persistent travel_map_dev**. Continue using the
+existing owner, LOCAL_DATABASE_ONLY=1, verified local target and backup procedure
+before any separately approved persistent application. Do not run the generic `up`
+command against the development database until that migration is authorized.
+`npm run db:local:test` applies/rolls back/reapplies it only in generated disposable
+databases. `npm run check` includes E2.3 validation tests; no dependencies added.
+
+New SQL handlers retain the four-RPC boundary and fixed owner/search_path/UTC.
+Runtime receives no direct tables/helpers. Minimal private audit events share each
+mutation's transaction. No invitations, ownership transfer, restoration, photos or
+frontend integration were added. Existing Google credentials and auth flows remain
+unchanged; test users/session fixtures never create an HTTP login bypass.

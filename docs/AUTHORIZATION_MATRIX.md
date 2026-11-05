@@ -1,7 +1,7 @@
 # Travel Map — Matriz de autorización y permisos
 
-**Versión:** 0.4 — P-03 y alcance E2.1/E2.2
-**Fecha:** 2026-11-04
+**Versión:** 0.5 — decisiones aprobadas y alcance E2.1–E2.3
+**Fecha:** 2026-11-05
 **Estado:** Borrador de diseño. La decisión #38 confirma restricciones del propietario; los restantes puntos abiertos siguen marcados como propuestas y **no** sustituyen las decisiones aprobadas en el PRD.  
 **Fuentes:** `docs/PRD.md` v1.0 (FR-01, FR-02, FR-04 a FR-10; NFR-04 a NFR-06), `docs/DATA_MODEL.md` v0.1, auditoría de frontend de Codex y decisiones de colaboración #02, #03, #08, #15, #16, #26, #27, #35 y #36.  
 **Alcance:** autorización conceptual para la beta privada, sin fijar API, mecanismo de sesión, framework o esquema de base de datos.
@@ -39,14 +39,14 @@ Un usuario puede tener varias relaciones, incluso G para un viaje y M para su pr
 |---|:---:|:---:|:---:|:---:|:---:|---|
 | Crear un proyecto nuevo | Sí | Sí | Sí | Sí | X: Sí / Ø: No | Cualquier cuenta autenticada puede crear su propio proyecto; la columna indica capacidad global, no sobre el proyecto ajeno. |
 | Ver proyecto y sus viajes en mapa general | Sí | Sí | Sí | No | No | G puede acceder a su viaje, **no** a la vista general ni a conteos de otros viajes. |
-| Editar nombre/configuración ordinaria | Sí | Sí | No | No | No | Configuración incluida: quién puede crear viajes. **Propuesta**: A puede cambiarla. |
+| Editar nombre/configuración ordinaria | Sí | Sí | No | No | No | P-02b Option A aprobada: O/A editan nombre y política existente de creación de viajes. |
 | Nombrar o revocar administradores | Sí | No | No | No | No | **Confirmado en decisión #38**; no hay delegación de este permiso. |
 | Invitar miembros comunes al proyecto | Sí | Sí | No | No | No | Invitación autenticada de un solo uso, revocable y con vencimiento. |
 | Retirar a un miembro común | Sí | Sí | No | No | No | No elimina automáticamente sus fotos; su cuota continúa. |
 | Retirar a otro administrador | Sí | No | No | No | No | **Confirmado en decisión #38**: reservado al propietario. |
 | Transferir propiedad | Sí | No | No | No | No | Requiere destinatario válido y aceptación; propuesta de flujo. |
 | Archivar proyecto | Sí | No | No | No | No | **Confirmado en decisión #38**: reservado al propietario. |
-| Restaurar proyecto archivado | Cond. | No | No | No | No | **Propuesta pendiente**: solo propietario, sujeto al estado del proyecto. |
+| Restaurar proyecto archivado | Cond. | Cond. | No | No | No | P-01b Option B aprobada: O/A con flujo válido futuro. No API de restauración en E2.3. |
 | Solicitar eliminación del proyecto | Sí | No | No | No | No | Recuperación de 30 días, aviso y salvaguardas sobre fotos de terceros. |
 | Abandonar proyecto por voluntad propia | Cond. | Sí | Sí | N/A | No | O debe transferir propiedad antes, si el proyecto sigue activo. Retirar acceso no transfiere cuotas automáticamente. |
 
@@ -185,9 +185,9 @@ No alterar silenciosamente el PRD para resolver las siguientes cuestiones:
 | ID | Decisión por confirmar | Propuesta conservadora |
 |---|---|---|
 | **P-01a — Resuelta (#38)** | ¿Quién puede archivar un proyecto? | Solo O. A no puede. |
-| **P-01b — Pendiente** | ¿Quién puede restaurar un proyecto archivado? | Solo O en MVP (propuesta por confirmar). |
+| **P-01b — Resuelta (2026-11-05), implementación diferida** | ¿Quién puede restaurar un proyecto archivado? | O y A, Option B aprobada. No API de restauración en E2.3. |
 | **P-02a — Resuelta (#38)** | ¿Quién puede promover/revocar administradores? | Solo O. |
-| **P-02b — Pendiente** | ¿Quién puede editar configuraciones ordinarias del proyecto? | O y A, salvo ajustes sensibles (propuesta por confirmar). |
+| **P-02b — Resuelta (2026-11-05)** | ¿Quién puede editar configuraciones ordinarias del proyecto? | O y A: nombre y política existente de creación de viajes, Option A aprobada. |
 | **P-03 — APROBADA** | ¿Puede el creador de un `Trip` (M) editarlo si no es A? | Opción A, aprobada el 2026-11-04: no; solo O/A. Implementada en E2.1. No cambia las reglas de creador/Admin de Visit (E2.2). |
 | **P-04** | ¿Plazo de recuperación de `Visit`? | 30 días, consistente con otras entidades, pendiente de aprobación explícita. |
 | **P-05** | ¿Cómo gestionar EXIF del original descargado por administradores? | Avisar al autor y documentar que los originales pueden conservar EXIF; no mostrar GPS preciso en UI sin consentimiento. |
@@ -197,7 +197,7 @@ No alterar silenciosamente el PRD para resolver las siguientes cuestiones:
 | **P-09** | ¿Qué información mínima del proyecto puede ver G? | Título/contexto indispensable del viaje, sin listar otros viajes, miembros o estadísticas privadas. |
 | **P-10** | ¿Puede G consultar lista completa de participantes del viaje? | Solo nombres/autores necesarios para la colaboración; sin emails ni datos de proyectos ajenos. |
 
-**Punto de control antes de implementar:** confirmar los apartados pendientes (P-01b, P-02b y P-04 a P-10) o etiquetarlos formalmente como decisiones diferidas con un comportamiento por defecto aprobado. Después, derivar pruebas de autorización por recurso, por ruta de navegación y por acceso a medios. No seleccionar ni implementar un mecanismo de seguridad específico todavía.
+**Punto de control antes de implementar:** confirmar los apartados todavía pendientes (P-04 a P-10; P-01b/P-02b resueltos en E2.3) o etiquetarlos formalmente como decisiones diferidas con un comportamiento por defecto aprobado. Después, derivar pruebas de autorización por recurso, por ruta de navegación y por acceso a medios. No seleccionar ni implementar un mecanismo de seguridad específico todavía.
 
 ## 12. Relación con documentos siguientes
 
@@ -229,3 +229,36 @@ D1/D2/D3 aprobadas. El catálogo es independiente/controlado y requiere sesión 
 Las proyecciones Guest no incluyen nombre/roster/email del Project, otros viajes ni agregados globales. Solo identificadores de Visit/Trip, autor de Visit cuando corresponde al DTO de visita, catálogo independiente, fechas y cero/null de fotos futuras. La ausencia de un proyecto/viaje/visita, inaccesibilidad o estado inactivo produce 404; no se usa similitud geográfica como permiso. Todas las consultas filtran antes de paginar/proyectar; no hay conteos/facetas sin ámbito.
 
 Confirmación y visibilidad de puntos exactos quedan pendientes: no se infiere consentimiento de sesión, rol o autoría. Se rechazan escrituras de puntos y se devuelve confirmedCoordinates=null, también para Owner/Admin. Visibilidad más amplia del Project/participantes (P-09/P-10), eliminación/restauración (P-04), miembros/invitaciones y medios siguen diferidos. Evidencia: [E2.2](../backend/E2_2_VALIDATION.md).
+
+## E2.3 approved decisions — 2026-11-05
+
+Recorded before E2.3 implementation from explicit user approval:
+
+- **P-02b Option A:** Owner and active Project Admin may edit only ordinary Project name and the existing admins_only/all_project_members Trip creation policy. Ownership, lifecycle and role assignment are excluded. Only Owner appoints/removes Admins and archives.
+- **Project departure Option A:** Project removal/self-departure atomically revokes the active Project membership and every active explicit descendant Trip grant, while preserving content, creator attribution and future storage responsibility. Owner cannot leave. Existing descendant grants cannot restore access; future new authorization is outside this increment.
+- **P-01b Option B:** Owner and Admin may restore archived Projects in a future approved workflow. **No restoration endpoint or shortcut is authorized in E2.3.** Owner-only archive currently has no implemented self-service restoration.
+
+E2.3 only is authorized; E2.4 invitations and ownership transfer remain out of scope.
+
+### E2.3 implemented permission matrix
+
+| Operation | Owner | Admin | Member | Trip-only Guest |
+|---|---|---|---|---|
+| Management roster | Yes | Yes | 403 | 404 |
+| Promote/demote Admin | Yes, non-Owner active target | 403 | 403 | 404 |
+| Remove Project participant | Any non-Owner active participant | Ordinary Member only | 403 | 404 |
+| Leave Project | 403 | Self | Self | 404 |
+| Revoke explicit Trip Guest | Yes | Yes | 403 | 404 |
+| Leave Trip | 403 (inherited) | 403 (inherited) | 403 (inherited) | Self explicit grant only |
+| Ordinary Project settings | Yes | Yes | 403 | 404 |
+| Archive Project | Yes | 403 | 403 | 404 |
+| Restore Project | Future approved | Future approved | No | No |
+
+All rows require current session/account and active ancestors. Hidden/unknown
+resources produce 404 irrespective of role elsewhere. No duplicate Owner role or
+Trip Admin exists. Inherited access is never negatively overridden by a Trip grant.
+Departure/removal atomically revokes Project membership and ALL descendant explicit
+Trip grants. Retained creator attribution confers no post-departure access/editing.
+Archive preserves memberships and contributions; it does not terminate application
+sessions. Subsequent requests observe committed changes; already downloaded copies
+cannot be invalidated. See [E2.3 evidence](../backend/E2_3_VALIDATION.md).
