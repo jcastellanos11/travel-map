@@ -36,7 +36,7 @@ test('E2.1 trips: disposable PostgreSQL, non-superuser owner, HTTP and SQL isola
     const url = new URL(base); url.pathname = `/${database}`;
     db = new pg.Client({ connectionString: url.toString() }); await db.connect();
     const sql = db;
-    const migrations = await loadMigrations();
+    const migrations = (await loadMigrations()).slice(0, 3);
     const e1 = migrations.slice(0, 2);
     const e21 = migrations[2]; assert.ok(e21);
     const ownedMigration = async (direction: 'up' | 'down', set: Migration[] = migrations) => {
@@ -356,8 +356,8 @@ test('E2.1 trips: disposable PostgreSQL, non-superuser owner, HTTP and SQL isola
       const guardUrl = new URL(url); guardUrl.pathname = `/${name}`;
       const guard = new pg.Client({ connectionString: guardUrl.toString() }); await guard.connect();
       try {
-        await guard.query(`SET ROLE ${ownerRole}`); assert.equal((await migrate(guard, 'up')).length, 3);
-        await assert.rejects(migrate(guard, 'down'), { code: '42501' });
+        await guard.query(`SET ROLE ${ownerRole}`); assert.equal((await migrate(guard, 'up', migrations)).length, 3);
+        await assert.rejects(migrate(guard, 'down', migrations), { code: '42501' });
         assert.equal((await guard.query('SELECT count(*)::int AS n FROM travel_map_migrations.applied')).rows[0].n, 3);
       } finally { await guard.end(); }
     });

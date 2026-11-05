@@ -7,6 +7,7 @@ import type { IdentityProvider } from './modules/identity/provider.ts';
 import { finishLogin, startLogin } from './modules/identity/routes.ts';
 import { checkOrigin, cookie, csrf, digest, equal, OAUTH_COOKIE, SESSION_COOKIE, setCookie, tokenPattern } from './modules/identity/security.ts';
 import { projectInput, projectPage, projectQuery, uuid } from './modules/projects/validation.ts';
+import { geographyRoute } from './modules/geography/routes.ts';
 import { tripRoute } from './modules/trips/routes.ts';
 import { health } from './modules/system/health.ts';
 import { errorResponse, HttpError, secureResponse } from './shared/http.ts';
@@ -59,7 +60,7 @@ export async function handleRequest(request: Request, env: AppEnv, dependencies?
           if (!uuid.test(id)) throw new HttpError(404,'RESOURCE_NOT_FOUND','Resource not available');
           response=Response.json(await repo.call(hash,'projects.get',{id}));
         } else {
-          const tripResponse = await tripRoute(request, repo, hash);
+          const tripResponse = await tripRoute(request, repo, hash) ?? await geographyRoute(request, repo, hash);
           if (tripResponse) response = tripResponse;
           else {
             await repo.call(hash,'me');

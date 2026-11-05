@@ -1,0 +1,4 @@
+export interface CalendarDate { mode: 'none' | 'single' | 'range'; start: string | null; end: string | null }
+export interface Place { id: string; countryCode: string; countryName: string; city: string; region: string | null; createdAt: string; approximateCoordinates: { lat: number; lng: number } | null; source: { provider: string | null; id: string | null; url: string | null } }
+export interface Visit { id: string; tripId: string; placeId: string; createdByUserId: string; name: string | null; status: string; place: Place; confirmedCoordinates: null; date: CalendarDate; photoCount: 0; previewPhotoId: null; createdAt: string; updatedAt: string }
+export interface MapItem { visitId: string; tripId: string; place: Place; confirmedCoordinates: null; date: CalendarDate; photoCount: 0; previewPhotoId: null; createdAt: string }

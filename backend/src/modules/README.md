@@ -9,11 +9,11 @@ One Worker composes modules through `src/app.ts`; there are no microservices.
 | `projects/` | Project model, input/pagination validation | E1 services enforced through scoped SQL RPC |
 | `infrastructure/postgres.ts` | Parameterized, bounded server-only SQL transport | E1 restricted database role; never a browser connection |
 | `trips/` | Trip DTOs, request validation and routing | E2.1 implemented; inherited authorization enforced in SQL |
-| visits/places | Repeated visits, geographic identity | E2.2, not started |
+| `geography/` | Controlled Places, Visit DTO/validation/routes, scoped map projections | E2.2 implemented; private SQL handlers; exact Visit points disabled |
 | photos/uploads, quota | Private media lifecycle and atomic accounting | E4, not started |
 | invitations, retention | Collaboration and assisted lifecycle procedures | E5/later approved scope, not started |
 
-SQL functions form the central authorization boundary for E1/E2.1: validate current
+SQL functions form the central authorization boundary for E1/E2.1/E2.2: validate current
 session/account, resolve current owner/membership and filter before projecting or
 counting. Only the trusted server role can invoke bootstrap functions; browser
 roles have no schema/table/function privileges. E1's schema migration owner is the
@@ -23,3 +23,12 @@ No imports from `spikes/`, test provider fixtures or test identity seeds are all
 in the production entry graph. Test injection ports are ordinary in-process
 interfaces, not HTTP backdoors or deployable mock authentication modes. Node-only
 migration/admin tools remain in `scripts/`, outside the Worker bundle.
+
+`geography/` reuses E2.1 trip ancestry/permission locks through private trips_action;
+creator edit rights apply only to Visits with current access. Catalog is independent
+of user content, attributed in catalog/README.md, and no inline resolver or public
+place mutation exists. Map DTOs contain only authorized Visits; photos=0/null.
+Country/Place/Visit tables have owner-only FORCE RLS and no runtime table grants.
+Only authenticated api_call dispatches to private geography_action; new helper
+functions are never runtime-executable. No EXIF, GPS sharing, members/invitations,
+delete/restore, storage or frontend integration belongs to this increment.

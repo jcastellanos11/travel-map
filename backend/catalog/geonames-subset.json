@@ -1,0 +1,89 @@
+{
+  "retrievedAt": "2026-11-04",
+  "license": "CC-BY-4.0",
+  "attribution": "GeoNames, https://www.geonames.org/",
+  "sources": [
+    {
+      "url": "https://download.geonames.org/export/dump/cities15000.zip",
+      "sha256": "1d7cf2e7b0920b5203a5c0f2b3825e5e5d6e721e3802593cb51b438877796847"
+    },
+    {
+      "url": "https://download.geonames.org/export/dump/countryInfo.txt",
+      "sha256": "79f8f59ea01cbb40438bf1856dd6c2ff201f03f8fc72d0530b2646aaf603ef04"
+    },
+    {
+      "url": "https://download.geonames.org/export/dump/readme.txt",
+      "sha256": "b1957379b6c1242c700c98ac9a8aa0a09f56c3c0a50ee72175527005f48ef2c5"
+    }
+  ],
+  "countries": [
+    {
+      "code": "COL",
+      "name": "Colombia"
+    },
+    {
+      "code": "TUR",
+      "name": "Turkey"
+    },
+    {
+      "code": "USA",
+      "name": "United States"
+    }
+  ],
+  "places": [
+    {
+      "id": "e741c61b-8011-59ac-9d6d-423b6ff10a83",
+      "countryCode": "COL",
+      "city": "Medellín",
+      "region": "02",
+      "sourceId": "3674962",
+      "latitude": 6.25,
+      "longitude": -75.57
+    },
+    {
+      "id": "44576a98-98a4-55e0-b879-360717211efb",
+      "countryCode": "COL",
+      "city": "Bogotá",
+      "region": "34",
+      "sourceId": "3688689",
+      "latitude": 4.61,
+      "longitude": -74.08
+    },
+    {
+      "id": "7d8727d6-10fc-54bb-ba98-c02610174c68",
+      "countryCode": "TUR",
+      "city": "Ankara",
+      "region": "68",
+      "sourceId": "323786",
+      "latitude": 39.92,
+      "longitude": 32.85
+    },
+    {
+      "id": "27f6811e-193a-53eb-b5e9-98a92a752986",
+      "countryCode": "TUR",
+      "city": "Istanbul",
+      "region": "34",
+      "sourceId": "745044",
+      "latitude": 41.01,
+      "longitude": 28.95
+    },
+    {
+      "id": "bcda7373-0441-5676-8e24-495131dc8d8e",
+      "countryCode": "USA",
+      "city": "Springfield",
+      "region": "IL",
+      "sourceId": "4250542",
+      "latitude": 39.8,
+      "longitude": -89.64
+    },
+    {
+      "id": "5a19d105-e882-51ba-b1b7-b2555218f351",
+      "countryCode": "USA",
+      "city": "Springfield",
+      "region": "MA",
+      "sourceId": "4951788",
+      "latitude": 42.1,
+      "longitude": -72.59
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 # Travel Map — Proposed E2 Implementation Plan
 
-Date: 2026-11-03. Updated: 2026-11-04. **E2.1 ONLY approved for implementation by the user. E2.2–E2.4 remain proposals, not implemented.**
+Date: 2026-11-03. Updated: 2026-11-04. **E2.1 and E2.2 approved and locally implemented. E2.3–E2.4 remain proposals, not implemented.**
 
-Implementation evidence and exact results: [E2_1_VALIDATION](../backend/E2_1_VALIDATION.md). Historical E1 audit below describes the pre-E2.1 baseline.
+Implementation evidence and exact results: [E2_1_VALIDATION](../backend/E2_1_VALIDATION.md), [E2_2_VALIDATION](../backend/E2_2_VALIDATION.md). Historical E1 audit below describes the pre-E2.1 baseline.
 
 Baseline commit: `b25701c223c8528d4bf3e655118961e0467e4232` (`feat(auth): implement Google OAuth and secure sessions`). Initial tracked worktree change: `backend/supabase/config.toml`; preserve it. This records the original planning baseline; subsequent E2.1 implementation is tracked separately.
 
@@ -97,6 +97,14 @@ O = owner, A = project admin, M = project member, G = trip-only guest. Unknown/f
 **Rollback:** restore the preceding dispatcher definition, then remove E2.1 helpers/policies and new tables only after later dependent migrations are reversed. Never roll back 0001/0002. Destructive table rollback is permitted only in an explicitly disposable test database; populated development data requires preservation/forward repair.
 
 ## 6. E2.2 — Places, Visits and authorized map projections
+
+**Implemented 2026-11-04:** D1/D2/D3 approved by user. Four paired migrations now exist. 0004 is validated only in disposable local databases; do not apply it to travel_map_dev without separate authorization. The following design is implemented with the conservative refinements below.
+
+- D1: city-level default; exact Visit storage/sharing remains disabled in API and SQL pending confirmation, visibility, reconfirmation and revocation rules. All DTOs return confirmedCoordinates=null. Catalog points are independent, approximate source data.
+- D2: date object {mode,start,end}; none=null/null, single=start=end, range ordered, PostgreSQL DATE, inclusive independently supplied from/to filters.
+- D3: GeoNames CC-BY-4.0 controlled snapshot, six source-identified Places/three alpha-3 countries, stable UUIDs and no worldwide-coverage claim. See [catalog provenance](../backend/catalog/README.md). Only explicit placeId writes; inline resolution/global user-created Places are disabled.
+- Guest DTOs expose only the authorized Trip’s Visits and minimal map markers, no project roster/name/metadata, other Trips or counts. Project-wide map remains O/A/M only.
+- Details below retain original design context; implemented DTOs and exact evidence are authoritative in [API contract](API_CONTRACT.md#e22-implemented-geography-contract-2026-11-04) and [validation](../backend/E2_2_VALIDATION.md).
 
 **Outcome:** shared visits reference normalized places; repeated visits remain independent and calendar dates never shift with timezones.
 
@@ -197,9 +205,9 @@ These are proposals/gates, not silently adopted product rules. An unresolved sub
 | What if invitation issuer loses admin/membership before redemption? | Not specified; propose revalidate issuer's current O/A authority. Alternative persistence policy needs explicit approval. | E2.4. |
 | Does project leave/removal also revoke explicit trip memberships? | Not specified. There are no deny overrides. Propose revoking all explicit descendant grants for a true project departure; otherwise document that independent guest access survives. Never promise total denial while preserving another active grant. | E2.3 departure/removal with overlapping grants; E2.4 retries. |
 | What project context / participant details can G see? | P-09/P-10; propose trip-only data and minimal creator display projection; no project roster/email/statistics. | Guest DTOs; broader views deferred. |
-| What is an authoritative Place identity/catalog? | DATA_MODEL §5; proposed controlled independent catalog, canonical country codes, stable UUIDs, source provenance, no name-only merging. Confirm coverage/import policy. | E2.2 real catalog and inline-place resolution. |
+| What is an authoritative Place identity/catalog? | DATA_MODEL §5; proposed controlled independent catalog, canonical country codes, stable UUIDs, source provenance, no name-only merging. D3 approved; source-identified limited GeoNames snapshot documented; inline-place resolver remains disabled. | Coverage expansion and cross-provider identity review remain future work. |
 | How is exact-location confirmation shared? | Precise consent/projection details remain undefined. Propose city-only default; share confirmed exact points only after explicit consent to current trip collaborators. No silent EXIF-derived sharing. | E2.2 precise-point write/read; null/omitted until approved. |
-| Single-day serialization and one-sided filters? | Proposed start=end canonical single date and inclusive open-ended filters above. | E2.2 API shape review. |
+| Single-day serialization and one-sided filters? | D2 approved: start=end and inclusive open-ended filters; implemented date object documented. | Resolved for E2.2. |
 
 P-05 EXIF, P-06 ownership-transfer workflow and P-07 photo movement remain outside this scope. Pending audit retention, project-name/description lengths, rate thresholds and pagination DTO specifics should be documented as technical defaults at implementation review, not invented business permissions.
 

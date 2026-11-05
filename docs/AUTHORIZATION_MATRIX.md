@@ -1,6 +1,6 @@
 # Travel Map — Matriz de autorización y permisos
 
-**Versión:** 0.3 — decisión P-03 y alcance E2.1
+**Versión:** 0.4 — P-03 y alcance E2.1/E2.2
 **Fecha:** 2026-11-04
 **Estado:** Borrador de diseño. La decisión #38 confirma restricciones del propietario; los restantes puntos abiertos siguen marcados como propuestas y **no** sustituyen las decisiones aprobadas en el PRD.  
 **Fuentes:** `docs/PRD.md` v1.0 (FR-01, FR-02, FR-04 a FR-10; NFR-04 a NFR-06), `docs/DATA_MODEL.md` v0.1, auditoría de frontend de Codex y decisiones de colaboración #02, #03, #08, #15, #16, #26, #27, #35 y #36.  
@@ -211,3 +211,21 @@ No alterar silenciosamente el PRD para resolver las siguientes cuestiones:
 ## Alcance implementado E2.1 (2026-11-04)
 
 Solo las cuatro rutas de viajes descritas en [API_CONTRACT](API_CONTRACT.md#e21-implemented-trip-contract-2026-11-04) están implementadas. O/A/M pueden listar los viajes de su proyecto; G solo puede abrir su viaje explícito, nunca enumerar el proyecto. O/A crean; M crea únicamente con `all_project_members`; solo O/A editan nombre/descripción. Se requiere cuenta, sesión, proyecto y relación efectivos activos. Una relación G revocada no niega acceso heredado activo. La creación/revocación de membresías e invitaciones sigue diferida. Evidencia: [E2.1](../backend/E2_1_VALIDATION.md).
+
+## Alcance implementado E2.2 (2026-11-04)
+
+D1/D2/D3 aprobadas. El catálogo es independiente/controlado y requiere sesión activa; nunca recibe sugerencias o conteos de visitas privadas. Una visita exige acceso activo a Trip y Project por herencia O/A/M o invitación Guest explícita al viaje. O/A/M/G pueden crear y leer. Solo el creador con acceso vigente u O/A del Project pueden editar; otros M/G reciben 403 sobre una visita visible. El creador revocado recibe 404; su aporte permanece almacenado.
+
+| Operación implementada | O | A | M | G |
+|---|---|---|---|---|
+| Buscar Places (catálogo independiente) | Sí | Sí | Sí | Sí |
+| Listar/crear/leer Visits del Trip accesible | Sí | Sí | Sí | Solo su Trip |
+| Editar Visit ajena dentro del ámbito | Sí | Sí | No | No |
+| Editar Visit propia con acceso vigente | Sí | Sí | Sí | Solo su Trip |
+| Mapa de Project, con filtros acotados | Sí | Sí | Sí | No |
+| Mapa del Trip accesible | Sí | Sí | Sí | Solo su Trip |
+| Guardar o publicar coordenadas exactas de Visit | No | No | No | No; política pendiente |
+
+Las proyecciones Guest no incluyen nombre/roster/email del Project, otros viajes ni agregados globales. Solo identificadores de Visit/Trip, autor de Visit cuando corresponde al DTO de visita, catálogo independiente, fechas y cero/null de fotos futuras. La ausencia de un proyecto/viaje/visita, inaccesibilidad o estado inactivo produce 404; no se usa similitud geográfica como permiso. Todas las consultas filtran antes de paginar/proyectar; no hay conteos/facetas sin ámbito.
+
+Confirmación y visibilidad de puntos exactos quedan pendientes: no se infiere consentimiento de sesión, rol o autoría. Se rechazan escrituras de puntos y se devuelve confirmedCoordinates=null, también para Owner/Admin. Visibilidad más amplia del Project/participantes (P-09/P-10), eliminación/restauración (P-04), miembros/invitaciones y medios siguen diferidos. Evidencia: [E2.2](../backend/E2_2_VALIDATION.md).

@@ -104,7 +104,7 @@ Un token de invitación no concede acceso hasta que una cuenta autenticada lo ca
 
 Filtros propuestos para mapas: `countryCode` (ISO 3166-1 canonicalizado), `tripId` (solo en mapa de proyecto), `from` y `to` (`YYYY-MM-DD`). Los filtros temporales devuelven visitas con rango **solapado**; visitas sin fecha están en la vista general, pero no al activar filtro temporal.
 
-**Mapa de ejemplo:**
+**Ejemplo histórico propuesto para medios futuros (E2.2 devuelve photoCount=0 y previewPhotoId=null; véase contrato implementado al final):**
 
 ```json
 {
@@ -142,7 +142,7 @@ Filtros propuestos para mapas: `countryCode` (ISO 3166-1 canonicalizado), `tripI
 | `PATCH` | `/api/v1/visits/{visitId}` | Creador con acceso u O/A. |
 | `DELETE` | `/api/v1/visits/{visitId}` | Papelera lógica; creador u O/A; salvaguardas por fotos de terceros. |
 
-**Crear visita, ejemplo:**
+**Ejemplo histórico de propuesta inline; NO aceptado por E2.2 (usar placeId según contrato implementado al final):**
 
 ```json
 {
@@ -272,3 +272,41 @@ List accepts only `limit` (default 25, maximum 100) and opaque `cursor`, using t
 All routes retain E1 opaque sessions. Mutations retain exact Origin and `X-CSRF-Token` verification. Missing/invalid/expired/revoked session: 401; forbidden action on visible resource: 403; hidden/foreign/unknown/inactive resource: 404; invalid input: 400; recognized operation conflict: 409; database unavailable: 503. No raw SQL detail is returned. Security checks can reject a malformed mutation before its resource lookup; no existence is disclosed.
 
 SQL entry remains `api_call`; new handlers are private. See [E2.1 validation](../backend/E2_1_VALIDATION.md) for migration and test evidence. Visits, invitations, member administration, archival, media and frontend integration are not implemented here.
+
+## E2.2 implemented geography contract (2026-11-04)
+
+This section is the implemented contract for the routes below. Earlier inline-place examples, photo examples and DELETE routes are proposals for future stages, not supported E2.2 behavior.
+
+| Method | Route | Authorization / success |
+|---|---|---|
+| GET | `/api/v1/places?countryCode=COL&query=Bog` | Active session; independent controlled catalog; 200 page |
+| GET | `/api/v1/trips/{tripId}/visits` | Active inherited O/A/M or explicit G of this Trip; 200 page |
+| POST | `/api/v1/trips/{tripId}/visits` | Same Trip collaborators, including G; 201 Visit |
+| GET | `/api/v1/visits/{visitId}` | Current active Trip/Project ancestry access; 200 Visit |
+| PATCH | `/api/v1/visits/{visitId}` | Creator with current access, or active Project O/A; 200 Visit |
+| GET | `/api/v1/projects/{projectId}/map` | Active O/A/M only; G cannot enumerate Project; 200 map page |
+| GET | `/api/v1/trips/{tripId}/map` | Authorized Trip readers including scoped G; 200 map page |
+
+POST accepts `{placeId,name?,date?,confirmedCoordinates?}`. placeId is a required UUID selected from catalog candidates; unknown UUIDs return 400. No inline place text, guessed match, implicit global catalog entry or automatic resolver exists. name is null or trimmed nonempty string, max 200 Unicode code points without control characters; omission defaults null. No description field is implemented. date omission defaults to none. confirmedCoordinates may be omitted or null; every non-null value is rejected (including a point claiming confirmation). Body max 16,384 bytes, application/json only.
+
+PATCH accepts any nonempty subset of the same fields; omission preserves existing values, null clears name, date replacement must be complete. placeId may change under Visit edit permission; tripId/projectId/creator/status/privileged assignments are always rejected. No DELETE/trash/restore or lifecycle mutation routes.
+
+Canonical date object (all three keys required when supplied):
+
+```json
+{"mode":"none","start":null,"end":null}
+{"mode":"single","start":"2024-02-29","end":"2024-02-29"}
+{"mode":"range","start":"2024-02-28","end":"2024-03-01"}
+```
+
+Calendar values are YYYY-MM-DD, years 0001–9999, valid Gregorian dates. No timestamp or timezone conversion. Single requires identical boundaries; range requires both, start<=end. Map from/to accept independent inclusive bounds: Visit end>=from and Visit start<=to. Any active bound excludes undated Visits; reversed/invalid bounds return 400.
+
+Place DTO: `{id,countryCode,countryName,city,region,approximateCoordinates,source,createdAt}`. region is the GeoNames admin1 code (not a translated region label), approximateCoordinates is null or `{lat,lng}`, source is `{provider,id,url}`. Points are independently sourced catalog approximations, never private Visit GPS. Attribution/licensing and scope: [catalog](../backend/catalog/README.md). Initial snapshot supports only COL/TUR/USA, six localities; no worldwide coverage. countryCode is required for Place search, uppercase alpha-3; invalid/unsupported codes return 400. query is optional literal case-insensitive substring (max 100 Unicode code points, control characters rejected); accents are not transliterated and `%`/`_` are literal. No matches returns an empty page. Ambiguous names return distinct candidate UUIDs, never an automatic selection. Search exposes no Visit counts, users, private suggestions or travel-dependent ranking.
+
+Visit DTO: `{id,tripId,placeId,createdByUserId,name,status,place,confirmedCoordinates,date,photoCount,previewPhotoId,createdAt,updatedAt}`. Map item: `{visitId,tripId,place,confirmedCoordinates,date,photoCount,previewPhotoId,createdAt}`. The map represents each Visit independently, even at the same Place; no merged travel identity or invented boundaries. Guest DTOs omit Project metadata/roster and other Trips; no membership emails. All photoCount values are 0 and previewPhotoId null until photos exist. confirmedCoordinates is always null in E2.2. All operational timestamps are UTC strings; date boundaries are calendar strings/null.
+
+Each list/map returns `{items,nextCursor}`. limit defaults 25, max 100; opaque cursor retains the existing `(createdAt,id)` format (map uses visitId as the cursor ID). Ordering is ascending `(created_at,id)`. Place search is country-scoped; Visit list is Trip-scoped. Map accepts countryCode, from, to, and (Project map only) tripId, plus limit/cursor. Trip filter must belong to the authorized active Project; hidden/foreign/unknown Trip filter returns 404. Unsupported/duplicate filters return 400. No totals, unbounded aggregates or facets. Pagination is not a cross-request snapshot; reauthorization and resource filtering happen before each page.
+
+All routes retain E1 session validation, private/no-store/CSP headers and error normalization. POST/PATCH require exact Origin and session-bound X-CSRF-Token. 401 invalid/missing/revoked/expired auth; 403 forbidden modification of a visible Visit; 404 hidden/foreign/inactive resource; 400 validation; 409 recognized transaction conflicts; 503 dependency unavailable. Existing E1 rate limits/429 behavior remain unchanged. SQL authorization applies independently of HTTP validation through the same four-function runtime boundary. No GPS/request-body/audit logging is added.
+
+D1 exact-point policy is pending, not inferred: database fields are constrained null. Enablement requires an approved confirmation actor, visibility audience, edits/reconfirmation, consent withdrawal/revocation and projection contract, plus a later migration. Evidence: [E2_2_VALIDATION](../backend/E2_2_VALIDATION.md). Migration 0004 is not automatically applied to persistent travel_map_dev.
