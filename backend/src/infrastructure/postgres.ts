@@ -36,8 +36,10 @@ export class PostgresRepository implements IdentityRepository {
     if (result.error === 'SESSION_REQUIRED') throw new HttpError(401,'SESSION_REQUIRED','Authentication required');
     // Domain outcomes are whitelisted and scoped to explicit domain actions. E1
     // error behavior remains unchanged; never reflect database-provided messages.
-    if (['trips.', 'places.', 'visits.', 'maps.', 'collaboration.'].some(prefix => action.startsWith(prefix)) && typeof result.error === 'string') {
+    if (['trips.', 'places.', 'visits.', 'maps.', 'collaboration.', 'invitations.'].some(prefix => action.startsWith(prefix)) && typeof result.error === 'string') {
       const errors: Record<string, { status: number; message: string }> = {
+        INVITATION_INVALID: { status: 400, message: 'Invitation not available' },
+        RATE_LIMITED: { status: 429, message: 'Please try again later' },
         ACTION_FORBIDDEN: { status: 403, message: 'Action not allowed' },
         VALIDATION_ERROR: { status: 400, message: 'Invalid request' },
         OPERATION_CONFLICT: { status: 409, message: 'Operation conflicts with current state' },

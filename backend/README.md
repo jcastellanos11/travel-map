@@ -1,4 +1,4 @@
-# Travel Map backend — E2.3
+# Travel Map backend — E2.4
 
 Workers/TypeScript modular monolith under [decision #40](../docs/ADR-001-STACK.md).
 E0 is committed; E1 adds Supabase Google OAuth/PKCE integration, opaque revocable
@@ -22,7 +22,7 @@ npm run check
 ```
 
 `check` runs lint, strict Worker/tooling type checking, local dry-run build and
-31 tests. Regenerate with `npm run types` after changing compatibility settings.
+33 tests. Regenerate with `npm run types` after changing compatibility settings.
 `build` uses `wrangler deploy --dry-run --env test --outdir dist`: no deployment
 occurs and no Cloudflare login is required. All outputs/state/logs are ignored.
 Do not remove `--dry-run` or invoke a real deployment command.
@@ -210,3 +210,29 @@ Runtime receives no direct tables/helpers. Minimal private audit events share ea
 mutation's transaction. No invitations, ownership transfer, restoration, photos or
 frontend integration were added. Existing Google credentials and auth flows remain
 unchanged; test users/session fixtures never create an HTTP login bypass.
+
+## E2.4 invitations
+
+Implemented contract and evidence: [API](../docs/API_CONTRACT.md),
+[E2_4_VALIDATION](E2_4_VALIDATION.md). Owner/Admin issue Project Member or Trip Guest
+links; recipients sign in through Google then explicitly POST acceptance using
+existing CSRF protection. `/invite#<secret>` clears the fragment and opens Google
+login separately; return to the original tab to accept. Reload loses the secret.
+No email service or frontend application integration. No private inspection/roster.
+
+Migration0006 remains **unapplied to travel_map_dev**. Use db:local:test for disposable
+validation. Persistent application requires separately authorized target/owner/
+checksum preflight and verified private backup. Never down persistent data.
+
+## OpenAPI and Swagger UI — local development
+
+Open **https://127.0.0.1:8789/api-docs**; spec at **/openapi.json**.
+Use the same browser/profile as Google login. Sign in using the page link, return,
+then Try it out → Execute on GET /api/v1/me or authorized domain operations. Cookies
+remain HttpOnly; CSRF is automatic (leave placeholder `automatic` unchanged).
+OAuth/invitation token operations are reference-only to keep secrets out of Swagger.
+
+Only APP_ENV=dev on the exact HTTPS loopback origin serves docs; prod/test404.
+No external CDN/validator or persistent credentials. npm run dev/build/typecheck
+prepare pinned local assets automatically. API behavior and database remain unchanged.
+[Usage, security, drift maintenance and actual checks](API_DOCS.md).

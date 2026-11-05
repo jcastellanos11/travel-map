@@ -23,7 +23,7 @@ test('E2.3: native membership lifecycle, SQL isolation, concurrency and migratio
     await admin.query(`CREATE DATABASE ${database} OWNER ${ownerRole}`); created = true;
     const url = new URL(base); url.pathname = `/${database}`;
     db = new pg.Client({ connectionString: url.toString() }); await db.connect(); const sql = db;
-    const all = await loadMigrations(), previous = all.slice(0, 4), migration = all[4]; assert.ok(migration); assert.equal(all.length, 5);
+    const all = (await loadMigrations()).slice(0, 5), previous = all.slice(0, 4), migration = all[4]; assert.ok(migration); assert.equal(all.length, 5);
     const owned = async (direction: 'up' | 'down', set: Migration[] = all) => { await sql.query(`SET ROLE ${ownerRole}`); try { return await migrate(sql, direction, set); } finally { await sql.query('RESET ROLE'); } };
     await owned('up', previous);
     await admin.query(`CREATE ROLE ${apiRole} LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS NOINHERIT`); roles.push(apiRole);
@@ -349,7 +349,7 @@ test('E2.3: native membership lifecycle, SQL isolation, concurrency and migratio
     await t.test('down refuses non-test database names without touching persistent databases', async () => {
       const guardName = `travel_map_guard_${suffix}`; await admin.query(`CREATE DATABASE ${guardName} OWNER ${ownerRole}`); guardDatabases.push(guardName);
       const guardUrl = new URL(url); guardUrl.pathname = `/${guardName}`; const guard = new pg.Client({ connectionString: guardUrl.toString() }); await guard.connect();
-      try { await guard.query(`SET ROLE ${ownerRole}`); await migrate(guard, 'up'); await assert.rejects(migrate(guard, 'down'), { code: '42501' }); assert.equal((await guard.query('SELECT count(*)::int n FROM travel_map_migrations.applied')).rows[0].n, 5); } finally { await guard.end(); }
+      try { await guard.query(`SET ROLE ${ownerRole}`); await migrate(guard, 'up', all); await assert.rejects(migrate(guard, 'down', all), { code: '42501' }); assert.equal((await guard.query('SELECT count(*)::int n FROM travel_map_migrations.applied')).rows[0].n, 5); } finally { await guard.end(); }
     });
     await t.test('full reverse/reapply on generated disposable data preserves original migration checksums', async () => {
       for (let i = 0; i < 5; i++) assert.equal((await owned('down')).length, 1);

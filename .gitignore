@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Generated from pinned local Swagger UI assets
+/backend/.generated/

@@ -1,6 +1,6 @@
 # Travel Map — Proposed E2 Implementation Plan
 
-Date: 2026-11-03. Updated: 2026-11-05. **E2.1–E2.3 approved and locally implemented. E2.3 migration remains disposable-only; E2.4 remains a proposal, not implemented.**
+Date: 2026-11-03. Updated: 2026-11-05. **E2.1–E2.3 approved and locally implemented. E2.3 migration remains disposable-only; E2.4 is approved and locally implemented; migration0006 remains disposable-only.**
 
 Implementation evidence and exact results: [E2_1_VALIDATION](../backend/E2_1_VALIDATION.md), [E2_2_VALIDATION](../backend/E2_2_VALIDATION.md), [E2_3_VALIDATION](../backend/E2_3_VALIDATION.md). Historical E1 audit below describes the pre-E2.1 baseline.
 
@@ -278,3 +278,30 @@ role/revocation/archive transitions. Persistent migration is separately authoriz
 requires preflight/backups and must preserve audit evidence. **0005 has not been
 applied to travel_map_dev by this implementation.** Results and outstanding local
 migration steps: [E2_3_VALIDATION](../backend/E2_3_VALIDATION.md). E2.4 is not started.
+
+
+## E2.4 approved decisions — 2026-11-05
+
+Recorded before implementation: P-08 Option A preserves all existing effective
+permissions without duplicate memberships or role changes. Existing-access redemption
+consumes the single-use invitation and returns already_has_access; subsequent replay
+is invalid, including after membership removal. P-09 Option A permits Trip-only
+context, never private Project details/other Trips/maps/counts/settings/rosters.
+P-10 Option A permits only author IDs relevant to visible content, no participant
+roster, emails or hidden profiles. Invitations grant Member or Trip Guest only.
+A fresh valid invitation explicitly authorizes rejoining as Member/Guest; consumed
+links never restore revoked access. Issuer-authority persistence is still unspecified:
+conservative validation requires current Owner/Admin authority at redemption.
+
+### E2.4 implementation update
+
+E2.4 now implements Project and Trip invitation issuance, safe administrative
+pagination/revocation, atomic authenticated redemption, and a server-owned minimal
+fragment landing/explicit-POST flow. This approved scope supersedes §8's former E3
+landing deferral. E1 OAuth callback/state remains unchanged; login opens another tab.
+P-08/P-09/P-10 are approved above. Issuer persistence remains an open policy: current
+Owner/Admin and active issuer account are conservatively required when redeeming.
+Project exclusive lock precedes Trip, invitation and membership changes; session/
+account resolution remains in api_call. Counter row is account-scoped before domain
+locks, shared across sessions. No invitations are applied to travel_map_dev during
+implementation. Results: backend/E2_4_VALIDATION.md. No later increment started.

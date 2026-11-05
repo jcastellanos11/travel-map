@@ -229,3 +229,31 @@ normal owner DML. This is not tamper-proof storage against a privileged owner ab
 to change DDL. No audit reader endpoint; retention/export policy remains pending.
 No names, emails, raw bodies, credentials, session digests, GPS or invitation secrets
 are recorded. Audit and domain mutations commit/rollback together.
+
+
+## E2.4 approved decisions — 2026-11-05
+
+Recorded before implementation: P-08 Option A preserves all existing effective
+permissions without duplicate memberships or role changes. Existing-access redemption
+consumes the single-use invitation and returns already_has_access; subsequent replay
+is invalid, including after membership removal. P-09 Option A permits Trip-only
+context, never private Project details/other Trips/maps/counts/settings/rosters.
+P-10 Option A permits only author IDs relevant to visible content, no participant
+roster, emails or hidden profiles. Invitations grant Member or Trip Guest only.
+A fresh valid invitation explicitly authorizes rejoining as Member/Guest; consumed
+links never restore revoked access. Issuer-authority persistence is still unspecified:
+conservative validation requires current Owner/Admin authority at redemption.
+
+### E2.4 implemented schema
+
+0006 adds invitations (UUID; exactly-one Project/Trip RESTRICT FK; unique SHA-256
+digest; issuer RESTRICT FK; creation/expiry; paired redemption/revocation actor and
+time). Pending/consumed/revoked are derived from timestamps; expiration is checked
+against database time. Constraints exclude simultaneous consumption/revocation.
+invitation_attempts is one bounded per-account counter/window, not a request log.
+Both tables FORCE RLS, owner-only policies, no runtime access. Audit action constraint
+is extended for issuance/revocation/redemption; metadata remains empty for these
+actions. Existing audit rows and append-only triggers are preserved.
+Down is disposable-only, restores dispatcher and old audit action rules NOT VALID
+so historical invitation events survive without rewriting append-only records. New
+writes still obey old rules. Membership effects are never undone by migration down.

@@ -41,11 +41,11 @@ try {
   command('postgres', ['--version']);
   command('initdb', ['-D', data, '-U', 'travel_map_e0', '--auth-local=trust', '--auth-host=trust', '--encoding=UTF8', '--locale=C']);
   command('pg_ctl', ['-D', data, '-l', join(cluster, 'postgres.log'), '-o',
-    `-h 127.0.0.1 -p ${port} -k ${socket} -c max_connections=25`, '-w', 'start']);
+    `-h 127.0.0.1 -p ${port} -k ${socket} -c max_connections=50`, '-w', 'start']);
   started = true;
-  console.log('Disposable PostgreSQL started on loopback; running E0/E1/E2.1/E2.2/E2.3 integration tests.');
+  console.log('Disposable PostgreSQL started on loopback; running E0/E1/E2.1/E2.2/E2.3/E2.4 integration tests.');
   const status = await new Promise<number>((done, reject) => {
-    const child = spawn(process.execPath, ['--test', 'tests/database.test.ts', 'tests/e1.integration.test.ts', 'tests/trips.integration.test.ts', 'tests/geography.integration.test.ts', 'tests/collaboration.integration.test.ts'], {
+    const child = spawn(process.execPath, ['--test', 'tests/database.test.ts', 'tests/e1.integration.test.ts', 'tests/trips.integration.test.ts', 'tests/geography.integration.test.ts', 'tests/collaboration.integration.test.ts', 'tests/invitations.integration.test.ts'], {
       cwd: backend,
       env: { ...process.env, LOCAL_DATABASE_ONLY: '1',
         DATABASE_URL: `postgresql://travel_map_e0@127.0.0.1:${port}/travel_map_test_e0` },

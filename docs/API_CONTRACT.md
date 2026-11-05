@@ -363,3 +363,64 @@ writes; rows, attribution and unrelated sessions remain. Repeated archive is 404
 **There is no restore/list-archived API or shortcut.** P-01b approves Owner/Admin
 restoration rights only for a future workflow. E2.4 invitations, ownership transfer,
 Trip archival, Visit deletion and audit-reading endpoints are not implemented.
+
+
+## E2.4 approved decisions — 2026-11-05
+
+Recorded before implementation: P-08 Option A preserves all existing effective
+permissions without duplicate memberships or role changes. Existing-access redemption
+consumes the single-use invitation and returns already_has_access; subsequent replay
+is invalid, including after membership removal. P-09 Option A permits Trip-only
+context, never private Project details/other Trips/maps/counts/settings/rosters.
+P-10 Option A permits only author IDs relevant to visible content, no participant
+roster, emails or hidden profiles. Invitations grant Member or Trip Guest only.
+A fresh valid invitation explicitly authorizes rejoining as Member/Guest; consumed
+links never restore revoked access. Issuer-authority persistence is still unspecified:
+conservative validation requires current Owner/Admin authority at redemption.
+
+### E2.4 implemented invitation contract
+
+All management routes require active Project Owner/Admin and active target ancestry.
+POST issuance accepts an empty body or `{}` only; target comes from the route.
+
+| Method | Path under `/api/v1` | Result |
+|---|---|---|
+| POST | `projects/{projectId}/invitations` | 201 ordinary Member invitation |
+| POST | `trips/{tripId}/invitations` | 201 explicit Trip Guest invitation |
+| GET | `projects/{projectId}/invitations` | Pending unexpired invitations for Project and its Trips |
+| GET | `trips/{tripId}/invitations` | Pending invitations for that Trip |
+| POST | `projects/{projectId}/invitations/{id}/revoke` | 204 unused invitation revoked within Project ancestry |
+| POST | `trips/{tripId}/invitations/{id}/revoke` | 204 matching Trip invitation revoked |
+| POST | `invitations/redeem` | 200 explicit authenticated consumption |
+
+Safe DTO: id, scopeType(project/trip), scopeId, createdAt, expiresAt, status.
+Lists use standard limit25/max100 and createdAt/id cursor. No issuer profile,
+recipient, secret, digest or URL. Issuance adds invitationUrl **once**:
+`<same-origin>/invite#<256-bit random base64url secret>`. Secret never enters SQL;
+SHA-256 digest only. Seven-day server expiry cannot be overridden.
+
+Redeem body exactly `{token:string}` (1024-byte cap). Session, Origin and CSRF
+required. Response `{scopeType,scopeId,result:access_granted|already_has_access}`.
+Existing effective rights remain unchanged; successful existing-access redemption
+still consumes once. Replays always400 INVITATION_INVALID, including same recipient.
+Expired/revoked/unknown/inactive-target/issuer-unavailable links share that response.
+New valid redemption may reactivate revoked Member/Guest; former Admin rejoins as
+Member. Revocation of consumed/expired/revoked invitations409, no membership changes.
+Per-account redemption counter allows30 attempts/minute, then429; no token logging.
+
+GET `/invite` is a context-free bearer landing page; it inspects no private scope.
+It clears fragment history immediately and holds token only in memory. Google login
+opens a separate tab through unchanged E1; return to original tab and explicitly
+accept. No GET redemption, OAuth state/query token, storage or automatic submission.
+Refresh loses continuation; reopen original link. Response is no-store/no-referrer,
+nonce-only script CSP with same-origin fetch, no third parties; existing API CSP is
+unchanged. No public inspection API or general Guest roster is implemented.
+
+## Machine-readable implementation documentation
+
+[backend/openapi.json](../backend/openapi.json) describes implemented E0–E2.4 HTTP
+operations and DTOs in OpenAPI3.1. Local-only Swagger UI: /api-docs; spec:/openapi.json.
+Both are disabled for production/test and remote origins. Authenticated same-origin
+requests use the existing opaque cookie and automatic CSRF. Sensitive OAuth and
+invitation flows remain reference-only. No API/auth/security-policy behavior changed.
+Validation/drift mechanism and limitations: [API_DOCS](../backend/API_DOCS.md).

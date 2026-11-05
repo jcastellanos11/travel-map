@@ -193,11 +193,11 @@ No alterar silenciosamente el PRD para resolver las siguientes cuestiones:
 | **P-05** | ¿Cómo gestionar EXIF del original descargado por administradores? | Avisar al autor y documentar que los originales pueden conservar EXIF; no mostrar GPS preciso en UI sin consentimiento. |
 | **P-06** | ¿Cómo se tramita la transferencia de propiedad? | Destinatario con cuenta válida, aceptación explícita, operación auditable. |
 | **P-07** | ¿Puede un usuario mover fotos entre visitas? | No en MVP; reevaluar consentimiento y permisos de ambos destinos. |
-| **P-08** | ¿Cómo gestionamos invitaciones canjeadas por un usuario ya miembro? | Evitar duplicados y no elevar privilegios; informar el acceso existente. |
-| **P-09** | ¿Qué información mínima del proyecto puede ver G? | Título/contexto indispensable del viaje, sin listar otros viajes, miembros o estadísticas privadas. |
-| **P-10** | ¿Puede G consultar lista completa de participantes del viaje? | Solo nombres/autores necesarios para la colaboración; sin emails ni datos de proyectos ajenos. |
+| **P-08 — Resuelta, Option A (E2.4)** | ¿Cómo gestionamos invitaciones canjeadas por un usuario ya miembro? | Evitar duplicados y no elevar privilegios; informar el acceso existente. |
+| **P-09 — Resuelta, Option A (E2.4)** | ¿Qué información mínima del proyecto puede ver G? | Título/contexto indispensable del viaje, sin listar otros viajes, miembros o estadísticas privadas. |
+| **P-10 — Resuelta, Option A (E2.4)** | ¿Puede G consultar lista completa de participantes del viaje? | Solo nombres/autores necesarios para la colaboración; sin emails ni datos de proyectos ajenos. |
 
-**Punto de control antes de implementar:** confirmar los apartados todavía pendientes (P-04 a P-10; P-01b/P-02b resueltos en E2.3) o etiquetarlos formalmente como decisiones diferidas con un comportamiento por defecto aprobado. Después, derivar pruebas de autorización por recurso, por ruta de navegación y por acceso a medios. No seleccionar ni implementar un mecanismo de seguridad específico todavía.
+**Punto de control antes de implementar:** confirmar los apartados todavía pendientes (P-04 a P-07; P-01b/P-02b resueltos en E2.3 y P-08/P-09/P-10 en E2.4) o etiquetarlos formalmente como decisiones diferidas con un comportamiento por defecto aprobado. Después, derivar pruebas de autorización por recurso, por ruta de navegación y por acceso a medios. No seleccionar ni implementar un mecanismo de seguridad específico todavía.
 
 ## 12. Relación con documentos siguientes
 
@@ -262,3 +262,17 @@ Trip grants. Retained creator attribution confers no post-departure access/editi
 Archive preserves memberships and contributions; it does not terminate application
 sessions. Subsequent requests observe committed changes; already downloaded copies
 cannot be invalidated. See [E2.3 evidence](../backend/E2_3_VALIDATION.md).
+
+
+## E2.4 approved decisions — 2026-11-05
+
+Recorded before implementation: P-08 Option A preserves all existing effective
+permissions without duplicate memberships or role changes. Existing-access redemption
+consumes the single-use invitation and returns already_has_access; subsequent replay
+is invalid, including after membership removal. P-09 Option A permits Trip-only
+context, never private Project details/other Trips/maps/counts/settings/rosters.
+P-10 Option A permits only author IDs relevant to visible content, no participant
+roster, emails or hidden profiles. Invitations grant Member or Trip Guest only.
+A fresh valid invitation explicitly authorizes rejoining as Member/Guest; consumed
+links never restore revoked access. Issuer-authority persistence is still unspecified:
+conservative validation requires current Owner/Admin authority at redemption.

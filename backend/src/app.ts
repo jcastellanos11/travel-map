@@ -9,6 +9,9 @@ import { checkOrigin, cookie, csrf, digest, equal, OAUTH_COOKIE, SESSION_COOKIE,
 import { projectInput, projectPage, projectQuery, uuid } from './modules/projects/validation.ts';
 import { geographyRoute } from './modules/geography/routes.ts';
 import { collaborationRoute } from './modules/collaboration/routes.ts';
+import { invitationRoute } from './modules/invitations/routes.ts';
+import { documentationRoute } from './modules/documentation/routes.ts';
+import { invitationLanding } from './modules/invitations/landing.ts';
 import { tripRoute } from './modules/trips/routes.ts';
 import { health } from './modules/system/health.ts';
 import { errorResponse, HttpError, secureResponse } from './shared/http.ts';
@@ -21,7 +24,12 @@ export async function handleRequest(request: Request, env: AppEnv, dependencies?
   let response: Response;
   try {
     assertEnvironment(env);
-    if (path==='/health') {
+    const documentation=await documentationRoute(request,env);
+    if (documentation) return documentation;
+    if (path==='/invite' && request.method==='GET') {
+      if (url.search) throw new HttpError(400,'VALIDATION_ERROR','Invalid request');
+      response=invitationLanding();
+    } else if (path==='/health') {
       if (request.method!=='GET') throw new HttpError(405,'METHOD_NOT_ALLOWED','Method not allowed');
       response=health();
     } else if (path==='/api/v1' || path.startsWith('/api/v1/')) {
@@ -61,7 +69,7 @@ export async function handleRequest(request: Request, env: AppEnv, dependencies?
           if (!uuid.test(id)) throw new HttpError(404,'RESOURCE_NOT_FOUND','Resource not available');
           response=Response.json(await repo.call(hash,'projects.get',{id}));
         } else {
-          const tripResponse = await tripRoute(request, repo, hash) ?? await geographyRoute(request, repo, hash) ?? await collaborationRoute(request, repo, hash);
+          const tripResponse = await tripRoute(request, repo, hash) ?? await geographyRoute(request, repo, hash) ?? await collaborationRoute(request, repo, hash) ?? await invitationRoute(request, repo, hash);
           if (tripResponse) response = tripResponse;
           else {
             await repo.call(hash,'me');
@@ -75,5 +83,8 @@ export async function handleRequest(request: Request, env: AppEnv, dependencies?
     if (error instanceof HttpError && error.status===405 && path==='/health') response.headers.set('Allow','GET');
     if (path==='/api/v1/auth/callback') response.headers.append('Set-Cookie',setCookie(OAUTH_COOKIE,'',0));
   }
-  return secureResponse(response,requestId);
+  const invitationCsp=path==='/invite' && response.status===200 ? response.headers.get('Content-Security-Policy') : null;
+  response=secureResponse(response,requestId);
+  if (invitationCsp) response.headers.set('Content-Security-Policy',invitationCsp);
+  return response;
 }

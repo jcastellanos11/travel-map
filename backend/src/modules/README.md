@@ -33,3 +33,8 @@ Country/Place/Visit tables have owner-only FORCE RLS and no runtime table grants
 Only authenticated api_call dispatches to private geography_action; new helper
 functions are never runtime-executable. No EXIF, GPS sharing, members/invitations,
 delete/restore, storage or frontend integration belongs to this increment.
+
+E2.4 `invitations/` now implements restricted issuance/list/revoke/redeem plus a
+minimal server invitation continuation page. Its private SQL helpers extend api_call
+without widening the runtime RPC surface. Media, retention, transfers and frontend
+application integration remain outside this increment.
