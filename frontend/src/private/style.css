@@ -37,6 +37,20 @@ p, h2, li { overflow-wrap: anywhere; }
 .trip-links { list-style: none; padding: 0; }
 .trip-links a { display: block; padding: .7rem .4rem; border-bottom: 1px solid #e5ece7; }
 .trip-description { white-space: pre-wrap; }
+.trip-visits { margin-top: 1.25rem; padding-top: .5rem; border-top: 1px solid #dce6df; }
+.visit-list, .place-results { list-style: none; padding: 0; }
+.visit-list button { display: block; width: 100%; margin: .5rem 0; text-align: left; background: #f6f9f6; }
+.visit-list span, .visit-list small { display: block; margin-top: .3rem; overflow-wrap: anywhere; }
+.visit-list [aria-pressed="true"] { border-color: #315e43; background: #e4eee7; }
+.visit-detail { padding: .75rem 0; border-top: 1px solid #dce6df; }
+.visit-form { margin-top: 1rem; }
+.visit-form fieldset { min-width: 0; margin: 1rem 0; padding: .8rem; border: 1px solid #bacdbf; border-radius: 9px; }
+.visit-form small { display: block; font-size: .8rem; line-height: 1.5; color: #4f6659; margin: .35rem 0 .7rem; }
+.visit-form small[role="alert"] { color: #8b3121; }
+.place-results { max-height: 15rem; overflow-y: auto; }
+.place-choice { display: flex; align-items: flex-start; gap: .6rem; padding: .6rem .1rem; font-weight: 400; overflow-wrap: anywhere; }
+.place-choice input { flex: 0 0 auto; width: auto; margin-top: .25rem; }
+.selected-place { font-size: .85rem; font-weight: 600; }
 .map-note { position: fixed; z-index: 500; bottom: 1rem; left: 1rem; margin: 0; padding: .6rem; max-width: min(340px, 40vw); background: rgb(255 255 255 / 94%); border-radius: 8px; font-size: .8rem; }
 .access-screen { display: grid; place-items: center; min-height: 100dvh; padding: 1rem; background: rgb(234 242 244 / 60%); }
 .access-card { width: min(420px, 100%); padding: 2rem; border-radius: 20px; background: #fffffff5; box-shadow: 0 15px 45px rgb(35 64 55 / 10%); }

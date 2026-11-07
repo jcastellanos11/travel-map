@@ -68,6 +68,13 @@ ni estado global adicional. Sesiones/Google/logout siguen siendo autoridad del
 backend. Implementación y aceptación local en [E3_2_VALIDATION.md](E3_2_VALIDATION.md).
 No implica autorización para E3.3, visitas/mapas privados ni despliegue.
 
+**E3.3 autorizado por separado:** integrar únicamente el catálogo Places y el
+listado/creación/detalle/edición de Visits dentro de Trip, con fechas de calendario
+y autorización vigente del servidor. Conservar rutas de E3.2, Guest sin contexto
+privado del Project y demo aislada. Sin cambios de backend/migraciones, coordenadas
+exactas, marcadores E3.4 ni fotos E4. Evidencia actual:
+[E3_3_VALIDATION.md](E3_3_VALIDATION.md).
+
 - Crear cliente API tipado y adaptadores; desacoplar `WorldMap` de `trips.ts` estático sin reescribir componentes visuales.
 - Navegación de sesión, proyectos, viajes y estados loading/empty/error. Conservar temporalmente demo estática detrás de selector de desarrollo, **no** mezclarla con datos privados en producción.
 - Mapa y galerías solo consumen datos autorizados del backend. Responsive a 360/768/1440; controles accesibles.

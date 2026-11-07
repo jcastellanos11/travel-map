@@ -3,8 +3,10 @@ import CreationForms from './CreationForms.tsx';
 import { tripCreationHint } from './controller.ts';
 import type { AppController, Snapshot } from './controller.ts';
 import { googleLoginPath } from './navigation.ts';
+import TripVisits from './visits/TripVisits.tsx';
+import type { VisitActions } from './visits/TripVisits.tsx';
 
-type Actions = Pick<AppController, 'navigate' | 'verify' | 'logout' | 'createProject' | 'createTrip' | 'loadProjects' | 'loadMoreTrips'>;
+type Actions = Pick<AppController, 'navigate' | 'verify' | 'logout' | 'createProject' | 'createTrip' | 'loadProjects' | 'loadMoreTrips'> & VisitActions;
 export default function AppView({ state, actions, onLogin }: { state: Snapshot; actions: Actions; onLogin(): void }) {
   function link(event: MouseEvent<HTMLAnchorElement>, path: string) {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -45,7 +47,8 @@ export default function AppView({ state, actions, onLogin }: { state: Snapshot; 
         {scope.status === 'loading' && <p role="status">Loading your selection…</p>}
         {scope.status === 'not-found' && <><h2>Page not found</h2><a href="/app" onClick={e => link(e, '/app')}>Return to your map</a></>}
         {scope.status === 'error' && <><p role="alert">{scope.message}</p><button onClick={() => void actions.verify()}>Check access again</button></>}
-        {scope.status === 'trip' && <><p className="eyebrow">TRIP</p><h2>{scope.trip.name}</h2>{scope.trip.description && <p className="trip-description">{scope.trip.description}</p>}<p className="muted">Only this Trip’s authorized context is shown here.</p></>}
+        {scope.status === 'trip' && <><p className="eyebrow">TRIP</p><h2>{scope.trip.name}</h2>{scope.trip.description && <p className="trip-description">{scope.trip.description}</p>}<p className="muted">Only this Trip’s authorized context is shown here.</p>
+          <TripVisits workspace={scope} actions={actions} user={state.user} pending={state.mutation.pending} version={state.formVersion} /></>}
         {scope.status === 'project' && <><p className="eyebrow">PROJECT</p><h2>{scope.project.name}</h2>
           <h3>Trips</h3>
           {scope.trips.status === 'ready' && <>{!scope.trips.page.items.length && <p>No Trips yet.</p>}<ul className="trip-links">{scope.trips.page.items.map(trip => <li key={trip.id}><a href={`/app/trips/${trip.id}`} onClick={e => link(e, `/app/trips/${trip.id}`)}>{trip.name}</a></li>)}</ul>

@@ -1,9 +1,10 @@
 # Frontend development
 
-E3.2 adds a private map-first React entry with Google sign-in, server-verified
-sessions, Project/Trip creation and history navigation. The existing React/Leaflet
-demo and the E3.1 GET-only diagnostic remain separate. No private Visit markers,
-Visit forms or media integration are included.
+The private map-first React entry supports Google sign-in, server-verified
+sessions, Project/Trip creation and history navigation (E3.2). E3.3 adds a compact
+Trip Visit list, controlled Place selection, calendar dates and authorized Visit
+creation/details/editing. The existing React/Leaflet demo and the E3.1 GET-only
+diagnostic remain separate. No private Visit markers or media integration.
 
 Use Node 24.x and npm 11.x, with the existing local backend/Supabase configuration.
 From the repository root:
@@ -47,6 +48,15 @@ as successful sign-out. Unsaved forms reset during access revalidation. Trip-onl
 readers never need a parent Project read. Owner/Admin creation remains enforced
 by PostgreSQL; current Project DTOs do not report the viewer's Admin capability.
 See [E3.2 validation and manual acceptance](../docs/E3_2_VALIDATION.md).
+
+In an authorized Trip, use **New Visit**, choose a country and an API catalog
+result, then optionally enter a name and calendar dates. Creation requires an
+explicit submit. Select an existing Visit to inspect/edit it; non-creator Admin
+capability is not exposed by the DTO, so the server decides on save. Visit
+selection is in-memory within the Trip URL and resets on refresh/scope change.
+Only COL/TUR/USA (six catalog Places) are currently available; there is no geocoder,
+worldwide-coverage promise, precise GPS, Visit description or deletion UI.
+See [E3.3 validation and acceptance steps](../docs/E3_3_VALIDATION.md).
 
 The diagnostic displays status and page counts only. Check health and session;
 if session is 401, complete the existing Google login flow in another tab and

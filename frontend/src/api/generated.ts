@@ -10,13 +10,15 @@ export type TripCreate = { readonly "name": string; readonly "description"?: str
 export type Visit = { readonly "id": string; readonly "placeId": string; readonly "createdByUserId": string; readonly "name": string | null; readonly "status": "active" | "archived" | "deletion_requested" | "deleted"; readonly "updatedAt": string; readonly "tripId": string; readonly "place": Place; readonly "confirmedCoordinates": null; readonly "date": VisitDate; readonly "photoCount": 0; readonly "previewPhotoId": null; readonly "createdAt": string; };
 export type Place = { readonly "id": string; readonly "countryCode": string; readonly "countryName": string; readonly "city": string; readonly "region": string | null; readonly "createdAt": string; readonly "approximateCoordinates": { readonly "lat": number; readonly "lng": number; } | null; readonly "source": { readonly "provider": string | null; readonly "id": string | null; readonly "url": string | null; }; };
 export type VisitDate = { readonly "mode": "none"; readonly "start": null; readonly "end": null; } | { readonly "mode": "single"; readonly "start": string; readonly "end": string; } | { readonly "mode": "range"; readonly "start": string; readonly "end": string; };
+export type VisitCreate = { readonly "placeId": string; readonly "name"?: string | null; readonly "date"?: VisitDate; readonly "confirmedCoordinates"?: null; };
+export type VisitPatch = { readonly "placeId"?: string; readonly "name"?: string | null; readonly "date"?: VisitDate; readonly "confirmedCoordinates"?: null; };
 export type MapMarker = { readonly "visitId": string; readonly "tripId": string; readonly "place": Place; readonly "confirmedCoordinates": null; readonly "date": VisitDate; readonly "photoCount": 0; readonly "previewPhotoId": null; readonly "createdAt": string; };
 export type ProjectPage = { readonly "items": ReadonlyArray<Project>; readonly "nextCursor": string | null; };
 export type TripPage = { readonly "items": ReadonlyArray<Trip>; readonly "nextCursor": string | null; };
 export type VisitPage = { readonly "items": ReadonlyArray<Visit>; readonly "nextCursor": string | null; };
 export type PlacePage = { readonly "items": ReadonlyArray<Place>; readonly "nextCursor": string | null; };
 export type MapMarkerPage = { readonly "items": ReadonlyArray<MapMarker>; readonly "nextCursor": string | null; };
-export interface ApiDtos { Me: Me; Error: Error; Health: Health; Project: Project; ProjectCreate: ProjectCreate; Trip: Trip; TripCreate: TripCreate; Visit: Visit; Place: Place; VisitDate: VisitDate; MapMarker: MapMarker; ProjectPage: ProjectPage; TripPage: TripPage; VisitPage: VisitPage; PlacePage: PlacePage; MapMarkerPage: MapMarkerPage; }
+export interface ApiDtos { Me: Me; Error: Error; Health: Health; Project: Project; ProjectCreate: ProjectCreate; Trip: Trip; TripCreate: TripCreate; Visit: Visit; Place: Place; VisitDate: VisitDate; VisitCreate: VisitCreate; VisitPatch: VisitPatch; MapMarker: MapMarker; ProjectPage: ProjectPage; TripPage: TripPage; VisitPage: VisitPage; PlacePage: PlacePage; MapMarkerPage: MapMarkerPage; }
 export const schemas = {
   "Me": {
     "type": "object",
@@ -525,6 +527,69 @@ export const schemas = {
       }
     ],
     "description": "Calendar DATE, years0001–9999. Single: start=end. Range: start<=end. None: both null. Never timezone-convert."
+  },
+  "VisitCreate": {
+    "type": "object",
+    "properties": {
+      "placeId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "Trimmed; no control characters. Unicode scalar character limit."
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "date": {
+        "$ref": "#/components/schemas/VisitDate"
+      },
+      "confirmedCoordinates": {
+        "type": "null"
+      }
+    },
+    "required": [
+      "placeId"
+    ],
+    "additionalProperties": false
+  },
+  "VisitPatch": {
+    "type": "object",
+    "properties": {
+      "placeId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "Trimmed; no control characters. Unicode scalar character limit."
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "date": {
+        "$ref": "#/components/schemas/VisitDate"
+      },
+      "confirmedCoordinates": {
+        "type": "null"
+      }
+    },
+    "required": [],
+    "additionalProperties": false,
+    "minProperties": 1
   },
   "MapMarker": {
     "type": "object",

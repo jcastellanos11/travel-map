@@ -42,6 +42,8 @@ export default function PrivateApp() {
   const actions = {
     navigate: controller.navigate, verify: controller.verify, createProject: controller.createProject,
     createTrip: controller.createTrip, loadProjects: controller.loadProjects, loadMoreTrips: controller.loadMoreTrips,
+    loadVisits: controller.loadVisits, selectVisit: controller.selectVisit, openVisitEditor: controller.openVisitEditor,
+    searchPlaces: controller.searchPlaces, clearPlaces: controller.clearPlaces, cancelPlaces: controller.cancelPlaces, saveVisit: controller.saveVisit,
     logout: async () => { await controller.logout(); if (controller.getSnapshot().phase === 'anonymous') channelRef.current?.postMessage('invalidate'); },
   };
   return <div className="private-root">
