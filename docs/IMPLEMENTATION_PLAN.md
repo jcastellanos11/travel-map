@@ -51,6 +51,15 @@ Se mantiene frontend React/TypeScript/Leaflet existente. Su dataset estático pu
 
 ### E3 — Integración incremental del frontend
 
+**Decisiones aprobadas para E3.1:** D-E3-01 exige un único origen HTTPS para
+interacciones autenticadas; D-E3-02 mantiene la demo estática aislada de datos
+privados; D-E3-03 permite diseñar contratos de Trip sin asumir acceso al Project
+padre; D-E3-04 utiliza un cliente API pequeño y patrones React estándar, sin nueva
+dependencia de estado global. E3.1 implementa únicamente transporte/DTOs y
+verificación local de lectura; navegación, pantallas de sesión, selector visual
+demo/live y adaptación del mapa quedan para incrementos posteriores. Evidencia y
+criterios pendientes en [E3_1_VALIDATION.md](E3_1_VALIDATION.md).
+
 - Crear cliente API tipado y adaptadores; desacoplar `WorldMap` de `trips.ts` estático sin reescribir componentes visuales.
 - Navegación de sesión, proyectos, viajes y estados loading/empty/error. Conservar temporalmente demo estática detrás de selector de desarrollo, **no** mezclarla con datos privados en producción.
 - Mapa y galerías solo consumen datos autorizados del backend. Responsive a 360/768/1440; controles accesibles.

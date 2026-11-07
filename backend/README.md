@@ -50,6 +50,14 @@ which is not a validation pass. The automatic helper is the verified path.
 
 ## Start the API
 
+For the E3.1 same-origin React integration diagnostic and isolated static demo,
+use `npm run dev:frontend` instead of `npm run dev` (one Worker at a time).
+This builds frontend assets locally and uses the existing HTTPS dev Worker on
+8789; it exposes no Vite network server and changes no authentication settings.
+See [frontend instructions](../frontend/README.md) and
+[E3.1 validation](../docs/E3_1_VALIDATION.md). Default backend production
+configuration has no frontend diagnostic asset binding.
+
 ```sh
 npm run dev
 ```

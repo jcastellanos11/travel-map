@@ -1,0 +1,5 @@
+body { font: 1rem/1.6 system-ui, sans-serif; margin: 0; background: #f5f8f6; color: #173c2d; }
+main { max-width: 52rem; margin: 3rem auto; padding: 1.5rem; }
+.controls { display: flex; flex-wrap: wrap; gap: .75rem; }
+button { font: inherit; padding: .5rem .8rem; cursor: pointer; }
+button:focus-visible, a:focus-visible { outline: 3px solid #467955; outline-offset: 3px; }

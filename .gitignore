@@ -25,3 +25,6 @@ dist-ssr
 
 # Generated from pinned local Swagger UI assets
 /backend/.generated/
+
+# Isolated frontend integration build and local verification artifacts
+/frontend/.local/
