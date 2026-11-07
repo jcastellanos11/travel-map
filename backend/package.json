@@ -23,7 +23,8 @@
     "db:local:test": "npm run build && node scripts/local-postgres.ts",
     "check": "npm run lint && npm run typecheck && npm test",
     "test:supabase": "node --test tests/supabase.integration.test.ts",
-    "dev:frontend": "node scripts/frontend-dev.ts"
+    "dev:frontend": "node scripts/frontend-dev.ts",
+    "test:frontend": "node scripts/frontend-dev.ts --prepare-only && npm run build && node --test tests/frontend-assets.test.ts"
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "12.1.0",

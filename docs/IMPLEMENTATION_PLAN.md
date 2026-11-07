@@ -60,6 +60,14 @@ verificación local de lectura; navegación, pantallas de sesión, selector visu
 demo/live y adaptación del mapa quedan para incrementos posteriores. Evidencia y
 criterios pendientes en [E3_1_VALIDATION.md](E3_1_VALIDATION.md).
 
+**E3.2 aprobado:** D01 conserva el mapa como centro de la aplicación, sin marcadores
+privados ni recuerdos demo; D02 permite formularios mínimos de Project/Trip con
+las políticas de creación vigentes; D03 usa History API y acceso directo a Trip
+sin lectura obligatoria de Project; D04 mantiene React/cliente ligero sin router
+ni estado global adicional. Sesiones/Google/logout siguen siendo autoridad del
+backend. Implementación y aceptación local en [E3_2_VALIDATION.md](E3_2_VALIDATION.md).
+No implica autorización para E3.3, visitas/mapas privados ni despliegue.
+
 - Crear cliente API tipado y adaptadores; desacoplar `WorldMap` de `trips.ts` estático sin reescribir componentes visuales.
 - Navegación de sesión, proyectos, viajes y estados loading/empty/error. Conservar temporalmente demo estática detrás de selector de desarrollo, **no** mezclarla con datos privados en producción.
 - Mapa y galerías solo consumen datos autorizados del backend. Responsive a 360/768/1440; controles accesibles.

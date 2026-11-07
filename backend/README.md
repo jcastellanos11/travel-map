@@ -50,13 +50,18 @@ which is not a validation pass. The automatic helper is the verified path.
 
 ## Start the API
 
-For the E3.1 same-origin React integration diagnostic and isolated static demo,
+For the E3.2 private React app, E3.1 diagnostic and isolated static demo,
 use `npm run dev:frontend` instead of `npm run dev` (one Worker at a time).
 This builds frontend assets locally and uses the existing HTTPS dev Worker on
 8789; it exposes no Vite network server and changes no authentication settings.
 See [frontend instructions](../frontend/README.md) and
-[E3.1 validation](../docs/E3_1_VALIDATION.md). Default backend production
+[E3.2 validation](../docs/E3_2_VALIDATION.md). `/app` deep links are narrowly
+rewritten to the local application document; root `/` provides frontend-only
+continuation after the unchanged OAuth callback. Default backend production
 configuration has no frontend diagnostic asset binding.
+
+`npm run test:frontend` prepares local assets, performs a dry-run Worker build,
+and runs three real workerd routing/isolation tests without database access.
 
 ```sh
 npm run dev
@@ -77,8 +82,9 @@ TLS verification is required. Stop Wrangler with Ctrl-C or `x`.
 Health is liveness, not provider/database readiness. Without identity configuration,
 health still works, requests without sessions return 401, and login or a plausibly
 formatted session requiring dependencies returns sanitized 503. No mock login
-fallback exists. Root `/` has no UI; callback redirects there for future same-origin
-frontend integration in E3. Until then, inspect `/api/v1/me` separately after login.
+fallback exists. With API-only `npm run dev`, root `/` has no UI and returns 404
+after the existing OAuth callback. With `npm run dev:frontend`, the local root
+document continues to the E3.2 private application without changing that callback.
 
 ## Local Supabase Auth integration tests
 

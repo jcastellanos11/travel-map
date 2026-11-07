@@ -27,10 +27,18 @@ try {
   oldHeaders = await readFile(new URL('.local/e22-api-assets/_headers', root), 'utf8');
 } catch (error) { if (!(error instanceof Error) || !('code' in error) || error.code !== 'ENOENT') throw error; }
 const diagnostic = await readFile(new URL('demo/integration.html', assets), 'utf8');
+const app = await readFile(new URL('demo/app.html', assets), 'utf8');
+await writeFile(new URL('app.html', assets), app);
+await writeFile(new URL('index.html', assets), app);
+// Narrow asset rewrites only. API/OAuth/invite/docs/demo routes never hit this shell.
+// Target the canonical root document; app.html would canonicalize back to /app
+// and create an internal rewrite/HTML-normalization redirect loop.
+await writeFile(new URL('_redirects', assets), '/app / 200\n/app/* / 200\n');
 await mkdir(new URL('__local/integration/', assets), { recursive: true });
 await writeFile(new URL('__local/integration/index.html', assets), diagnostic);
 // Diagnostic should have one development-only address, separate from demo paths.
 await writeFile(new URL('demo/integration.html', assets), '<!doctype html><title>Use local integration check</title><a href="/__local/integration/">Local integration check</a>');
+await writeFile(new URL('demo/app.html', assets), '<!doctype html><title>Travel Map</title><a href="/app">Open private application</a>');
 await writeFile(new URL('_headers', assets), `${oldHeaders}
 /demo/*
   Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://www.geoboundaries.org https://raw.githubusercontent.com https://media.githubusercontent.com; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
@@ -39,6 +47,21 @@ await writeFile(new URL('_headers', assets), `${oldHeaders}
   X-Content-Type-Options: nosniff
 /__local/integration/*
   Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  Referrer-Policy: no-referrer
+  Cache-Control: private, no-store
+  X-Content-Type-Options: nosniff
+/
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  Referrer-Policy: no-referrer
+  Cache-Control: private, no-store
+  X-Content-Type-Options: nosniff
+/app*
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  Referrer-Policy: no-referrer
+  Cache-Control: private, no-store
+  X-Content-Type-Options: nosniff
+/index.html
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
   Referrer-Policy: no-referrer
   Cache-Control: private, no-store
   X-Content-Type-Options: nosniff

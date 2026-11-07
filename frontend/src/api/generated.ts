@@ -4,7 +4,9 @@ export type Me = { readonly "id": string; readonly "displayName": string; readon
 export type Error = { readonly "error": { readonly "code": string; readonly "message": string; readonly "requestId": string; }; };
 export type Health = { readonly "status": "ok"; };
 export type Project = { readonly "id": string; readonly "ownerUserId": string; readonly "name": string; readonly "tripCreationPolicy": "admins_only" | "all_project_members"; readonly "status": "active" | "archived" | "deletion_requested" | "deleted"; readonly "createdAt": string; };
+export type ProjectCreate = { readonly "name": string; readonly "tripCreationPolicy"?: "admins_only" | "all_project_members"; };
 export type Trip = { readonly "id": string; readonly "projectId": string; readonly "createdByUserId": string; readonly "name": string; readonly "description": string | null; readonly "status": "active" | "archived" | "deletion_requested" | "deleted"; readonly "createdAt": string; readonly "updatedAt": string; };
+export type TripCreate = { readonly "name": string; readonly "description"?: string | null; };
 export type Visit = { readonly "id": string; readonly "placeId": string; readonly "createdByUserId": string; readonly "name": string | null; readonly "status": "active" | "archived" | "deletion_requested" | "deleted"; readonly "updatedAt": string; readonly "tripId": string; readonly "place": Place; readonly "confirmedCoordinates": null; readonly "date": VisitDate; readonly "photoCount": 0; readonly "previewPhotoId": null; readonly "createdAt": string; };
 export type Place = { readonly "id": string; readonly "countryCode": string; readonly "countryName": string; readonly "city": string; readonly "region": string | null; readonly "createdAt": string; readonly "approximateCoordinates": { readonly "lat": number; readonly "lng": number; } | null; readonly "source": { readonly "provider": string | null; readonly "id": string | null; readonly "url": string | null; }; };
 export type VisitDate = { readonly "mode": "none"; readonly "start": null; readonly "end": null; } | { readonly "mode": "single"; readonly "start": string; readonly "end": string; } | { readonly "mode": "range"; readonly "start": string; readonly "end": string; };
@@ -14,7 +16,7 @@ export type TripPage = { readonly "items": ReadonlyArray<Trip>; readonly "nextCu
 export type VisitPage = { readonly "items": ReadonlyArray<Visit>; readonly "nextCursor": string | null; };
 export type PlacePage = { readonly "items": ReadonlyArray<Place>; readonly "nextCursor": string | null; };
 export type MapMarkerPage = { readonly "items": ReadonlyArray<MapMarker>; readonly "nextCursor": string | null; };
-export interface ApiDtos { Me: Me; Error: Error; Health: Health; Project: Project; Trip: Trip; Visit: Visit; Place: Place; VisitDate: VisitDate; MapMarker: MapMarker; ProjectPage: ProjectPage; TripPage: TripPage; VisitPage: VisitPage; PlacePage: PlacePage; MapMarkerPage: MapMarkerPage; }
+export interface ApiDtos { Me: Me; Error: Error; Health: Health; Project: Project; ProjectCreate: ProjectCreate; Trip: Trip; TripCreate: TripCreate; Visit: Visit; Place: Place; VisitDate: VisitDate; MapMarker: MapMarker; ProjectPage: ProjectPage; TripPage: TripPage; VisitPage: VisitPage; PlacePage: PlacePage; MapMarkerPage: MapMarkerPage; }
 export const schemas = {
   "Me": {
     "type": "object",
@@ -158,6 +160,28 @@ export const schemas = {
     ],
     "additionalProperties": false
   },
+  "ProjectCreate": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200,
+        "description": "Trimmed; no control characters. Unicode scalar character limit."
+      },
+      "tripCreationPolicy": {
+        "enum": [
+          "admins_only",
+          "all_project_members"
+        ],
+        "default": "admins_only"
+      }
+    },
+    "required": [
+      "name"
+    ],
+    "additionalProperties": false
+  },
   "Trip": {
     "type": "object",
     "properties": {
@@ -212,6 +236,32 @@ export const schemas = {
       "status",
       "createdAt",
       "updatedAt"
+    ],
+    "additionalProperties": false
+  },
+  "TripCreate": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200,
+        "description": "Trimmed; no control characters. Unicode scalar character limit."
+      },
+      "description": {
+        "anyOf": [
+          {
+            "type": "string",
+            "maxLength": 2000
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "name"
     ],
     "additionalProperties": false
   },

@@ -6,13 +6,12 @@ export default defineConfig(({ mode }) => ({
   plugins: [react()],
   base: '/',
   server: { host: '127.0.0.1', strictPort: true },
-  ...(mode === 'integration' ? {
-    build: {
-      outDir: '.local/integration-dist',
-      rolldownOptions: { input: {
-        demo: fileURLToPath(new URL('index.html', import.meta.url)),
-        integration: fileURLToPath(new URL('integration.html', import.meta.url)),
-      } },
-    },
-  } : {}),
+  build: {
+    ...(mode === 'integration' ? { outDir: '.local/integration-dist' } : {}),
+    rolldownOptions: { input: {
+      demo: fileURLToPath(new URL('index.html', import.meta.url)),
+      app: fileURLToPath(new URL('app.html', import.meta.url)),
+      ...(mode === 'integration' ? { integration: fileURLToPath(new URL('integration.html', import.meta.url)) } : {}),
+    } },
+  },
 }));
