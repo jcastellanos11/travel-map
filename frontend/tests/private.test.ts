@@ -28,6 +28,7 @@ function setup(path = '/app', handler: Handler = () => undefined) {
     const result = await handler(p, init);
     if (result) return result;
     if (p === '/api/v1/me') return Response.json(me);
+    if (/\/map\?/.test(p)) return Response.json(page());
     if (/^\/api\/v1\/trips\/[^/]+\/visits\?/.test(p)) return Response.json(page());
     if (p.startsWith('/api/v1/projects?')) return Response.json(page([project()]));
     if (p.startsWith('/api/v1/projects/') && p.includes('/trips?')) return Response.json(page([trip()]));
@@ -144,13 +145,13 @@ test('creation affordances use only owner/policy facts, never a fabricated viewe
   assert.equal(tripCreationHint({ ...project(), ownerUserId: id(9) }, publicUser), 'server-check');
   assert.equal(tripCreationHint({ ...project(), ownerUserId: id(9), tripCreationPolicy: 'all_project_members' }, publicUser), 'allowed');
 });
-test('direct Trip-only Guest never requests parent, sibling Trips, roster, maps or settings', async () => {
+test('direct Trip-only Guest never requests parent, sibling Trips, roster, Project maps or settings', async () => {
   const h = setup(`/app/trips/${id(3)}`, p => p.startsWith('/api/v1/projects?') ? Response.json(page()) : undefined);
   await h.controller.verify();
   assert.equal(ready(h.controller.getSnapshot()).scope.status, 'trip');
   assert.match(html(h.controller), /Private Trip 3/);
   assert.doesNotMatch(html(h.controller), /Private Project 2|New Trip|createdByUserId|projectId/);
-  assert.deepEqual(h.calls.map(c => c.path).sort(), ['/api/v1/me', '/api/v1/projects?limit=25', `/api/v1/trips/${id(3)}`, `/api/v1/trips/${id(3)}/visits?limit=25`].sort());
+  assert.deepEqual(h.calls.map(c => c.path).sort(), ['/api/v1/me', '/api/v1/projects?limit=25', `/api/v1/trips/${id(3)}`, `/api/v1/trips/${id(3)}/visits?limit=25`, `/api/v1/trips/${id(3)}/map?limit=100`].sort());
 });
 for (const status of [403, 404]) test(`inaccessible Project ${status} clears scope details and offers safe recovery`, async () => {
   const h = setup(`/app/projects/${id(2)}`, p => p === `/api/v1/projects/${id(2)}` ? error(status) : undefined);

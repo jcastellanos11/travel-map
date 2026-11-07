@@ -5,8 +5,10 @@ import type { AppController, Snapshot } from './controller.ts';
 import { googleLoginPath } from './navigation.ts';
 import TripVisits from './visits/TripVisits.tsx';
 import type { VisitActions } from './visits/TripVisits.tsx';
+import MapControls from './map/MapControls.tsx';
+import type { MapActions } from './map/MapControls.tsx';
 
-type Actions = Pick<AppController, 'navigate' | 'verify' | 'logout' | 'createProject' | 'createTrip' | 'loadProjects' | 'loadMoreTrips'> & VisitActions;
+type Actions = Pick<AppController, 'navigate' | 'verify' | 'logout' | 'createProject' | 'createTrip' | 'loadProjects' | 'loadMoreTrips'> & VisitActions & MapActions;
 export default function AppView({ state, actions, onLogin }: { state: Snapshot; actions: Actions; onLogin(): void }) {
   function link(event: MouseEvent<HTMLAnchorElement>, path: string) {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -30,7 +32,7 @@ export default function AppView({ state, actions, onLogin }: { state: Snapshot; 
     <header className="private-header"><div><a className="brand" href="/app" onClick={e => link(e, '/app')}>Travel Map</a><p>Every place has a story.</p></div>
       <nav aria-label="Account"><button onClick={() => void actions.verify()}>Refresh access</button><button onClick={() => void actions.logout()}>Sign out</button></nav>
     </header>
-    <p className="map-note">Your private world. Visit markers are not displayed in this view yet.</p>
+    <p className="map-note">{state.route.kind === 'home' ? 'Choose a Project or open a Trip. No all-Projects map is shown.' : 'Approximate catalog locations. Marker counts include loaded Visits only.'}</p>
     <main className="private-panel" aria-label="Projects and Trips">
       <h1>Your journeys</h1>
       <label htmlFor="project-selector">Project</label>
@@ -42,6 +44,7 @@ export default function AppView({ state, actions, onLogin }: { state: Snapshot; 
       {state.projects.status === 'ready' && <>{!projects.length && <p>You have no Project memberships. Create a Project or open an authorized Trip link.</p>}
         {state.projects.page.nextCursor && <button disabled={state.projects.loadingMore} onClick={() => void actions.loadProjects(true)}>{state.projects.loadingMore ? 'Loading…' : 'Load more Projects'}</button>}</>}
       <CreationForms key={`project-${state.formVersion}`} kind="project" pending={state.mutation.pending} onProject={actions.createProject} onTrip={actions.createTrip} />
+      <MapControls state={state.map} actions={actions} trips={scope.status === 'project' && scope.trips.status === 'ready' ? scope.trips.page.items : []} pending={state.mutation.pending} />
       <div className="scope" key={`${state.formVersion}-${state.route.kind}-${'id' in state.route ? state.route.id : ''}`}>
         {scope.status === 'home' && <p>Select a Project, or open a Trip link shared with you.</p>}
         {scope.status === 'loading' && <p role="status">Loading your selection…</p>}

@@ -3,11 +3,14 @@ import type { AppController } from '../controller.ts';
 import type { VisitWorkspace } from './types.ts';
 import { dateLabel, placeLabel } from './forms.ts';
 import VisitForm from './VisitForm.tsx';
+import { useEffect, useRef } from 'react';
 export type VisitActions = Pick<AppController, 'loadVisits' | 'selectVisit' | 'openVisitEditor' | 'searchPlaces' | 'clearPlaces' | 'cancelPlaces' | 'saveVisit'>;
 export default function TripVisits({ workspace, actions, user, pending, version }: {
   workspace: VisitWorkspace; actions: VisitActions; user: CurrentUser; pending: boolean; version: number;
 }) {
   const selected = workspace.selection.status === 'ready' ? workspace.selection.visit : undefined;
+  const detail = useRef<HTMLElement>(null);
+  useEffect(() => { if (selected?.id) detail.current?.focus(); }, [selected?.id]);
   return <section className="trip-visits" aria-labelledby="trip-visits-title"><h3 id="trip-visits-title">Visits</h3>
     <div className="action-row"><button disabled={pending} onClick={() => actions.openVisitEditor('create')}>New Visit</button><button disabled={pending} onClick={() => void actions.loadVisits()}>Refresh Visits</button></div>
     {workspace.visits.status === 'loading' && <p role="status">Loading Visits…</p>}
@@ -17,7 +20,7 @@ export default function TripVisits({ workspace, actions, user, pending, version 
     {workspace.selection.status === 'loading' && <p role="status">Loading Visit details…</p>}
     {workspace.selection.status === 'error' && <p role="alert">{workspace.selection.message}</p>}
     {workspace.saved && <p role="status">{workspace.saved}</p>}
-    {selected && <article className="visit-detail" aria-label="Visit details"><h4>{selected.name ?? `Visit to ${selected.place.city}`}</h4><p>{placeLabel(selected.place)}</p><p>{dateLabel(selected.date)}</p>
+    {selected && <article ref={detail} tabIndex={-1} className="visit-detail" aria-label="Visit details"><h4>{selected.name ?? `Visit to ${selected.place.city}`}</h4><p>{placeLabel(selected.place)}</p><p>{dateLabel(selected.date)}</p>
       <p className="muted">City/region reference only. No exact Visit coordinates are collected or shared.</p>
       {workspace.editor === 'closed' && <button disabled={pending} onClick={() => actions.openVisitEditor('edit')}>{selected.createdByUserId === user.id ? 'Edit Visit' : 'Edit Visit (Owner/Admin only)'}</button>}
     </article>}

@@ -3,8 +3,10 @@
 The private map-first React entry supports Google sign-in, server-verified
 sessions, Project/Trip creation and history navigation (E3.2). E3.3 adds a compact
 Trip Visit list, controlled Place selection, calendar dates and authorized Visit
-creation/details/editing. The existing React/Leaflet demo and the E3.1 GET-only
-diagnostic remain separate. No private Visit markers or media integration.
+creation/details/editing. E3.4 adds authorized Project/Trip map projections,
+approximate catalog markers, grouped Visit selection and server-backed filters.
+The existing React/Leaflet demo and the E3.1 GET-only diagnostic remain separate.
+There is no private media integration.
 
 Use Node 24.x and npm 11.x, with the existing local backend/Supabase configuration.
 From the repository root:
@@ -57,6 +59,18 @@ selection is in-memory within the Trip URL and resets on refresh/scope change.
 Only COL/TUR/USA (six catalog Places) are currently available; there is no geocoder,
 worldwide-coverage promise, precise GPS, Visit description or deletion UI.
 See [E3.3 validation and acceptance steps](../docs/E3_3_VALIDATION.md).
+
+Open a Project or Trip to load its authorized map (up to 100 Visits initially).
+Use **Map filters** for country code, optional Project Trip and inclusive date
+bounds, then explicitly apply or reset. **Load more map Visits** follows the
+opaque cursor; counts and marker groups describe loaded results only. Click a
+marker, then choose an individual Visit; the keyboard alternative is **Browse
+loaded map Visits**. Project marker selection opens the authorized Trip and live
+Visit detail without scanning Visit pages. Missing catalog coordinates appear in
+the accessible list without an invented marker. The `/app` landing does not fetch
+an all-Projects map. Filters/selection are in memory and reset on access
+revalidation or navigation. See [E3.4 validation](../docs/E3_4_VALIDATION.md) for
+actual test evidence and outstanding browser acceptance.
 
 The diagnostic displays status and page counts only. Check health and session;
 if session is 401, complete the existing Google login flow in another tab and

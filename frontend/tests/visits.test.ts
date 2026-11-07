@@ -24,6 +24,7 @@ function setup(handler: Handler = () => undefined) {
     const p = String(input), init = options!; calls.push({ path: p, init });
     const result = await handler(p, init); if (result) return result;
     if (p === '/api/v1/me') return Response.json(me);
+    if (/\/map\?/.test(p)) return Response.json(page());
     if (p.startsWith('/api/v1/projects?')) return Response.json(page());
     if (/^\/api\/v1\/trips\/[^/]+$/.test(p)) return Response.json({ id: p.split('/').at(-1), projectId: id(2), createdByUserId: id(2), name: 'Authorized Trip', description: null, status: 'active', createdAt: time, updatedAt: time });
     if (p.startsWith(`/api/v1/trips/${id(3)}/visits?`)) return Response.json(page([visit()]));
@@ -100,7 +101,7 @@ for (const mode of ['none', 'single', 'range'] as const) test(`Guest creates Vis
   assert.deepEqual(JSON.parse(String(post.init.body)), { ...input, date });
   assert.equal(new Headers(post.init.headers).get('X-CSRF-Token'), me.csrfToken);
   assert.equal(h.calls.filter(c => c.path.startsWith(`/api/v1/trips/${id(3)}/visits?`)).length, 2);
-  assert.ok(!h.calls.some(c => /\/projects\/|\/members|\/map/.test(c.path)));
+  assert.ok(!h.calls.some(c => /\/projects\/|\/members/.test(c.path)));
 });
 test('no Visit mutation is automatic; unknown/missing Place IDs and invalid dates never send POST', async () => {
   const h = setup(); await creating(h);

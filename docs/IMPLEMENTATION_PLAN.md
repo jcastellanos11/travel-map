@@ -75,6 +75,14 @@ privado del Project y demo aislada. Sin cambios de backend/migraciones, coordena
 exactas, marcadores E3.4 ni fotos E4. Evidencia actual:
 [E3_3_VALIDATION.md](E3_3_VALIDATION.md).
 
+**E3.4 autorizado por separado:** consumir proyecciones de mapa autorizadas por
+Project/Trip, adaptar únicamente coordenadas aproximadas del catálogo y conservar
+cada Visit independiente al agrupar marcadores. Filtros y paginación proceden del
+API existente; un Guest no necesita leer el Project padre. Integración con detalle
+de Visit sin recorrer todas sus páginas. Solo frontend, sin backend/migraciones,
+GPS exacto, medios ni E3.5/E4. Evidencia y aceptación pendiente:
+[E3_4_VALIDATION.md](E3_4_VALIDATION.md).
+
 - Crear cliente API tipado y adaptadores; desacoplar `WorldMap` de `trips.ts` estático sin reescribir componentes visuales.
 - Navegación de sesión, proyectos, viajes y estados loading/empty/error. Conservar temporalmente demo estática detrás de selector de desarrollo, **no** mezclarla con datos privados en producción.
 - Mapa y galerías solo consumen datos autorizados del backend. Responsive a 360/768/1440; controles accesibles.

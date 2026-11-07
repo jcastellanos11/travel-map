@@ -11,7 +11,7 @@
     "typecheck": "tsc -b && tsc -p tsconfig.api.json",
     "api:generate": "node scripts/generate-api.mjs",
     "api:check": "node scripts/generate-api.mjs --check",
-    "test": "npm run api:check && tsc -p tsconfig.tests.json && node --test .local/tests/tests/api.test.js .local/tests/tests/private.test.js .local/tests/tests/calendar.test.js .local/tests/tests/visits.test.js",
+    "test": "npm run api:check && tsc -p tsconfig.tests.json && node --test .local/tests/tests/api.test.js .local/tests/tests/private.test.js .local/tests/tests/calendar.test.js .local/tests/tests/visits.test.js .local/tests/tests/map.test.js",
     "build:integration": "npm run typecheck && vite build --mode integration --base /demo/",
     "test:build": "npm run build && npm run build:integration && node --test tests/build.test.mjs"
   },

@@ -5,6 +5,7 @@ import BaseWorldMap from '../features/map/components/BaseWorldMap.tsx';
 import { AppController } from './controller.ts';
 import { browserNavigation, googleLoginPath, rememberLoginPath, routePath } from './navigation.ts';
 import AppView from './AppView.tsx';
+import AuthorizedMarkers from '../features/map/components/AuthorizedMarkers.tsx';
 
 export default function PrivateApp() {
   const [navigation] = useState(() => browserNavigation(window));
@@ -44,10 +45,18 @@ export default function PrivateApp() {
     createTrip: controller.createTrip, loadProjects: controller.loadProjects, loadMoreTrips: controller.loadMoreTrips,
     loadVisits: controller.loadVisits, selectVisit: controller.selectVisit, openVisitEditor: controller.openVisitEditor,
     searchPlaces: controller.searchPlaces, clearPlaces: controller.clearPlaces, cancelPlaces: controller.cancelPlaces, saveVisit: controller.saveVisit,
+    loadMap: controller.loadMap, showMapGroup: controller.showMapGroup, fitMap: controller.fitMap, openMapVisit: controller.openMapVisit,
     logout: async () => { await controller.logout(); if (controller.getSnapshot().phase === 'anonymous') channelRef.current?.postMessage('invalidate'); },
   };
+  const projection = state.phase === 'ready' && state.map.status === 'ready' ? state.map : null;
+  const framing = state.phase === 'ready' && (projection || state.route.kind === 'home')
+    ? { key: `${state.user.id}:${routePath(state.route)}`, positions: projection?.visits.flatMap(visit => visit.position ? [visit.position] : []) ?? [] } : undefined;
+  const privacyReset = ['anonymous', 'unavailable', 'logging-out', 'logout-failed'].includes(state.phase) || state.phase === 'ready' && state.scope.status === 'error';
+  const mapHidden = state.phase !== 'ready' || state.scope.status !== 'home' && !projection;
   return <div className="private-root">
-    <div className="map-backdrop" inert={state.phase !== 'ready'} aria-hidden={state.phase !== 'ready'}><BaseWorldMap /></div>
+    <div className={`map-backdrop${mapHidden ? ' map-hidden' : ''}`} inert={mapHidden} aria-hidden={mapHidden}><BaseWorldMap framing={framing} camera={projection?.camera} privacyReset={privacyReset}>
+      {projection && <AuthorizedMarkers visits={projection.visits} selectedIds={projection.selectedVisitId ? [projection.selectedVisitId] : projection.groupIds} select={controller.showMapGroup} />}
+    </BaseWorldMap></div>
     <AppView state={state} actions={actions} onLogin={() => {
       try { rememberLoginPath(window.sessionStorage, routePath(state.route)); } catch { /* Optional navigation storage. */ }
       window.location.assign(googleLoginPath);

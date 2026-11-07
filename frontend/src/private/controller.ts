@@ -5,6 +5,8 @@ import type { CurrentUser, Page, Project, Trip, Visit } from '../api/contracts.t
 import type { ProjectCreate, TripCreate, VisitCreate, VisitPatch } from '../api/generated.ts';
 import { placeSearch, visitForm } from './visits/forms.ts';
 import type { VisitWorkspace } from './visits/types.ts';
+import { adaptMarker, emptyFilters, matchesProjection, mergeMapVisits, validateFilters } from './map/model.ts';
+import type { MapFilters, MapScope, MapState } from './map/model.ts';
 import { parseRoute } from './navigation.ts';
 import type { AppRoute, Navigation } from './navigation.ts';
 
@@ -21,7 +23,7 @@ export type Snapshot = {
 } | {
   phase: 'ready'; route: AppRoute; user: CurrentUser;
   projects: ListState<Project>; scope: ScopeState;
-  mutation: { pending: boolean; error?: string }; formVersion: number;
+  mutation: { pending: boolean; error?: string }; formVersion: number; map: MapState;
 };
 const safeMessage = (error: unknown) => error instanceof ApiError ? error.message : 'The request could not be completed. Please retry.';
 export function tripCreationHint(project: Project, user: CurrentUser): 'allowed' | 'server-check' {
@@ -38,6 +40,7 @@ export class AppController {
   private requests = new Map<string, AbortController>();
   private generation = 0;
   private sessionSeen = false;
+  private cameraSequence = 0;
   private snapshot: Snapshot;
   constructor(client: Client, navigation: Navigation) {
     this.client = client;
@@ -88,7 +91,7 @@ export class AppController {
       const user = await this.client.currentUser({ signal: request.signal });
       if (!request.current()) return;
       this.sessionSeen = true;
-      this.publish({ phase: 'ready', route, user, projects: { status: 'loading' }, scope: { status: route.kind === 'home' ? 'home' : route.kind === 'not-found' ? 'not-found' : 'loading' }, mutation: { pending: false }, formVersion: this.generation });
+      this.publish({ phase: 'ready', route, user, projects: { status: 'loading' }, scope: { status: route.kind === 'home' ? 'home' : route.kind === 'not-found' ? 'not-found' : 'loading' }, mutation: { pending: false }, formVersion: this.generation, map: { status: 'idle' } });
       await Promise.all([this.loadProjects(), this.loadScope()]);
     } catch (error) {
       if (!request.current()) return;
@@ -134,21 +137,98 @@ export class AppController {
         const trip = await this.client.get(`/api/v1/trips/${route.id}`, 'Trip', { signal: request.signal });
         if (request.current() && this.snapshot.phase === 'ready') {
           this.publish({ ...this.snapshot, scope: { status: 'trip', trip, visits: { status: 'loading' }, selection: { status: 'none' }, catalog: { status: 'idle' }, editor: 'closed' } });
-          await this.loadVisits();
+          await Promise.all([this.loadVisits(), this.loadMap()]);
         }
       } else {
         const project = await this.client.get(`/api/v1/projects/${route.id}`, 'Project', { signal: request.signal });
         const trips = await this.client.get(paginatedPath(`/api/v1/projects/${route.id}/trips`, { limit: 25 }), 'TripPage', { signal: request.signal });
-        if (request.current() && this.snapshot.phase === 'ready') this.publish({ ...this.snapshot, scope: { status: 'project', project, trips: { status: 'ready', page: trips, loadingMore: false } } });
+        if (request.current() && this.snapshot.phase === 'ready') {
+          this.publish({ ...this.snapshot, scope: { status: 'project', project, trips: { status: 'ready', page: trips, loadingMore: false } } });
+          await this.loadMap();
+        }
       }
     } catch (error) {
       if (!request.current() || this.fail(error) || this.snapshot.phase !== 'ready') return;
       // No stale resource details or stale selector labels after lost authorization.
-      this.publish({ ...this.snapshot, scope: { status: 'error', message: safeMessage(error) }, projects: { status: 'loading' }, formVersion: this.snapshot.formVersion + 1 });
+      this.cancelRequest('map');
+      this.publish({ ...this.snapshot, scope: { status: 'error', message: safeMessage(error) }, map: { status: 'idle' }, projects: { status: 'loading' }, formVersion: this.snapshot.formVersion + 1 });
       await this.loadProjects();
     }
   };
   private cancelRequest(key: string) { this.requests.get(key)?.abort(); this.requests.delete(key); }
+  private mapContext() {
+    const state = this.snapshot;
+    if (state.phase !== 'ready' || !['trip', 'project'].includes(state.scope.status)) return null;
+    const scope: MapScope = state.scope.status === 'project' ? { kind: 'project', id: state.scope.project.id }
+      : state.scope.status === 'trip' ? { kind: 'trip', id: state.scope.trip.id } : { kind: 'trip', id: '' };
+    return { state, scope };
+  }
+  loadMap = async (more = false, filters?: MapFilters) => {
+    const context = this.mapContext(); if (!context) return;
+    const { state, scope } = context, previous = state.map;
+    if (more && (previous.status !== 'ready' || previous.loadingMore || !previous.nextCursor)) return;
+    const input = filters ?? (previous.status !== 'idle' && previous.scope.kind === scope.kind && previous.scope.id === scope.id ? previous.filters : emptyFilters);
+    const checked = validateFilters(input, scope.kind);
+    const request = this.request('map');
+    if (!checked.value) {
+      this.cancelRequest('visit-detail');
+      this.publish({ ...state, map: { status: 'error', scope, filters: input, message: 'Check the country, Trip and calendar filter values.' } }); return;
+    }
+    const active = checked.value;
+    if (more && previous.status === 'ready' && JSON.stringify(active) !== JSON.stringify(previous.filters)) return;
+    if (!more) { this.cancelRequest('visit-detail'); this.cancelPlaces(); }
+    const cleared = !more && state.scope.status === 'trip' ? { ...state.scope, selection: { status: 'none' } as const, editor: 'closed' as const, catalog: { status: 'idle' } as const } : state.scope;
+    this.publish({ ...state, scope: cleared, map: more && previous.status === 'ready' ? { ...previous, loadingMore: true } : { status: 'loading', scope, filters: active } });
+    const query = new URLSearchParams();
+    for (const key of ['countryCode', 'tripId', 'from', 'to'] as const) if (active[key]) query.set(key, active[key]);
+    try {
+      const result = await this.client.get(paginatedPath(`/api/v1/${scope.kind === 'project' ? 'projects' : 'trips'}/${scope.id}/map?${query}`, { limit: 100, cursor: more && previous.status === 'ready' ? previous.nextCursor : null }), 'MapMarkerPage', { signal: request.signal });
+      const latest = this.mapContext(); if (!request.current() || !latest || latest.scope.kind !== scope.kind || latest.scope.id !== scope.id) return;
+      const page = result.items.map(adaptMarker);
+      if (page.some(visit => !matchesProjection(visit, scope, active))) throw new ApiError('protocol', 'INVALID_RESPONSE');
+      const visits = mergeMapVisits(more && previous.status === 'ready' ? previous.visits : [], page);
+      this.publish({ ...latest.state, map: { status: 'ready', scope, filters: active, visits, nextCursor: result.nextCursor, loadingMore: false,
+        groupIds: more && previous.status === 'ready' ? previous.groupIds : [], selectedVisitId: more && previous.status === 'ready' ? previous.selectedVisitId : null,
+        ...(filters ? { camera: { sequence: ++this.cameraSequence, kind: 'fit' } as const }
+          : more && previous.status === 'ready' && previous.camera ? { camera: previous.camera } : {}) } });
+    } catch (error) {
+      if (!request.current() || this.fail(error)) return;
+      if (this.snapshot.phase !== 'ready') return;
+      if (error instanceof ApiError && [403, 404].includes(error.status ?? 0)) {
+        for (const key of ['map', 'visit-detail', 'visits', 'places', 'mutation']) this.cancelRequest(key);
+        this.publish({ ...this.snapshot, scope: { status: 'error', message: safeMessage(error) }, map: { status: 'idle' }, mutation: { pending: false }, formVersion: this.snapshot.formVersion + 1 });
+      } else this.publish({ ...this.snapshot, map: { status: 'error', scope, filters: active, message: safeMessage(error) } });
+    }
+  };
+  showMapGroup = (ids: ReadonlyArray<string>) => {
+    const state = this.snapshot;
+    if (state.phase !== 'ready' || state.map.status !== 'ready' || state.mutation.pending) return;
+    const selected = [...new Set(ids)].map(id => state.map.status === 'ready' ? state.map.visits.find(visit => visit.visitId === id) : undefined);
+    if (!selected.length || selected.some(visit => !visit)) return;
+    this.cancelRequest('visit-detail'); this.cancelPlaces();
+    const point = selected.find(visit => visit?.position)?.position;
+    this.publish({ ...state, scope: state.scope.status === 'trip' ? { ...state.scope, selection: { status: 'none' }, editor: 'closed', catalog: { status: 'idle' } } : state.scope,
+      map: { ...state.map, groupIds: selected.map(visit => visit!.visitId), selectedVisitId: null,
+        ...(point ? { camera: { sequence: ++this.cameraSequence, kind: 'point', position: point } as const } : {}) } });
+  };
+  fitMap = () => {
+    const state = this.snapshot;
+    if (state.phase === 'ready' && state.map.status === 'ready' && state.map.visits.some(visit => visit.position)) this.publish({ ...state, map: { ...state.map, camera: { sequence: ++this.cameraSequence, kind: 'fit' } } });
+  };
+  openMapVisit = async (id: string) => {
+    const state = this.snapshot;
+    if (state.phase !== 'ready' || state.map.status !== 'ready' || state.mutation.pending) return;
+    const proof = state.map.visits.find(visit => visit.visitId === id); if (!proof) return;
+    if (state.map.scope.kind === 'trip') { await this.selectVisit(id); return; }
+    const projectId = state.map.scope.id, actorId = state.user.id;
+    // One-use intent comes only from this loaded authorized Project projection.
+    // Recheck actor/Trip ancestry after navigation; never scan all Visit pages.
+    const navigating = this.navigate(`/app/trips/${proof.tripId}`), generation = this.generation;
+    await navigating;
+    const current = this.tripState(proof.tripId);
+    if (generation !== this.generation || !current || current.state.user.id !== actorId || current.scope.trip.projectId !== projectId) return;
+    await this.loadVisitDetail(proof.visitId, proof.tripId);
+  };
   private tripState(tripId?: string) {
     const state = this.snapshot;
     return state.phase === 'ready' && state.scope.status === 'trip' && (!tripId || state.scope.trip.id === tripId)
@@ -158,8 +238,8 @@ export class AppController {
     if (this.fail(error)) return;
     const current = this.tripState();
     if (!current) return;
-    for (const key of ['visits', 'visit-detail', 'places', 'mutation']) this.cancelRequest(key);
-    this.publish({ ...current.state, scope: { status: 'error', message: safeMessage(error) }, mutation: { pending: false }, formVersion: current.state.formVersion + 1 });
+    for (const key of ['visits', 'visit-detail', 'places', 'mutation', 'map']) this.cancelRequest(key);
+    this.publish({ ...current.state, scope: { status: 'error', message: safeMessage(error) }, map: { status: 'idle' }, mutation: { pending: false }, formVersion: current.state.formVersion + 1 });
   }
   loadVisits = async (more = false) => {
     const current = this.tripState(); if (!current) return;
@@ -186,10 +266,17 @@ export class AppController {
     this.cancelPlaces();
     this.cancelRequest('visit-detail');
     // Do not fetch arbitrary known IDs from another Trip, even for multi-Trip users.
-    if (scope.visits.status !== 'ready' || !scope.visits.page.items.some(visit => visit.id === id)) {
+    const mapProof = state.map.status === 'ready' && state.map.scope.kind === 'trip' && state.map.scope.id === scope.trip.id
+      && state.map.visits.some(visit => visit.visitId === id && visit.tripId === scope.trip.id);
+    if (!(scope.visits.status === 'ready' && scope.visits.page.items.some(visit => visit.id === id)) && !mapProof) {
       this.publish({ ...state, scope: { ...scope, selection: { status: 'error', message: 'Visit not available in the current Trip list.' }, editor: 'closed', catalog: { status: 'idle' } } });
       return;
     }
+    await this.loadVisitDetail(id, scope.trip.id);
+  };
+  private loadVisitDetail = async (id: string, tripId: string) => {
+    const current = this.tripState(tripId); if (!current) return;
+    const { state, scope } = current;
     const request = this.request('visit-detail');
     this.publish({ ...state, scope: { ...scope, selection: { status: 'loading' }, editor: 'closed', catalog: { status: 'idle' }, saved: undefined } });
     try {
@@ -197,7 +284,9 @@ export class AppController {
       const latest = this.tripState(scope.trip.id);
       if (!request.current() || !latest) return;
       assertVisit(visit, scope.trip.id, id);
-      this.publish({ ...latest.state, scope: { ...latest.scope, selection: { status: 'ready', visit } } });
+      const point = latest.state.map.status === 'ready' ? latest.state.map.visits.find(item => item.visitId === id)?.position : null;
+      this.publish({ ...latest.state, scope: { ...latest.scope, selection: { status: 'ready', visit } }, map: latest.state.map.status === 'ready' ? { ...latest.state.map, selectedVisitId: id,
+        ...(point ? { camera: { sequence: ++this.cameraSequence, kind: 'point', position: point } as const } : {}) } : latest.state.map });
     } catch (error) { if (request.current()) this.visitFailure(error); }
   };
   openVisitEditor = (editor: 'closed' | 'create' | 'edit') => {
@@ -264,7 +353,7 @@ export class AppController {
       const visit = await this.client.mutate(editing ? 'PATCH' : 'POST', editing ? `/api/v1/visits/${editing.id}` : `/api/v1/trips/${scope.trip.id}/visits`, payload, { response: 'Visit', signal: request.signal });
       if (!request.current() || !this.tripState(scope.trip.id)) return;
       assertVisit(visit, scope.trip.id, editing?.id);
-      await this.loadVisits();
+      await Promise.all([this.loadVisits(), this.loadMap()]);
       const latest = this.tripState(scope.trip.id); if (!request.current() || !latest) return;
       this.publish({ ...latest.state, scope: { ...latest.scope, selection: { status: 'ready', visit }, editor: 'closed', saved: editing ? 'Visit updated.' : 'Visit created.' }, mutation: { pending: false }, formVersion: latest.state.formVersion + 1 });
     } catch (error) {
@@ -286,7 +375,8 @@ export class AppController {
       if (request.current() && this.snapshot.phase === 'ready') this.publish({ ...this.snapshot, scope: { ...scope, trips: { status: 'ready', page: { ...page, items: merge(trips.page.items, page.items) }, loadingMore: false } } });
     } catch (error) {
       if (!request.current() || this.fail(error) || this.snapshot.phase !== 'ready') return;
-      this.publish({ ...this.snapshot, scope: { status: 'error', message: safeMessage(error) }, formVersion: this.snapshot.formVersion + 1 });
+      this.cancelRequest('map');
+      this.publish({ ...this.snapshot, scope: { status: 'error', message: safeMessage(error) }, map: { status: 'idle' }, formVersion: this.snapshot.formVersion + 1 });
     }
   };
   createProject = async (input: ProjectCreate) => { await this.create('project', input); };
@@ -306,7 +396,8 @@ export class AppController {
     } catch (error) {
       if (!request.current() || this.fail(error) || this.snapshot.phase !== 'ready') return;
       if (error instanceof ApiError && (error.status === 403 || error.status === 404)) {
-        this.publish({ ...this.snapshot, scope: { status: 'error', message: safeMessage(error) }, mutation: { pending: false }, projects: { status: 'loading' }, formVersion: this.snapshot.formVersion + 1 });
+        this.cancelRequest('map');
+        this.publish({ ...this.snapshot, scope: { status: 'error', message: safeMessage(error) }, map: { status: 'idle' }, mutation: { pending: false }, projects: { status: 'loading' }, formVersion: this.snapshot.formVersion + 1 });
         await this.loadProjects();
       } else this.publish({ ...this.snapshot, mutation: { pending: false, error: safeMessage(error) } });
     }
