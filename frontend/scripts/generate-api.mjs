@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 const source = await readFile(new URL('../../backend/openapi.json', import.meta.url), 'utf8');
-const names = ['Me', 'Error', 'Health', 'Project', 'ProjectCreate', 'Trip', 'TripCreate', 'Visit', 'VisitCreate', 'VisitPatch', 'Place', 'MapMarker', 'VisitDate', 'ProjectPage', 'TripPage', 'VisitPage', 'PlacePage', 'MapMarkerPage'];
+const names = ['Me', 'Error', 'Health', 'Project', 'ProjectCreate', 'Trip', 'TripCreate', 'Visit', 'VisitCreate', 'VisitPatch', 'Place', 'MapMarker', 'VisitDate', 'ProjectPage', 'TripPage', 'VisitPage', 'PlacePage', 'MapMarkerPage', 'RosterMemberPage', 'InvitationPage', 'InvitationIssued'];
 const all = JSON.parse(source).components.schemas;
 const schemas = {};
 function include(name) {

@@ -83,6 +83,16 @@ de Visit sin recorrer todas sus páginas. Solo frontend, sin backend/migraciones
 GPS exacto, medios ni E3.5/E4. Evidencia y aceptación pendiente:
 [E3_4_VALIDATION.md](E3_4_VALIDATION.md).
 
+**E3.5 autorizado por separado:** integrar gestión de membresías e invitaciones
+mediante los endpoints E2.3/E2.4 existentes, con confirmaciones, token de emisión
+solo en el formulario abierto y limpieza de contexto tras revocación/salida.
+Conservar `/invite` y OAuth del servidor; no crear un sistema paralelo ni ampliar
+permisos. No hay directorio de participantes de Trip ni rol efectivo en el DTO
+general: usar controles conservadores y respuestas autoritativas. Aceptación entre
+cuentas reales y prueba de rendimiento móvil/4G pendientes de evidencia nueva.
+Solo frontend y documentación; sin E4, backend, migraciones ni despliegue.
+[E3_5_VALIDATION.md](E3_5_VALIDATION.md).
+
 - Crear cliente API tipado y adaptadores; desacoplar `WorldMap` de `trips.ts` estático sin reescribir componentes visuales.
 - Navegación de sesión, proyectos, viajes y estados loading/empty/error. Conservar temporalmente demo estática detrás de selector de desarrollo, **no** mezclarla con datos privados en producción.
 - Mapa y galerías solo consumen datos autorizados del backend. Responsive a 360/768/1440; controles accesibles.

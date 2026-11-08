@@ -64,6 +64,17 @@ p, h2, li { overflow-wrap: anywhere; }
 .authorized-marker-label { border: 1px solid #d5e1d8; border-radius: 8px; background: #fffffff5; color: #365f47; font: 12px/1.4 system-ui, sans-serif; }
 .map-note { position: fixed; z-index: 500; bottom: 1rem; left: 1rem; margin: 0; padding: .6rem; max-width: min(340px, 40vw); background: rgb(255 255 255 / 94%); border-radius: 8px; font-size: .8rem; }
 .access-screen { display: grid; place-items: center; min-height: 100dvh; padding: 1rem; background: rgb(234 242 244 / 60%); }
+.collaboration, .departure { margin-top: 1.2rem; border-top: 1px solid #dce6df; padding-top: .7rem; }
+.collaboration h4 { margin: 1rem 0 .6rem; }
+.membership-list { list-style: none; padding: 0; }
+.membership-list li { padding: .8rem 0; border-bottom: 1px solid #dce6df; overflow-wrap: anywhere; }
+.membership-list span { display: block; margin: .3rem 0; }
+.membership-list .action-row { margin-top: .5rem; }
+.invitation-creator { margin-top: .8rem; padding: .7rem; border: 1px solid #bacdbf; border-radius: 9px; }
+.invitation-creator textarea { resize: vertical; overflow-wrap: anywhere; word-break: break-all; font-size: .85rem; }
+.collaboration-dialog { width: min(420px, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); overflow-y: auto; border: 1px solid #bacdbf; border-radius: 14px; padding: 1.3rem; color: #253a32; background: #fff; }
+.collaboration-dialog::backdrop { background: rgb(25 45 35 / 40%); }
+.collaboration-dialog h2 { font-size: 1.2rem; }
 .access-card { width: min(420px, 100%); padding: 2rem; border-radius: 20px; background: #fffffff5; box-shadow: 0 15px 45px rgb(35 64 55 / 10%); }
 .access-card h1 { font-size: 2rem; letter-spacing: -.07rem; }
 .primary-action { display: inline-block; margin: .75rem 0; text-decoration: none; font-weight: 600; }

@@ -18,7 +18,12 @@ export type TripPage = { readonly "items": ReadonlyArray<Trip>; readonly "nextCu
 export type VisitPage = { readonly "items": ReadonlyArray<Visit>; readonly "nextCursor": string | null; };
 export type PlacePage = { readonly "items": ReadonlyArray<Place>; readonly "nextCursor": string | null; };
 export type MapMarkerPage = { readonly "items": ReadonlyArray<MapMarker>; readonly "nextCursor": string | null; };
-export interface ApiDtos { Me: Me; Error: Error; Health: Health; Project: Project; ProjectCreate: ProjectCreate; Trip: Trip; TripCreate: TripCreate; Visit: Visit; Place: Place; VisitDate: VisitDate; VisitCreate: VisitCreate; VisitPatch: VisitPatch; MapMarker: MapMarker; ProjectPage: ProjectPage; TripPage: TripPage; VisitPage: VisitPage; PlacePage: PlacePage; MapMarkerPage: MapMarkerPage; }
+export type RosterMemberPage = { readonly "items": ReadonlyArray<RosterMember>; readonly "nextCursor": string | null; };
+export type RosterMember = { readonly "userId": string; readonly "displayName": string; readonly "role": "owner" | "admin" | "member"; readonly "createdAt": string; };
+export type InvitationPage = { readonly "items": ReadonlyArray<Invitation>; readonly "nextCursor": string | null; };
+export type Invitation = { readonly "id": string; readonly "scopeType": "project" | "trip"; readonly "scopeId": string; readonly "createdAt": string; readonly "expiresAt": string; readonly "status": "pending" | "consumed" | "revoked" | "expired"; };
+export type InvitationIssued = { readonly "id": string; readonly "scopeType": "project" | "trip"; readonly "scopeId": string; readonly "createdAt": string; readonly "expiresAt": string; readonly "status": "pending" | "consumed" | "revoked" | "expired"; readonly "invitationUrl": string; };
+export interface ApiDtos { Me: Me; Error: Error; Health: Health; Project: Project; ProjectCreate: ProjectCreate; Trip: Trip; TripCreate: TripCreate; Visit: Visit; Place: Place; VisitDate: VisitDate; VisitCreate: VisitCreate; VisitPatch: VisitPatch; MapMarker: MapMarker; ProjectPage: ProjectPage; TripPage: TripPage; VisitPage: VisitPage; PlacePage: PlacePage; MapMarkerPage: MapMarkerPage; RosterMemberPage: RosterMemberPage; RosterMember: RosterMember; InvitationPage: InvitationPage; Invitation: Invitation; InvitationIssued: InvitationIssued; }
 export const schemas = {
   "Me": {
     "type": "object",
@@ -762,6 +767,183 @@ export const schemas = {
     "required": [
       "items",
       "nextCursor"
+    ],
+    "additionalProperties": false
+  },
+  "RosterMemberPage": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/RosterMember"
+        }
+      },
+      "nextCursor": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "items",
+      "nextCursor"
+    ],
+    "additionalProperties": false
+  },
+  "RosterMember": {
+    "type": "object",
+    "properties": {
+      "userId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "displayName": {
+        "type": "string"
+      },
+      "role": {
+        "enum": [
+          "owner",
+          "admin",
+          "member"
+        ]
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      }
+    },
+    "required": [
+      "userId",
+      "displayName",
+      "role",
+      "createdAt"
+    ],
+    "additionalProperties": false
+  },
+  "InvitationPage": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Invitation"
+        }
+      },
+      "nextCursor": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "items",
+      "nextCursor"
+    ],
+    "additionalProperties": false
+  },
+  "Invitation": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "scopeType": {
+        "enum": [
+          "project",
+          "trip"
+        ]
+      },
+      "scopeId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "expiresAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "status": {
+        "enum": [
+          "pending",
+          "consumed",
+          "revoked",
+          "expired"
+        ]
+      }
+    },
+    "required": [
+      "id",
+      "scopeType",
+      "scopeId",
+      "createdAt",
+      "expiresAt",
+      "status"
+    ],
+    "additionalProperties": false
+  },
+  "InvitationIssued": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "scopeType": {
+        "enum": [
+          "project",
+          "trip"
+        ]
+      },
+      "scopeId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "expiresAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "status": {
+        "enum": [
+          "pending",
+          "consumed",
+          "revoked",
+          "expired"
+        ]
+      },
+      "invitationUrl": {
+        "type": "string",
+        "format": "uri",
+        "readOnly": true,
+        "description": "One-time sensitive same-origin /invite#secret URL. Never logged or returned again. Swagger execution disabled."
+      }
+    },
+    "required": [
+      "id",
+      "scopeType",
+      "scopeId",
+      "createdAt",
+      "expiresAt",
+      "status",
+      "invitationUrl"
     ],
     "additionalProperties": false
   }

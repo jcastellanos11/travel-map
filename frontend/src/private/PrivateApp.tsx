@@ -46,6 +46,8 @@ export default function PrivateApp() {
     loadVisits: controller.loadVisits, selectVisit: controller.selectVisit, openVisitEditor: controller.openVisitEditor,
     searchPlaces: controller.searchPlaces, clearPlaces: controller.clearPlaces, cancelPlaces: controller.cancelPlaces, saveVisit: controller.saveVisit,
     loadMap: controller.loadMap, showMapGroup: controller.showMapGroup, fitMap: controller.fitMap, openMapVisit: controller.openMapVisit,
+    showCollaboration: controller.showCollaboration, collaborationCurrent: controller.collaborationCurrent,
+    collaborationFailure: controller.collaborationFailure, refreshCollaboration: controller.refreshCollaboration, leaveResource: controller.leaveResource,
     logout: async () => { await controller.logout(); if (controller.getSnapshot().phase === 'anonymous') channelRef.current?.postMessage('invalidate'); },
   };
   const projection = state.phase === 'ready' && state.map.status === 'ready' ? state.map : null;

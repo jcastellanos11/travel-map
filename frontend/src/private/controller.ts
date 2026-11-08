@@ -24,6 +24,7 @@ export type Snapshot = {
   phase: 'ready'; route: AppRoute; user: CurrentUser;
   projects: ListState<Project>; scope: ScopeState;
   mutation: { pending: boolean; error?: string }; formVersion: number; map: MapState;
+  collaborationOpen?: boolean; collaborationNotice?: string;
 };
 const safeMessage = (error: unknown) => error instanceof ApiError ? error.message : 'The request could not be completed. Please retry.';
 export function tripCreationHint(project: Project, user: CurrentUser): 'allowed' | 'server-check' {
@@ -49,7 +50,11 @@ export class AppController {
   }
   getSnapshot = (): Snapshot => this.snapshot;
   subscribe = (listener: () => void) => { this.listeners.add(listener); return () => { this.listeners.delete(listener); }; };
-  private publish(snapshot: Snapshot) { this.snapshot = snapshot; this.listeners.forEach(listener => listener()); }
+  private publish(snapshot: Snapshot) {
+    this.snapshot = snapshot.phase === 'ready' && snapshot.scope.status !== 'project'
+      ? { ...snapshot, collaborationOpen: false, collaborationNotice: undefined } : snapshot;
+    this.listeners.forEach(listener => listener());
+  }
   private cancel() { this.generation++; this.requests.forEach(request => request.abort()); this.requests.clear(); }
   private request(key: string) {
     this.requests.get(key)?.abort();
@@ -381,6 +386,55 @@ export class AppController {
   };
   createProject = async (input: ProjectCreate) => { await this.create('project', input); };
   createTrip = async (input: TripCreate) => { await this.create('trip', input); };
+  showCollaboration = (open: boolean) => {
+    if (this.snapshot.phase === 'ready' && this.snapshot.scope.status === 'project') this.publish({ ...this.snapshot, collaborationOpen: open, collaborationNotice: undefined });
+  };
+  collaborationCurrent = (actor: string, project: string, version: number) => {
+    const state = this.snapshot;
+    return state.phase === 'ready' && state.scope.status === 'project' && state.user.id === actor
+      && state.scope.project.id === project && state.formVersion === version && state.collaborationOpen === true;
+  };
+  collaborationFailure = async (error: unknown) => {
+    if (this.fail(error) || this.snapshot.phase !== 'ready') return;
+    if (error instanceof ApiError && [403, 404].includes(error.status ?? 0)) {
+      const state = this.snapshot;
+      // A denied administrative action is not proof of logout or removal. Clear
+      // all affected private presentation and return safely; re-open to revalidate.
+      this.cancel(); this.navigation.go('/app', true);
+      this.publish({ ...state, route: { kind: 'home' }, scope: { status: 'error', message: `${safeMessage(error)} Reopen an authorized Project or Trip to check current access.` },
+        projects: { status: 'loading' }, map: { status: 'idle' }, mutation: { pending: false }, formVersion: this.generation });
+      await this.loadProjects();
+    }
+  };
+  refreshCollaboration = async (message: string) => {
+    const state = this.snapshot;
+    if (state.phase !== 'ready' || state.scope.status !== 'project') return;
+    const actor = state.user.id, project = state.scope.project.id;
+    const checking = this.verify(), generation = this.generation;
+    await checking;
+    const current = this.snapshot;
+    if (generation === this.generation && current.phase === 'ready' && current.user.id === actor
+      && current.scope.status === 'project' && current.scope.project.id === project)
+      this.publish({ ...current, collaborationOpen: true, collaborationNotice: message });
+  };
+  leaveResource = async () => {
+    const state = this.snapshot;
+    if (state.phase !== 'ready' || state.mutation.pending || !['project', 'trip'].includes(state.scope.status)) return;
+    const path = state.scope.status === 'project' ? `/api/v1/projects/${state.scope.project.id}/leave`
+      : state.scope.status === 'trip' ? `/api/v1/trips/${state.scope.trip.id}/leave` : '';
+    const request = this.request('mutation');
+    this.publish({ ...state, mutation: { pending: true } });
+    try {
+      await this.client.mutate('POST', path, undefined, { signal: request.signal });
+      if (!request.current()) return;
+      // Drop descendants/markers/invitation UI before loading any new private state.
+      await this.navigate('/app');
+    } catch (error) {
+      if (!request.current()) return;
+      await this.collaborationFailure(error);
+      if (this.snapshot.phase === 'ready' && request.current()) this.publish({ ...this.snapshot, mutation: { pending: false, error: `${safeMessage(error)} Departure was not confirmed.` } });
+    }
+  };
   private async create(kind: 'project' | 'trip', input: ProjectCreate | TripCreate) {
     const state = this.snapshot;
     if (state.phase !== 'ready' || state.mutation.pending || kind === 'trip' && state.scope.status !== 'project') return;

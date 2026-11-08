@@ -7,8 +7,10 @@ import TripVisits from './visits/TripVisits.tsx';
 import type { VisitActions } from './visits/TripVisits.tsx';
 import MapControls from './map/MapControls.tsx';
 import type { MapActions } from './map/MapControls.tsx';
+import { LeaveResource, ProjectCollaboration } from './collaboration/Collaboration.tsx';
+import type { CollaborationActions } from './collaboration/Collaboration.tsx';
 
-type Actions = Pick<AppController, 'navigate' | 'verify' | 'logout' | 'createProject' | 'createTrip' | 'loadProjects' | 'loadMoreTrips'> & VisitActions & MapActions;
+type Actions = Pick<AppController, 'navigate' | 'verify' | 'logout' | 'createProject' | 'createTrip' | 'loadProjects' | 'loadMoreTrips'> & VisitActions & MapActions & CollaborationActions;
 export default function AppView({ state, actions, onLogin }: { state: Snapshot; actions: Actions; onLogin(): void }) {
   function link(event: MouseEvent<HTMLAnchorElement>, path: string) {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -51,13 +53,16 @@ export default function AppView({ state, actions, onLogin }: { state: Snapshot; 
         {scope.status === 'not-found' && <><h2>Page not found</h2><a href="/app" onClick={e => link(e, '/app')}>Return to your map</a></>}
         {scope.status === 'error' && <><p role="alert">{scope.message}</p><button onClick={() => void actions.verify()}>Check access again</button></>}
         {scope.status === 'trip' && <><p className="eyebrow">TRIP</p><h2>{scope.trip.name}</h2>{scope.trip.description && <p className="trip-description">{scope.trip.description}</p>}<p className="muted">Only this Trip’s authorized context is shown here.</p>
-          <TripVisits workspace={scope} actions={actions} user={state.user} pending={state.mutation.pending} version={state.formVersion} /></>}
+          <TripVisits workspace={scope} actions={actions} user={state.user} pending={state.mutation.pending} version={state.formVersion} />
+          <LeaveResource kind="trip" pending={state.mutation.pending} leave={actions.leaveResource} /></>}
         {scope.status === 'project' && <><p className="eyebrow">PROJECT</p><h2>{scope.project.name}</h2>
           <h3>Trips</h3>
           {scope.trips.status === 'ready' && <>{!scope.trips.page.items.length && <p>No Trips yet.</p>}<ul className="trip-links">{scope.trips.page.items.map(trip => <li key={trip.id}><a href={`/app/trips/${trip.id}`} onClick={e => link(e, `/app/trips/${trip.id}`)}>{trip.name}</a></li>)}</ul>
             {scope.trips.page.nextCursor && <button disabled={scope.trips.loadingMore} onClick={() => void actions.loadMoreTrips()}>{scope.trips.loadingMore ? 'Loading…' : 'Load more Trips'}</button>}</>}
           <p className="muted">{tripCreationHint(scope.project, state.user) === 'allowed' ? 'You may request a new Trip in this Project.' : 'Only the Owner and Admins may create Trips here. The server checks your current permission when you save.'}</p>
           <CreationForms kind="trip" pending={state.mutation.pending} onProject={actions.createProject} onTrip={actions.createTrip} />
+          <ProjectCollaboration project={scope.project} actorId={state.user.id} version={state.formVersion}
+            trips={scope.trips.status === 'ready' ? scope.trips.page.items : []} open={Boolean(state.collaborationOpen)} notice={state.collaborationNotice} pending={state.mutation.pending} actions={actions} />
         </>}
       </div>
       {state.mutation.error && <p role="alert">{state.mutation.error}</p>}

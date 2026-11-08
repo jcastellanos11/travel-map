@@ -8,6 +8,27 @@ approximate catalog markers, grouped Visit selection and server-backed filters.
 The existing React/Leaflet demo and the E3.1 GET-only diagnostic remain separate.
 There is no private media integration.
 
+E3.5 adds explicit **Manage members & invitations** in an authorized Project.
+The management roster is requested only when opened; Owner/Admin permission is
+checked by the server. Owner-only role changes, participant removal, paginated
+invitation management and Project/Trip departure require explicit actions and
+confirmation. Direct Trip views have no Project administration or participant list.
+
+In Project management, choose a Project Member or loaded Trip Guest invitation
+scope, then **New invitation** and **Create single-use invitation**. No email is
+sent: the first authenticated holder can redeem the seven-day bearer link. Copy
+privately before closing; the one-time link is kept only in the open creation
+form. It is cleared on close/session/scope revalidation and cannot be recovered
+from listings. The form also provides a separate non-secret app destination link.
+
+Recipients use the existing `/invite#secret` page: its script removes the fragment,
+Google login opens a separate tab, then they return to the original invitation tab
+and explicitly accept. Do not reload that tab. The existing server page does not
+redirect to the granted resource; after acceptance reopen `/app` and select the
+Project, or use the separately shared canonical Trip app link. E3.5 does not modify
+this backend-owned flow. Full endpoint matrix, limitations and multi-account
+acceptance: [E3.5 validation](../docs/E3_5_VALIDATION.md).
+
 Use Node 24.x and npm 11.x, with the existing local backend/Supabase configuration.
 From the repository root:
 
