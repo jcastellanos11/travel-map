@@ -1,0 +1,250 @@
+{
+  "scope": "Synthetic local Node/macOS only; no cloud/native-workerd inference",
+  "node": "v24.21.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "versions": {
+    "aom": "3.15.1",
+    "archive": "3.8.9",
+    "cairo": "1.18.6",
+    "cgif": "0.5.4",
+    "exif": "0.6.26",
+    "expat": "2.8.5",
+    "ffi": "3.8.0",
+    "fontconfig": "2.18.3",
+    "freetype": "2.14.3",
+    "fribidi": "1.0.17",
+    "glib": "2.90.0",
+    "harfbuzz": "14.5.0",
+    "heif": "1.23.5",
+    "highway": "1.4.0",
+    "imagequant": "2.4.1",
+    "lcms": "2.19.1",
+    "mozjpeg": "0826579",
+    "pango": "1.58.2",
+    "pixman": "0.46.4",
+    "png": "1.6.58",
+    "proxy-libintl": "0.5",
+    "rsvg": "2.63.2",
+    "tiff": "4.7.2",
+    "uhdr": "2.0.2",
+    "vips": "8.18.7",
+    "webp": "1.6.0",
+    "xml2": "2.15.4",
+    "zlib-ng": "2.3.3",
+    "sharp": "0.35.5"
+  },
+  "policy": {
+    "maxInputBytes": 20000000,
+    "maxBatch": 10,
+    "userBytes": 500000000,
+    "maxPixels": 40000000,
+    "maxEdge": 12000,
+    "outputCaps": {
+      "archival": 64000000,
+      "display": 4000000,
+      "thumbnail": 500000
+    }
+  },
+  "assertions": [
+    {
+      "id": "jpeg: decode, GPS proof and all-three-output sanitization",
+      "status": "FAIL",
+      "error": "Unknown file format"
+    },
+    {
+      "id": "png: decode, GPS proof and all-three-output sanitization",
+      "status": "FAIL",
+      "error": "Unknown file format"
+    },
+    {
+      "id": "webp: decode, GPS proof and all-three-output sanitization",
+      "status": "FAIL",
+      "error": "Unknown file format"
+    },
+    {
+      "id": "EXIF orientation 1: pixel corner verification",
+      "status": "FAIL",
+      "error": "Unknown file format"
+    },
+    {
+      "id": "EXIF orientation 2: pixel corner verification",
+      "status": "FAIL",
+      "error": "Unknown file format"
+    },
+    {
+      "id": "EXIF orientation 3: pixel corner verification",
+      "status": "FAIL",
+      "error": "Unknown file format"
+    },
+    {
+      "id": "EXIF orientation 4: pixel corner verification",
+      "status": "FAIL",
+      "error": "Unknown file format"
+    },
+    {
+      "id": "EXIF orientation 5: pixel corner verification",
+      "status": "FAIL",
+      "error": "Unknown file format"
+    },
+    {
+      "id": "EXIF orientation 6: pixel corner verification",
+      "status": "FAIL",
+      "error": "Unknown file format"
+    },
+    {
+      "id": "EXIF orientation 7: pixel corner verification",
+      "status": "FAIL",
+      "error": "Unknown file format"
+    },
+    {
+      "id": "EXIF orientation 8: pixel corner verification",
+      "status": "FAIL",
+      "error": "Unknown file format"
+    },
+    {
+      "id": "ICC Display-P3 conversion to untagged sRGB with pixel verification",
+      "status": "FAIL",
+      "error": "Unknown file format"
+    },
+    {
+      "id": "PNG/WebP transparency preserved",
+      "status": "PASS",
+      "elapsedMs": 5.569499999999948
+    },
+    {
+      "id": "declared MIME mismatch and active/vector payloads rejected",
+      "status": "PASS",
+      "elapsedMs": 0.16925000000003365
+    },
+    {
+      "id": "truncation and trailing encoded payloads rejected",
+      "status": "PASS",
+      "elapsedMs": 0.05037500000003092
+    },
+    {
+      "id": "corrupt compressed PNG rejected despite valid signature/CRC",
+      "status": "PASS",
+      "elapsedMs": 0.3532920000000104
+    },
+    {
+      "id": "malformed EXIF is rejected or fully sanitized, never copied",
+      "status": "PASS",
+      "elapsedMs": 1.6417920000000095,
+      "outcome": "rejected"
+    },
+    {
+      "id": "animated WebP and APNG explicitly rejected",
+      "status": "FAIL",
+      "error": "The expression evaluated to a falsy value:\n\n  assert.ok((await sharp(f.animation,{animated:true}).metadata()).pages>1)\n"
+    },
+    {
+      "id": "16-bit PNG fails closed instead of silently losing precision",
+      "status": "PASS",
+      "elapsedMs": 0.1587089999999307
+    },
+    {
+      "id": "valid 50MP compressible PNG bomb rejected before pixel processing",
+      "status": "PASS",
+      "elapsedMs": 0.09449999999992542,
+      "encodedBytes": 145876,
+      "generatedDecodedBytes": 150010000,
+      "pixelCount": 50000000
+    },
+    {
+      "id": "panorama preserves aspect and derivative bounding boxes without enlargement",
+      "status": "PASS",
+      "elapsedMs": 90.19554100000005
+    },
+    {
+      "id": "actual encoded byte boundary 19900000",
+      "status": "FAIL",
+      "error": "Unknown file format"
+    },
+    {
+      "id": "actual encoded byte boundary 20000000",
+      "status": "FAIL",
+      "error": "Unknown file format"
+    },
+    {
+      "id": "actual encoded byte boundary 20000001",
+      "status": "PASS",
+      "elapsedMs": 2.202333000000067,
+      "bytes": 20000001,
+      "expected": "rejected"
+    },
+    {
+      "id": "12MP isolated process resource/time observation",
+      "status": "PASS",
+      "elapsedMs": 3568.5018330000003
+    },
+    {
+      "id": "external process watchdog kills a stuck job",
+      "status": "PASS",
+      "elapsedMs": 306.3237910000007,
+      "timeoutMs": 300,
+      "signal": "SIGKILL"
+    }
+  ],
+  "formats": [
+    {
+      "format": "heic",
+      "node": "Blocked",
+      "reason": "sips fixture encoder unavailable"
+    },
+    {
+      "format": "heif",
+      "node": "Blocked",
+      "reason": "sips fixture encoder unavailable"
+    }
+  ],
+  "benchmark": {
+    "inputBytes": 6313733,
+    "pixels": 12000000,
+    "exit": 0,
+    "signal": null,
+    "ok": true,
+    "elapsedMs": 3092.8240830000004,
+    "maxRSSKiB": 873040,
+    "cpuMicroseconds": 3596749,
+    "variants": {
+      "archival": {
+        "bytes": 30966260,
+        "width": 4000,
+        "height": 3000,
+        "chunks": [
+          "VP8L"
+        ],
+        "hasAlpha": false
+      },
+      "display": {
+        "bytes": 2670814,
+        "width": 2560,
+        "height": 1920,
+        "chunks": [
+          "VP8 "
+        ],
+        "hasAlpha": false
+      },
+      "thumbnail": {
+        "bytes": 13002,
+        "width": 480,
+        "height": 360,
+        "chunks": [
+          "VP8 "
+        ],
+        "hasAlpha": false
+      }
+    }
+  },
+  "limitations": [
+    "Synthetic fixtures only, not iPhone/HDR/hostile corpus certification",
+    "V8 heap flag does not bound native memory",
+    "Sips probes write synthetic intermediate fixtures only, not an approved beta processing path"
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 15,
+    "skipped": 0
+  }
+}

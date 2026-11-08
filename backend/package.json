@@ -17,14 +17,16 @@
     "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.tools.json",
     "lint": "eslint . --max-warnings 0",
     "build": "wrangler deploy --dry-run --env test --outdir dist",
-    "test": "npm run build && node --test tests/http.test.ts tests/runtime.test.ts tests/migration-safety.test.ts tests/artifacts.test.ts tests/identity.test.ts tests/trips.test.ts tests/geography.test.ts tests/collaboration.test.ts tests/invitations.test.ts tests/documentation.test.ts",
+    "test": "npm run build && node --test tests/http.test.ts tests/runtime.test.ts tests/migration-safety.test.ts tests/artifacts.test.ts tests/identity.test.ts tests/trips.test.ts tests/geography.test.ts tests/collaboration.test.ts tests/invitations.test.ts tests/documentation.test.ts tests/media.test.ts",
     "test:db": "npm run build && node --env-file-if-exists=.env --test tests/database.test.ts tests/e1.integration.test.ts tests/trips.integration.test.ts tests/geography.integration.test.ts tests/collaboration.integration.test.ts tests/invitations.integration.test.ts",
     "db:migrate": "node --env-file-if-exists=.env scripts/migrate.ts",
     "db:local:test": "npm run build && node scripts/local-postgres.ts",
     "check": "npm run lint && npm run typecheck && npm test",
     "test:supabase": "node --test tests/supabase.integration.test.ts",
     "dev:frontend": "node scripts/frontend-dev.ts",
-    "test:frontend": "node scripts/frontend-dev.ts --prepare-only && npm run build && node --test tests/frontend-assets.test.ts"
+    "test:frontend": "node scripts/frontend-dev.ts --prepare-only && npm run build && node --test tests/frontend-assets.test.ts",
+    "db:media:test": "npm run build && node scripts/media-local-postgres.ts --all",
+    "test:media": "node --test tests/media.test.ts"
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "12.1.0",

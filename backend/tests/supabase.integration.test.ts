@@ -7,7 +7,7 @@ import { test } from 'node:test';
 import { GoTrueClient } from '@supabase/auth-js';
 import pg from 'pg';
 import { createTestHarness } from 'wrangler';
-import { migrate } from '../scripts/migrations.ts';
+import { migrate, loadMigrations } from '../scripts/migrations.ts';
 import { handleRequest } from '../src/app.ts';
 import { identityConfig } from '../src/env.ts';
 import { PostgresRepository } from '../src/infrastructure/postgres.ts';
@@ -54,7 +54,9 @@ test('actual local Supabase PKCE/getUser + app sessions; synthetic Google identi
       VALUES($1,$2,$3,'google',now(),now())`,[subject,accountId,JSON.stringify({sub:subject,email,email_verified:true})]);
     await authDb.query(`CREATE DATABASE ${database}`);created=true;
     const dbUrl=new URL(env.DB_URL!);dbUrl.pathname=`/${database}`;
-    db=new pg.Client({connectionString:dbUrl.toString()});await db.connect();await migrate(db,'up');
+    // Preserve the provider regression at its previously implemented E2.4 schema.
+    // E4.1 migrations use only the separate marked disposable-cluster harness.
+    db=new pg.Client({connectionString:dbUrl.toString()});await db.connect();await migrate(db,'up',(await loadMigrations()).slice(0,6));
     await authDb.query(`CREATE ROLE ${role} LOGIN NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE NOINHERIT`);roleCreated=true;
     await db.query(`GRANT USAGE ON SCHEMA travel_map TO ${role}`);
     await db.query(`GRANT EXECUTE ON FUNCTION travel_map.oauth_begin(text,text),travel_map.oauth_consume(text),

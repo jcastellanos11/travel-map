@@ -20,5 +20,7 @@
   "src/modules/projects/types.ts": "7e316457a30be0fc2cd16a913221e4fc4dc99cb3ce910bdd6656b7c35325f34e",
   "src/modules/identity/types.ts": "31299f662cc47ac94b3ca8b63d53b2e686415ab57c7b7bcf862750dd3d086c6f",
   "src/modules/geography/types.ts": "20d942c44512015a3e711dc3cfa14c6907ab966e9ff29507e6d9bfa5b8d6a3b3",
-  "src/modules/documentation/routes.ts": "47d30b4ccf2ede978c362889f8ca4f7bb262e808ead74e117c0fd4fe333561dd"
+  "src/modules/documentation/routes.ts": "47d30b4ccf2ede978c362889f8ca4f7bb262e808ead74e117c0fd4fe333561dd",
+  "src/modules/media/types.ts": "d54ba291a13d70c133a737f2c6761893825f7f9fef87ae93a9587da84ecf5d5f",
+  "migrations/0007_media_foundation.up.sql": "1e86f61da8e194d18f8d764a895f52673536b8faeeeea237f385c5f00bed72b8"
 }

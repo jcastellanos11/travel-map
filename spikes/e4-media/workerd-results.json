@@ -1,0 +1,122 @@
+{
+  "scope": "Actual LOCAL workerd; R2/Images are LOCAL EMULATORS, not cloud verification",
+  "assertions": [
+    {
+      "id": "workerd cannot read the host filesystem marker",
+      "status": "PASS"
+    },
+    {
+      "id": "no native browser image decoder APIs in workerd",
+      "status": "PASS"
+    },
+    {
+      "id": "native addon loading unavailable for the installed Sharp build",
+      "status": "PASS"
+    },
+    {
+      "id": "Worker tmp is writable but request-ephemeral, not durable media storage",
+      "status": "PASS"
+    },
+    {
+      "id": "local R2 contract: put/get/head/conditional immutable write/delete",
+      "status": "PASS"
+    },
+    {
+      "id": "local Images JPEG/PNG/WebP conversion and output metadata stripping",
+      "status": "PASS"
+    }
+  ],
+  "images": [
+    {
+      "format": "jpeg",
+      "status": 200,
+      "chunks": [
+        "VP8 "
+      ],
+      "output": {
+        "bytes": 208,
+        "width": 64,
+        "height": 40
+      },
+      "privacy": "Verified output chunk allowlist"
+    },
+    {
+      "format": "png",
+      "status": 200,
+      "chunks": [
+        "VP8X",
+        "ALPH",
+        "VP8 "
+      ],
+      "output": {
+        "bytes": 302,
+        "width": 64,
+        "height": 40
+      },
+      "privacy": "Verified output chunk allowlist"
+    },
+    {
+      "format": "webp",
+      "status": 200,
+      "chunks": [
+        "VP8X",
+        "ALPH",
+        "VP8 "
+      ],
+      "output": {
+        "bytes": 274,
+        "width": 64,
+        "height": 40
+      },
+      "privacy": "Verified output chunk allowlist"
+    },
+    {
+      "format": "heic",
+      "status": "rejected",
+      "error": "Unexpected error response 500: Error: source: bad seek to 1530\nsource: bad seek to 1500\nsource: bad seek to 1499\nheif: Error while loading plugin: Support for this compression format has not been built in: HEVC (a suitable decoder plugin is libde265) (11.6003)\n    at Sharp.toBuffer (file:///Users/luffy/Documents/travel-map/spikes/tools/node_modules/sharp/dist/output.mjs:159:17)\n    at runTransform (/Users/luffy/Documents/travel-map/spikes/tools/node_modules/miniflare/dist/src/index.js:135694:37)\n    at imagesLocalFetcher (/Users/luffy/Documents/travel-map/spikes/tools/node_modules/miniflare/dist/src/index.js:135583:14)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async #handleLoopbackCustomFetchService (/Users/luffy/Documents/travel-map/spikes/tools/node_modules/miniflare/dist/src/index.js:138097:22)\n    at async #handleLoopback (/Users/luffy/"
+    },
+    {
+      "format": "heif",
+      "status": "rejected",
+      "error": "Unexpected error response 500: Error: source: bad seek to 1530\nsource: bad seek to 1500\nsource: bad seek to 1499\nheif: Error while loading plugin: Support for this compression format has not been built in: HEVC (a suitable decoder plugin is libde265) (11.6003)\n    at Sharp.toBuffer (file:///Users/luffy/Documents/travel-map/spikes/tools/node_modules/sharp/dist/output.mjs:159:17)\n    at runTransform (/Users/luffy/Documents/travel-map/spikes/tools/node_modules/miniflare/dist/src/index.js:135694:37)\n    at imagesLocalFetcher (/Users/luffy/Documents/travel-map/spikes/tools/node_modules/miniflare/dist/src/index.js:135583:14)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async #handleLoopbackCustomFetchService (/Users/luffy/Documents/travel-map/spikes/tools/node_modules/miniflare/dist/src/index.js:138097:22)\n    at async #handleLoopback (/Users/luffy/"
+    }
+  ],
+  "capabilities": {
+    "imageDecoder": "undefined",
+    "createImageBitmap": "undefined",
+    "nativeAddon": "The process.dlopen method is not implemented",
+    "hostVisible": false
+  },
+  "vfs": [
+    {
+      "existed": false,
+      "writeRead": true
+    },
+    {
+      "existed": false,
+      "writeRead": true
+    }
+  ],
+  "objects": {
+    "size": 4,
+    "read": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "conditionalRejected": true,
+    "unchanged": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "deleted": true
+  },
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0
+  }
+}

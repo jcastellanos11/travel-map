@@ -257,3 +257,26 @@ actions. Existing audit rows and append-only triggers are preserved.
 Down is disposable-only, restores dispatcher and old audit action rules NOT VALID
 so historical invitation events survive without rewriting append-only records. New
 writes still obey old rules. Membership effects are never undone by migration down.
+
+## E4.1 implemented SQL/domain foundation — 2026-11-08
+
+Migration0007 introduces Photo, PhotoAsset/artifact journal, UserMediaQuota,
+UploadOperation, FileSlot, QuotaReservation, ProcessingAttempt and MediaTask/outbox.
+This is validated only in disposable PostgreSQL; no persistent migration or media
+HTTP/storage/processing implementation. Photo has immutable Visit/creator and separate
+quota responsibility (initially the same contributor, not transferable here).
+All FKs RESTRICT; all eight private tables FORCE RLS with owner-only policies.
+
+Binding beta update: all retained archival/display/thumbnail images must be sanitized
+reconstructions; no byte-identical/raw original or EXIF/GPS/date suggestions. Opaque
+keys are private technical references. Decimal limits are10 files,20000000 input bytes,
+500000000 charged/reserved bytes per user and2592000seconds trash retention. HEIC/HEIF
+remain disabled pending portable-codec/containment proof. Earlier E4 examples are
+superseded for these fields; no precise location columns/features are added.
+
+Reservation finalization, fencing, cleanup and trash/purge/restore transitions are SQL
+foundations with restricted synthetic evidence tests. Actual object verification
+remains future work; SQL is not an object-store transaction. Maintenance audit events
+have explicit technical attribution and no fake user. Existing audit history and
+append-only controls remain intact. [Exact model/security](../backend/src/modules/media/README.md),
+[contract](E4_MEDIA_CONTRACT.md), [validation](../backend/E4_1_VALIDATION.md).

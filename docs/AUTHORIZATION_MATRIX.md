@@ -276,3 +276,29 @@ roster, emails or hidden profiles. Invitations grant Member or Trip Guest only.
 A fresh valid invitation explicitly authorizes rejoining as Member/Guest; consumed
 links never restore revoked access. Issuer-authority persistence is still unspecified:
 conservative validation requires current Owner/Admin authority at redemption.
+
+## E4.1 approved media foundation — 2026-11-08
+
+SQL/domain foundation only; **no new HTTP media operation is implemented**. Every
+permission requires a valid session and active Project/Trip/Visit ancestry. Guest
+context remains explicit-Trip-only, without parent Project metadata/rosters/siblings.
+
+| Operation | Owner/Admin | Member | Trip-only Guest | Former contributor |
+| --- | --- | --- | --- | --- |
+| Active photo metadata/derivative authorization | Yes | Authorized Trip | Explicit Trip | No |
+| Upload intent/reservation | Own contribution | Own contribution | Own authorized Trip | No |
+| Sanitized archival authorization | Yes | Own photo/current access | Own photo/current access | No |
+| Description/trash/restore | Yes | Own photo/current access | Own photo/current access | No |
+| Ordinary media while trashed/processing/failed/expired | No | No | No | No |
+| Permanent purge | No browser role; technical expired-task boundary only | Same | Same | No |
+
+Departure preserves photos, creator and storage charge. Restore is before30days,
+same Photo/Visit/creator, current authority, active ancestry and fresh trusted asset
+availability. Purge never precedes deadline; only confirmed per-asset deletion releases
+used bytes. Uncertain writes keep reservations. No ownership transfer or new Admin
+power is introduced. Role checks live in SQL through the existing four app RPCs; a
+separate NOLOGIN maintenance group has only two scoped job RPCs and no domain-table
+access, user impersonation or membership APIs.
+
+[Exact SQL matrix and authority](../backend/src/modules/media/README.md);
+[synthetic evidence and limits](../backend/E4_1_VALIDATION.md).

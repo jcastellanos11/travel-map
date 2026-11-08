@@ -152,3 +152,17 @@ Solo frontend y documentación; sin E4, backend, migraciones ni despliegue.
 - Cada PR incluye criterios de aceptación, rutas modificadas, cambio de esquema/migración, tests relevantes, efectos de seguridad y costos.
 - Si una integración externa requiere secreto, autorización de recursos o cobro, parar **solo esa acción**, continuar trabajo local viable y reportar claramente el bloqueo.
 - Dejar rastro de qué requisitos son aprobados y qué defaults técnicos siguen provisionales; PRD es la autoridad de producto.
+
+## E4.1 local foundation status — 2026-11-08
+
+E4.1 adds reversible0007 media schema/domain types, locked BIGINT quota/reservations,
+idempotent per-file intent, fenced attempts/artifact journal/outbox, live media SQL
+authorization, trash/restore foundations and a narrowly privileged maintenance group.
+Validated only in a newly marked disposable native PostgreSQL cluster. No persistent
+migration, HTTP media routes, storage, processor, bridge, scheduler or cloud resources.
+
+The explicit E4.1 approvals replace historical raw-original/EXIF-suggestion examples
+with sanitized archival images and no GPS feature. See [contract](E4_MEDIA_CONTRACT.md)
+and [actual validation](../backend/E4_1_VALIDATION.md). E4.2 requires separate approval
+and must verify real object semantics, private transport, portable codecs and hard
+OS containment before processing. E4.1 does not claim completed E4 photo functionality.

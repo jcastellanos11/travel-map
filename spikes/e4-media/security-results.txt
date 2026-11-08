@@ -1,0 +1,28 @@
+✔ application sources/configuration import no E4 experiments or media bindings (20.063833ms)
+✔ current production artifacts contain no experimental codec/storage/probe code (17.151667ms)
+✔ storage isolation rejects an unapproved root before creating it (2.266708ms)
+✔ private filesystem store uses0700 root/0600 objects outside public assets (8.757834ms)
+✔ opaque keys, traversal and symlink objects fail closed (0.842292ms)
+✔ streamed object write is bounded, verified and immutable/idempotent (44.602917ms)
+✔ failed promotion is invisible; orphan temp recovery is scoped and deletion idempotent (4.455625ms)
+✔ objects persist across fresh adapter instances; authorization precedes object access (14.378292ms)
+✔ objects survive an actual fresh Node process, without claiming power-loss durability (31.334583ms)
+✔ reference batch bound and per-file validation preserve independent outcomes (0.202208ms)
+✔ reference authorization owner with creator/current access rules (0.060917ms)
+✔ reference authorization admin with creator/current access rules (0.063791ms)
+✔ reference authorization member with creator/current access rules (0.03ms)
+✔ reference authorization guest with creator/current access rules (0.019667ms)
+✔ reference authorization outsider with creator/current access rules (0.01475ms)
+✔ reference quota: independent concurrent reservations never exceed500MB (0.105208ms)
+✔ reference quota: replay is one reservation/finalization; changed intent conflicts (0.077584ms)
+✔ reference quota: partial files independent, failures retain reservations until writes/deletion confirmed (0.0605ms)
+✔ reference quota: unexpected output expansion never overcommits the reservation (0.027709ms)
+✔ controlled30-day clock: trash retains quota, restore preserves charge, purge releases only after confirmed deletion (0.076791ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 140.467459

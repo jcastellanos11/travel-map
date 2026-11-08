@@ -23,7 +23,7 @@ test('E2.4 invitations: native security, lifecycle and concurrency', { skip: !su
     await admin.query(`CREATE DATABASE ${database} OWNER ${ownerRole}`); created = true;
     const url = new URL(base); url.pathname = `/${database}`;
     db = new pg.Client({ connectionString: url.toString() }); await db.connect(); const sql = db;
-    const all = await loadMigrations(), previous = all.slice(0, 5), migration = all[5]; assert.ok(migration); assert.equal(all.length, 6);
+    const all = (await loadMigrations()).slice(0, 6), previous = all.slice(0, 5), migration = all[5]; assert.ok(migration); assert.equal(all.length, 6);
     const owned = async (direction: 'up' | 'down', set: Migration[] = all) => { await sql.query(`SET ROLE ${ownerRole}`); try { return await migrate(sql, direction, set); } finally { await sql.query('RESET ROLE'); } };
     await owned('up', previous);
     await admin.query(`CREATE ROLE ${apiRole} LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS NOINHERIT`); roles.push(apiRole);
@@ -198,7 +198,7 @@ test('E2.4 invitations: native security, lifecycle and concurrency', { skip: !su
     await t.test('non-test-name down guard and complete disposable reverse/reapply chain', async () => {
       const name = `travel_map_guard_${suffix}`; await admin.query(`CREATE DATABASE ${name} OWNER ${ownerRole}`); guardDatabases.push(name);
       const guardUrl = new URL(url); guardUrl.pathname = `/${name}`; const guard = new pg.Client({ connectionString: guardUrl.toString() }); await guard.connect();
-      try { await guard.query(`SET ROLE ${ownerRole}`); await migrate(guard, 'up'); await assert.rejects(migrate(guard, 'down'), { code: '42501' }); } finally { await guard.end(); }
+      try { await guard.query(`SET ROLE ${ownerRole}`); await migrate(guard, 'up', all); await assert.rejects(migrate(guard, 'down', all), { code: '42501' }); } finally { await guard.end(); }
       for (let n = 0; n < 6; n++) await owned('down'); assert.equal((await sql.query("SELECT to_regnamespace('travel_map') x")).rows[0].x, null);
       assert.equal((await owned('up')).length, 6);
     });

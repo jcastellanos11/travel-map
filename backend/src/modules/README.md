@@ -11,7 +11,7 @@ One Worker composes modules through `src/app.ts`; there are no microservices.
 | `trips/` | Trip DTOs, request validation and routing | E2.1 implemented; inherited authorization enforced in SQL |
 | `geography/` | Controlled Places, Visit DTO/validation/routes, scoped map projections | E2.2 implemented; private SQL handlers; exact Visit points disabled |
 | `collaboration/` | Membership roster/actions, Project settings and archival | E2.3 implemented; exclusive Project locks and transactional audit in private SQL |
-| photos/uploads, quota | Private media lifecycle and atomic accounting | E4, not started |
+| `media/` | Private media domain types and SQL lifecycle/accounting contracts | E4.1 foundations only; no HTTP, storage or processing |
 | invitations, retention | Collaboration and assisted lifecycle procedures | E2.4/later approved scope, not started |
 
 SQL functions form the central authorization boundary for E1/E2.1/E2.2/E2.3: validate current

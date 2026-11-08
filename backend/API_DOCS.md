@@ -234,3 +234,12 @@ Browser QA verdict4/5: rendering and authenticated read/mutation work; the origi
 profile retains an external injection warning until the user uses a clean context
 or adjusts their extension. No claim that application code can suppress an external
 extension's violation while preserving CSP. No deployment, commit/push or new phase.
+
+## E4.1 source review — 2026-11-08
+
+Reviewed the new `src/modules/media/types.ts` and0007 SQL foundation. No media HTTP
+route is registered; production OpenAPI remains38 implemented operations. `/me.storage`
+retains its existing DTO shape, with SQL ledger-backed values after0007. The reviewed
+source manifest includes the new domain types and SQL, without adding proposed paths
+to OpenAPI. See [separate proposed media contract](../docs/E4_MEDIA_CONTRACT.md).
+No Swagger authentication, CSP, CSRF, Origin or production-access behavior changed.

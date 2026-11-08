@@ -424,3 +424,20 @@ Both are disabled for production/test and remote origins. Authenticated same-ori
 requests use the existing opaque cookie and automatic CSRF. Sensitive OAuth and
 invitation flows remain reference-only. No API/auth/security-policy behavior changed.
 Validation/drift mechanism and limitations: [API_DOCS](../backend/API_DOCS.md).
+
+## E4.1 media contract status — 2026-11-08
+
+The earlier media examples remain **unimplemented HTTP proposals**. Approved beta
+changes are recorded in [E4 media contract](E4_MEDIA_CONTRACT.md): decimal20,000,000
+bytes/file and500,000,000 bytes/user; reconstructed sanitized JPEG/PNG archival plus
+WebP display/thumbnail; no raw original, EXIF suggestion or GPS feature; HEIC/HEIF
+disabled until codec/containment gates. The proposed download name is `/archive`, not
+an unsanitized `/original`. No new path was added to production OpenAPI.
+
+E4.1 implements private `media.*` SQL actions and restricted job/accounting primitives
+for future services, not an upload/content/retrieval endpoint. `items`/internal paired
+cursor fields follow existing server pagination; the future HTTP layer must encode
+opaque nextCursor. Object keys, SHA256, technical claims, credentials and raw EXIF
+are not public DTO fields. Existing `/me.storage` shape stays unchanged; when0007
+is applied it derives current used/reserved values from the caller's ledger instead
+of hard-coded zeros. Persistent development has not been migrated.

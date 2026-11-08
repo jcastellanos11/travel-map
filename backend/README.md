@@ -250,3 +250,35 @@ Only APP_ENV=dev on the exact HTTPS loopback origin serves docs; prod/test404.
 No external CDN/validator or persistent credentials. npm run dev/build/typecheck
 prepare pinned local assets automatically. API behavior and database remain unchanged.
 [Usage, security, drift maintenance and actual checks](API_DOCS.md).
+
+## E4.1 — Private media SQL foundation (local only)
+
+`0007_media_foundation` adds domain/asset/intent/reservation/attempt/task records,
+atomic accounting, SQL authorization, trash/restoration foundations and a separate
+restricted maintenance group. No photo HTTP route, processor, storage adapter, media
+delivery or scheduler is implemented. See [module security boundary](src/modules/media/README.md),
+[E4.1 validation](E4_1_VALIDATION.md) and [future contract](../docs/E4_MEDIA_CONTRACT.md).
+
+Do **not** run the normal development migration command for this increment.
+`travel_map_dev` remains untouched. Use the existing installed PostgreSQL17+ binaries:
+
+```sh
+# From backend; supply only an existing binary directory, never a development URL.
+PG_BIN=/absolute/path/to/postgresql/bin npm run db:media:test
+```
+
+This starts a NEW native cluster on a random127.0.0.1 port, with a server marker,
+private generated data directory and marked test database. It rejects supplied
+DATABASE_URL/connection overrides, persistent port57422, unexpected data directory,
+marker or owner, and hosted endpoints. It runs E0–E4.1 disposable database regressions
+and removes only its generated cluster after successful shutdown. It neither reads
+.env nor reuses the Google-enabled Supabase stack. Test fixture credentials/data
+are synthetic and no image bytes are processed. `npm run check` includes media
+contract/safety checks, existing workerd/OpenAPI tests and a dry-run build.
+
+The maintenance group must be preprovisioned by an authorized administrator before
+a future separately approved migration, with the exact NOLOGIN/NOINHERIT/no-power/no-
+membership profile documented in the module README. E4.1 provisions it only inside
+the new test cluster. No persistent role or technical login/credential was created.
+Down refuses any media/history/nonzero charge and accepts only marked disposable
+E4.1 databases; no persistent down, deletion or migration is authorized here.

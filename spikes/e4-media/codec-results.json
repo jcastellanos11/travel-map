@@ -1,0 +1,691 @@
+{
+  "scope": "Synthetic local Node/macOS only; no cloud/native-workerd inference",
+  "node": "v24.21.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "versions": {
+    "aom": "3.15.1",
+    "archive": "3.8.9",
+    "cairo": "1.18.6",
+    "cgif": "0.5.4",
+    "exif": "0.6.26",
+    "expat": "2.8.5",
+    "ffi": "3.8.0",
+    "fontconfig": "2.18.3",
+    "freetype": "2.14.3",
+    "fribidi": "1.0.17",
+    "glib": "2.90.0",
+    "harfbuzz": "14.5.0",
+    "heif": "1.23.5",
+    "highway": "1.4.0",
+    "imagequant": "2.4.1",
+    "lcms": "2.19.1",
+    "mozjpeg": "0826579",
+    "pango": "1.58.2",
+    "pixman": "0.46.4",
+    "png": "1.6.58",
+    "proxy-libintl": "0.5",
+    "rsvg": "2.63.2",
+    "tiff": "4.7.2",
+    "uhdr": "2.0.2",
+    "vips": "8.18.7",
+    "webp": "1.6.0",
+    "xml2": "2.15.4",
+    "zlib-ng": "2.3.3",
+    "sharp": "0.35.5"
+  },
+  "policy": {
+    "maxInputBytes": 20000000,
+    "maxBatch": 10,
+    "userBytes": 500000000,
+    "maxPixels": 40000000,
+    "maxEdge": 12000,
+    "outputCaps": {
+      "archival": 64000000,
+      "display": 4000000,
+      "thumbnail": 500000
+    }
+  },
+  "assertions": [
+    {
+      "id": "jpeg: decode, GPS proof and all-three-output sanitization",
+      "status": "PASS",
+      "elapsedMs": 5.840542000000028
+    },
+    {
+      "id": "png: decode, GPS proof and all-three-output sanitization",
+      "status": "PASS",
+      "elapsedMs": 3.160624999999982
+    },
+    {
+      "id": "webp: decode, GPS proof and all-three-output sanitization",
+      "status": "PASS",
+      "elapsedMs": 3.591790999999944
+    },
+    {
+      "id": "jpeg: lower-cost JPEG/PNG archival profile with full metadata stripping",
+      "status": "PASS",
+      "elapsedMs": 3.0338330000000724,
+      "variants": {
+        "archival": {
+          "format": "jpeg",
+          "bytes": 1212,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            219,
+            219,
+            192,
+            196,
+            196,
+            196,
+            196,
+            218
+          ],
+          "hasAlpha": false,
+          "sha256": "7b7fb8339a14b493e956b82436670cc7dd39fe1435a444ec7a15c06a6cf1a4ef"
+        },
+        "display": {
+          "format": "webp",
+          "bytes": 260,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "VP8 "
+          ],
+          "hasAlpha": false,
+          "sha256": "534e3938aa14f558745c9775c1a17d5d51b7d3fb98c716f5da8290114879dcf6"
+        },
+        "thumbnail": {
+          "format": "webp",
+          "bytes": 230,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "VP8 "
+          ],
+          "hasAlpha": false,
+          "sha256": "48f99d31620ca0f8fd2857ebace0d1da10ef239ea2a7be523acf68878b3e1637"
+        }
+      },
+      "archivalPSNRdB": 50.5427389446007
+    },
+    {
+      "id": "png: lower-cost JPEG/PNG archival profile with full metadata stripping",
+      "status": "PASS",
+      "elapsedMs": 2.6660830000000715,
+      "variants": {
+        "archival": {
+          "format": "png",
+          "bytes": 474,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "IHDR",
+            "pHYs",
+            "IDAT",
+            "IEND"
+          ],
+          "hasAlpha": true,
+          "sha256": "94d2b2884b771d6a5f203a3a917d4e69626e2c317cfe39f0aedd4464a4b7709f"
+        },
+        "display": {
+          "format": "webp",
+          "bytes": 228,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "VP8X",
+            "ALPH",
+            "VP8 "
+          ],
+          "hasAlpha": true,
+          "sha256": "cc00e246cd124808eea1feb262d06fb3e4dc1b3519dbd9ee496ed579d36a5ff8"
+        },
+        "thumbnail": {
+          "format": "webp",
+          "bytes": 234,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "VP8X",
+            "ALPH",
+            "VP8 "
+          ],
+          "hasAlpha": true,
+          "sha256": "e6cc1be9aec44af836315ab2a773f04cb4a205fc40eb02503698375ad7e35b9b"
+        }
+      },
+      "archivalPSNRdB": "lossless decoded pixels"
+    },
+    {
+      "id": "webp: lower-cost JPEG/PNG archival profile with full metadata stripping",
+      "status": "PASS",
+      "elapsedMs": 3.069749999999999,
+      "variants": {
+        "archival": {
+          "format": "png",
+          "bytes": 471,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "IHDR",
+            "pHYs",
+            "IDAT",
+            "IEND"
+          ],
+          "hasAlpha": true,
+          "sha256": "7f9b8500d516a07eeaecac730546f56cbcadb871a8f5b305b008d7db13f6d779"
+        },
+        "display": {
+          "format": "webp",
+          "bytes": 216,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "VP8X",
+            "ALPH",
+            "VP8 "
+          ],
+          "hasAlpha": true,
+          "sha256": "34847c974ea2df20bbe29729ff99fb97991a68b02e10435453a6a2e74e279e5b"
+        },
+        "thumbnail": {
+          "format": "webp",
+          "bytes": 218,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "VP8X",
+            "ALPH",
+            "VP8 "
+          ],
+          "hasAlpha": true,
+          "sha256": "22a6c83ca60e0be42a260bef0d5f497c3addea040ac47e039bad17441e247623"
+        }
+      },
+      "archivalPSNRdB": "lossless decoded pixels"
+    },
+    {
+      "id": "EXIF orientation 1: pixel corner verification",
+      "status": "PASS",
+      "elapsedMs": 2.380374999999958
+    },
+    {
+      "id": "EXIF orientation 2: pixel corner verification",
+      "status": "PASS",
+      "elapsedMs": 2.2830410000000256
+    },
+    {
+      "id": "EXIF orientation 3: pixel corner verification",
+      "status": "PASS",
+      "elapsedMs": 2.2732919999999694
+    },
+    {
+      "id": "EXIF orientation 4: pixel corner verification",
+      "status": "PASS",
+      "elapsedMs": 2.2721250000000737
+    },
+    {
+      "id": "EXIF orientation 5: pixel corner verification",
+      "status": "PASS",
+      "elapsedMs": 2.2615409999999656
+    },
+    {
+      "id": "EXIF orientation 6: pixel corner verification",
+      "status": "PASS",
+      "elapsedMs": 2.1967910000000757
+    },
+    {
+      "id": "EXIF orientation 7: pixel corner verification",
+      "status": "PASS",
+      "elapsedMs": 2.285041999999976
+    },
+    {
+      "id": "EXIF orientation 8: pixel corner verification",
+      "status": "PASS",
+      "elapsedMs": 2.252124999999978
+    },
+    {
+      "id": "ICC Display-P3 conversion to untagged sRGB with pixel verification",
+      "status": "PASS",
+      "elapsedMs": 3.9329999999999927,
+      "maxChannelError": 1
+    },
+    {
+      "id": "PNG/WebP transparency preserved",
+      "status": "PASS",
+      "elapsedMs": 5.7052079999999705
+    },
+    {
+      "id": "declared MIME mismatch and active/vector payloads rejected",
+      "status": "PASS",
+      "elapsedMs": 0.19924999999989268
+    },
+    {
+      "id": "missing/generic MIME still requires signature and full decoding; AVIF is not HEIC",
+      "status": "PASS",
+      "elapsedMs": 15.310500000000047
+    },
+    {
+      "id": "truncation and trailing encoded payloads rejected",
+      "status": "PASS",
+      "elapsedMs": 0.06925000000001091
+    },
+    {
+      "id": "corrupt compressed PNG rejected despite valid signature/CRC",
+      "status": "PASS",
+      "elapsedMs": 1.2401250000000346
+    },
+    {
+      "id": "malformed EXIF is rejected or fully sanitized, never copied",
+      "status": "PASS",
+      "elapsedMs": 2.6293339999999716,
+      "outcome": "decoded and sanitized"
+    },
+    {
+      "id": "animated WebP and APNG explicitly rejected",
+      "status": "PASS",
+      "elapsedMs": 0.14141699999993307
+    },
+    {
+      "id": "16-bit PNG fails closed instead of silently losing precision",
+      "status": "PASS",
+      "elapsedMs": 0.12608300000010786
+    },
+    {
+      "id": "valid 50MP compressible PNG bomb rejected before pixel processing",
+      "status": "PASS",
+      "elapsedMs": 0.09333400000002712,
+      "encodedBytes": 145876,
+      "generatedDecodedBytes": 150010000,
+      "pixelCount": 50000000
+    },
+    {
+      "id": "panorama preserves aspect and derivative bounding boxes without enlargement",
+      "status": "PASS",
+      "elapsedMs": 92.92516699999999
+    },
+    {
+      "id": "actual encoded byte boundary 19900000",
+      "status": "PASS",
+      "elapsedMs": 9.916583999999943,
+      "bytes": 19900000,
+      "expected": "accepted"
+    },
+    {
+      "id": "actual encoded byte boundary 20000000",
+      "status": "PASS",
+      "elapsedMs": 7.797707999999943,
+      "bytes": 20000000,
+      "expected": "accepted"
+    },
+    {
+      "id": "actual encoded byte boundary 20000001",
+      "status": "PASS",
+      "elapsedMs": 3.315291000000002,
+      "bytes": 20000001,
+      "expected": "rejected"
+    },
+    {
+      "id": "heic: macOS decoder then explicit raw-barrier WebP sanitization (not portable)",
+      "status": "PASS",
+      "elapsedMs": 2.600125000000048
+    },
+    {
+      "id": "heif: macOS decoder then explicit raw-barrier WebP sanitization (not portable)",
+      "status": "PASS",
+      "elapsedMs": 2.5139159999999947
+    },
+    {
+      "id": "12MP isolated process resource/time observation",
+      "status": "PASS",
+      "elapsedMs": 4007.781958
+    },
+    {
+      "id": "external process watchdog kills a stuck job",
+      "status": "PASS",
+      "elapsedMs": 305.841958,
+      "timeoutMs": 300,
+      "signal": "SIGKILL"
+    }
+  ],
+  "formats": [
+    {
+      "format": "jpeg",
+      "node": "Verified",
+      "bytes": 1075,
+      "sourceGPSVerified": true,
+      "variants": {
+        "archival": {
+          "format": "webp",
+          "bytes": 180,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "VP8L"
+          ],
+          "hasAlpha": false,
+          "sha256": "238d0be5702344d3db6a028141ad3363029e131878aa7338d31bb5c59769a785"
+        },
+        "display": {
+          "format": "webp",
+          "bytes": 260,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "VP8 "
+          ],
+          "hasAlpha": false,
+          "sha256": "534e3938aa14f558745c9775c1a17d5d51b7d3fb98c716f5da8290114879dcf6"
+        },
+        "thumbnail": {
+          "format": "webp",
+          "bytes": 230,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "VP8 "
+          ],
+          "hasAlpha": false,
+          "sha256": "48f99d31620ca0f8fd2857ebace0d1da10ef239ea2a7be523acf68878b3e1637"
+        }
+      }
+    },
+    {
+      "format": "png",
+      "node": "Verified",
+      "bytes": 1133,
+      "sourceGPSVerified": true,
+      "variants": {
+        "archival": {
+          "format": "webp",
+          "bytes": 86,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "VP8L"
+          ],
+          "hasAlpha": true,
+          "sha256": "a46ffe6275fa5a948ae4af89251536927540d0f47ed2626703defaef44e4f057"
+        },
+        "display": {
+          "format": "webp",
+          "bytes": 228,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "VP8X",
+            "ALPH",
+            "VP8 "
+          ],
+          "hasAlpha": true,
+          "sha256": "cc00e246cd124808eea1feb262d06fb3e4dc1b3519dbd9ee496ed579d36a5ff8"
+        },
+        "thumbnail": {
+          "format": "webp",
+          "bytes": 234,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "VP8X",
+            "ALPH",
+            "VP8 "
+          ],
+          "hasAlpha": true,
+          "sha256": "e6cc1be9aec44af836315ab2a773f04cb4a205fc40eb02503698375ad7e35b9b"
+        }
+      }
+    },
+    {
+      "format": "webp",
+      "node": "Verified",
+      "bytes": 668,
+      "sourceGPSVerified": true,
+      "variants": {
+        "archival": {
+          "format": "webp",
+          "bytes": 86,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "VP8L"
+          ],
+          "hasAlpha": true,
+          "sha256": "a46ffe6275fa5a948ae4af89251536927540d0f47ed2626703defaef44e4f057"
+        },
+        "display": {
+          "format": "webp",
+          "bytes": 216,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "VP8X",
+            "ALPH",
+            "VP8 "
+          ],
+          "hasAlpha": true,
+          "sha256": "34847c974ea2df20bbe29729ff99fb97991a68b02e10435453a6a2e74e279e5b"
+        },
+        "thumbnail": {
+          "format": "webp",
+          "bytes": 218,
+          "width": 128,
+          "height": 80,
+          "chunks": [
+            "VP8X",
+            "ALPH",
+            "VP8 "
+          ],
+          "hasAlpha": true,
+          "sha256": "22a6c83ca60e0be42a260bef0d5f497c3addea040ac47e039bad17441e247623"
+        }
+      }
+    },
+    {
+      "format": "heic",
+      "bytes": 1498,
+      "brands": "heic\u0000\u0000\u0000\u0000mif1MiPrmiafMiHBheic",
+      "sourceGPSVerified": true,
+      "node": "Not supported",
+      "error": "heif: Error while loading plugin: Support for this compression format has not been built in: HEVC (a suitable decoder plugin is libde265) (11.6003)",
+      "macOS": {
+        "exit": 0,
+        "variants": {
+          "archival": {
+            "format": "webp",
+            "bytes": 158,
+            "width": 128,
+            "height": 80,
+            "chunks": [
+              "VP8L"
+            ],
+            "hasAlpha": false,
+            "sha256": "da055c59c89c012c0ff9b1db4e359323889fb4a7e1c023ae4669ce5737e8ae82"
+          },
+          "display": {
+            "format": "webp",
+            "bytes": 242,
+            "width": 128,
+            "height": 80,
+            "chunks": [
+              "VP8 "
+            ],
+            "hasAlpha": false,
+            "sha256": "a9b3ff66e1e5b2ef7fcf6475340530e533ab46db599004dc927e244b21f89a0d"
+          },
+          "thumbnail": {
+            "format": "webp",
+            "bytes": 228,
+            "width": 128,
+            "height": 80,
+            "chunks": [
+              "VP8 "
+            ],
+            "hasAlpha": false,
+            "sha256": "790942330322fd700dc5ad8ea210bdaa9b9119be63842d9f24063ae76ddde469"
+          }
+        },
+        "status": "Verified synthetic chain only"
+      }
+    },
+    {
+      "format": "heif",
+      "bytes": 1498,
+      "brands": "mif1\u0000\u0000\u0000\u0000mif1MiPrmiafMiHBheic",
+      "sourceGPSVerified": true,
+      "node": "Not supported",
+      "error": "heif: Error while loading plugin: Support for this compression format has not been built in: HEVC (a suitable decoder plugin is libde265) (11.6003)",
+      "macOS": {
+        "exit": 0,
+        "variants": {
+          "archival": {
+            "format": "webp",
+            "bytes": 158,
+            "width": 128,
+            "height": 80,
+            "chunks": [
+              "VP8L"
+            ],
+            "hasAlpha": false,
+            "sha256": "da055c59c89c012c0ff9b1db4e359323889fb4a7e1c023ae4669ce5737e8ae82"
+          },
+          "display": {
+            "format": "webp",
+            "bytes": 242,
+            "width": 128,
+            "height": 80,
+            "chunks": [
+              "VP8 "
+            ],
+            "hasAlpha": false,
+            "sha256": "a9b3ff66e1e5b2ef7fcf6475340530e533ab46db599004dc927e244b21f89a0d"
+          },
+          "thumbnail": {
+            "format": "webp",
+            "bytes": 228,
+            "width": 128,
+            "height": 80,
+            "chunks": [
+              "VP8 "
+            ],
+            "hasAlpha": false,
+            "sha256": "790942330322fd700dc5ad8ea210bdaa9b9119be63842d9f24063ae76ddde469"
+          }
+        },
+        "status": "Verified synthetic chain only"
+      }
+    }
+  ],
+  "benchmark": {
+    "inputBytes": 6313733,
+    "pixels": 12000000,
+    "exit": 0,
+    "signal": null,
+    "ok": true,
+    "baseline": {
+      "rssBytes": 75071488,
+      "maxRSSKiB": 73312
+    },
+    "sampledPeakRSSBytes": 749912064,
+    "finalRSSBytes": 750075904,
+    "elapsedMs": 3065.355709,
+    "maxRSSKiB": 732496,
+    "cpuMicroseconds": 3107161,
+    "variants": {
+      "archival": {
+        "format": "webp",
+        "bytes": 30966260,
+        "width": 4000,
+        "height": 3000,
+        "chunks": [
+          "VP8L"
+        ],
+        "hasAlpha": false
+      },
+      "display": {
+        "format": "webp",
+        "bytes": 2670814,
+        "width": 2560,
+        "height": 1920,
+        "chunks": [
+          "VP8 "
+        ],
+        "hasAlpha": false
+      },
+      "thumbnail": {
+        "format": "webp",
+        "bytes": 13002,
+        "width": 480,
+        "height": 360,
+        "chunks": [
+          "VP8 "
+        ],
+        "hasAlpha": false
+      }
+    }
+  },
+  "limitations": [
+    "Synthetic fixtures only, not iPhone/HDR/hostile corpus certification",
+    "V8 heap flag does not bound native memory",
+    "Sips probes write synthetic intermediate fixtures only, not an approved beta processing path"
+  ],
+  "alternateBenchmark": {
+    "profile": "archival JPEG95/4:4:4, PNG if alpha",
+    "exit": 0,
+    "ok": true,
+    "baseline": {
+      "rssBytes": 75038720,
+      "maxRSSKiB": 73280
+    },
+    "sampledPeakRSSBytes": 358825984,
+    "finalRSSBytes": 359006208,
+    "elapsedMs": 701.5079579999999,
+    "maxRSSKiB": 350592,
+    "cpuMicroseconds": 746178,
+    "variants": {
+      "archival": {
+        "format": "jpeg",
+        "bytes": 14977996,
+        "width": 4000,
+        "height": 3000,
+        "chunks": [
+          219,
+          219,
+          192,
+          196,
+          196,
+          196,
+          196,
+          218
+        ],
+        "hasAlpha": false
+      },
+      "display": {
+        "format": "webp",
+        "bytes": 2670814,
+        "width": 2560,
+        "height": 1920,
+        "chunks": [
+          "VP8 "
+        ],
+        "hasAlpha": false
+      },
+      "thumbnail": {
+        "format": "webp",
+        "bytes": 13002,
+        "width": 480,
+        "height": 360,
+        "chunks": [
+          "VP8 "
+        ],
+        "hasAlpha": false
+      }
+    }
+  },
+  "summary": {
+    "passed": 32,
+    "failed": 0,
+    "skipped": 0
+  }
+}
